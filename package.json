@@ -1,7 +1,7 @@
 {
   "name": "ngrx-store-storagesync",
-  "version": "1.0.1",
-  "description": "@ngrx/store sync state to any storage type (localstorage/sessionstorage)",
+  "version": "1.0.2",
+  "description": "Simple way of syncing state to any storage type (localstorage/sessionstorage) for @ngrx/store",
   "main": "./dist/public_api.js",
   "typings": "./dist/public_api.d.ts",
   "scripts": {
