@@ -1,0 +1,51 @@
+{
+  "name": "ngrx-store-storagesync",
+  "version": "1.0.1",
+  "description": "@ngrx/store sync state to any storage type (localstorage/sessionstorage)",
+  "main": "./dist/public_api.js",
+  "typings": "./dist/public_api.d.ts",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "prepublish": "npm run test && npm run build",
+    "test": "jest",
+    "test:update": "jest -u",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --runInBand",
+    "test:coverage": "jest --coverage",
+    "typings": "typings install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larscom/ngrx-store-storagesync.git"
+  },
+  "keywords": [
+    "ngrx",
+    "ngrx/store",
+    "redux",
+    "state",
+    "storage"
+  ],
+  "author": "Lars Kniep",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/larscom/ngrx-store-storagesync/issues"
+  },
+  "homepage": "https://github.com/larscom/ngrx-store-storagesync#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/lodash": "^4.14.123",
+    "@types/node": "^11.11.3",
+    "jest": "^24.5.0",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.0",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.14.0",
+    "typescript": "^3.3.3333"
+  },
+  "peerDependencies": {
+    "@ngrx/store": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
+}
