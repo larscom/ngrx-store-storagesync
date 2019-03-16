@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "10.13.0"
+deploy:
+  provider: script
+  script: "npm run prepublish"
+  skip_cleanup: true
+  on:
+    tags: true
+notifications:
+  email:
+    recipients:
+    - larskniep@gmail.com
+    on_success: always
+    on_failure: always
