@@ -119,7 +119,7 @@ describe('StorageSync', () => {
       const config: IStorageSyncConfig = {
         storage,
         storageKeySerializer: (key: string) => key,
-        features: [{ stateKey: 'feature1', blackListKeys: ['prop1', 'check'] }]
+        features: [{ stateKey: 'feature1', ignoreKeys: ['prop1', 'check'] }]
       };
 
       expect(storage.length).toEqual(0);

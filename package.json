@@ -1,12 +1,12 @@
 {
   "name": "@larscom/ngrx-store-storagesync",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Simple way of syncing state to any storage type (localstorage/sessionstorage) for @ngrx/store",
   "main": "./dist/public_api.js",
   "typings": "./dist/public_api.d.ts",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "prepublish": "npm run test && npm run build",
+    "prepublish": "npm run test && npm run build",    
     "test": "jest",
     "test:update": "jest -u",
     "test:watch": "jest --watch",

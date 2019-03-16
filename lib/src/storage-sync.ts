@@ -65,7 +65,7 @@ export const syncStateUpdate = (
 ): void => {
   features.forEach(feature => {
     const featureState = JSON.parse(JSON.stringify(state[feature.stateKey]));
-    const filteredState = filterObject(featureState, feature.blackListKeys);
+    const filteredState = filterObject(featureState, feature.ignoreKeys);
     storage.setItem(storageKeySerializer(feature.stateKey), JSON.stringify(filteredState));
   });
 };

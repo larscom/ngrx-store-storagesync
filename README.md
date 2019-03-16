@@ -1,7 +1,7 @@
 # @larscom/ngrx-store-storagesync
 [![master-branche](https://travis-ci.com/larscom/ngrx-store-storagesync.svg?branch=master)](https://travis-ci.com/larscom/ngrx-store-storagesync)
 
-Simple syncing (with ignoring/blacklisting specific keys) between the ngrx store and localstorage/sessionstorage.
+Simple syncing (with ignoring specific keys) between the ngrx store and localstorage/sessionstorage.
 
 ## Dependencies
 
@@ -33,7 +33,7 @@ export const reducers: ActionReducerMap<IState> = {
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return storageSync({
-    features: [{ stateKey: 'router' }, { stateKey: 'app', blackListKeys: ['success', 'loading'] }],
+    features: [{ stateKey: 'router' }, { stateKey: 'app', ignoreKeys: ['success', 'loading'] }],
     storage: window.sessionStorage
   })(reducer);
 }
