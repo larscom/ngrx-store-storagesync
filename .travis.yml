@@ -8,8 +8,9 @@ before_install:
 before_deploy:
   - npm run build
 deploy:
-  - provider: script
-    script: "cp .npmrc.template $HOME/.npmrc && npm publish"   
+    provider: npm
+    email: "$NPM_EMAIL"
+    api_key: "$NPM_API_TOKEN"
     skip_cleanup: true
     on:
       tags: true
