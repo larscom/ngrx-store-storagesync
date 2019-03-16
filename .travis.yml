@@ -3,7 +3,9 @@ node_js:
   - "10.13.0"
 deploy:
   provider: script
-  script: "npm run prepublish"
+  script: 
+    - if [ "$TRAVIS_BRANCH" = "master" ]; then "npm test"; fi
+    - if [ "$TRAVIS_BRANCH" = "release" ]; then "npm run prepublish"; fi
   skip_cleanup: true
   on:
     tags: true
