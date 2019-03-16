@@ -1,4 +1,8 @@
 # ngrx-store-storagesync
+[![master-branche](https://travis-ci.com/larscom/ngrx-store-storagesync.svg?branch=master)](https://travis-ci.com/larscom/ngrx-store-storagesync)
+[![release-branche](https://travis-ci.com/larscom/ngrx-store-storagesync.svg?branch=release)](https://travis-ci.com/larscom/ngrx-store-storagesync)
+[![Node version](https://img.shields.io/node/v/ngrx-store-storagesync.svg?style=flat)](http://nodejs.org/download/)
+
 
 Simple syncing (with ignoring/blacklisting specific keys) between the ngrx store and localstorage/sessionstorage.
 
