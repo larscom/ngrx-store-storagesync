@@ -8,7 +8,7 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-      branch: release
+      branch: master
   - provider: script
     script: "npm test"  
     skip_cleanup: true 
