@@ -5,8 +5,7 @@
   "main": "./dist/public_api.js",
   "typings": "./dist/public_api.d.ts",
   "scripts": {
-    "build": "rimraf dist && tsc",
-    "prepublish": "npm run test && npm run build",
+    "build": "rimraf dist && tsc",    
     "test": "jest",
     "test:update": "jest -u",
     "test:watch": "jest --watch",
