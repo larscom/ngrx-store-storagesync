@@ -1,19 +1,16 @@
-# ngrx-store-storagesync
+# @larscom/ngrx-store-storagesync
 [![master-branche](https://travis-ci.com/larscom/ngrx-store-storagesync.svg?branch=master)](https://travis-ci.com/larscom/ngrx-store-storagesync)
-[![release-branche](https://travis-ci.com/larscom/ngrx-store-storagesync.svg?branch=release)](https://travis-ci.com/larscom/ngrx-store-storagesync)
-[![Node version](https://img.shields.io/node/v/ngrx-store-storagesync.svg?style=flat)](http://nodejs.org/download/)
-
 
 Simple syncing (with ignoring/blacklisting specific keys) between the ngrx store and localstorage/sessionstorage.
 
 ## Dependencies
 
-`ngrx-store-storagesync` depends on [@ngrx/store](https://github.com/ngrx/store) and [Angular 2+](https://github.com/angular/angular).
+`@larscom/ngrx-store-storagesync` depends on [@ngrx/store](https://github.com/ngrx/store) and [Angular 2+](https://github.com/angular/angular).
 
 ## Usage
 
 ```bash
-npm i --save ngrx-store-storagesync
+npm i --save @larscom/ngrx-store-storagesync
 ```
 
 **How to use**
@@ -26,7 +23,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule, ActionReducerMap, ActionReducer, MetaReducer } from '@ngrx/store';
 import { routerReducer } from '@ngrx/router-store';
-import { storageSync } from 'ngrx-store-storagesync';
+import { storageSync } from '@larscom/ngrx-store-storagesync';
 import * as fromApp from './app/reducer';
 
 export const reducers: ActionReducerMap<IState> = {
