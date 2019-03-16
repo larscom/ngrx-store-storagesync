@@ -1,0 +1,12 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "ban-types": false,
+    "quotemark": false,
+    "trailing-comma": false,
+    "arrow-parens": false,
+    "prefer-conditional-expression": false,
+    "no-console": false,
+    "no-debugger": false,
+  }
+}
