@@ -1,5 +1,8 @@
 # @larscom/ngrx-store-storagesync
-[![master-branche](https://travis-ci.com/larscom/ngrx-store-storagesync.svg?branch=master)](https://travis-ci.com/larscom/ngrx-store-storagesync)
+![npm (scoped)](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg)
+![Travis (.com) branch](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)
+![Travis (.com) branch](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/release.svg?label=build%20%28release%29)
+![NPM](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)
 
 Simple syncing (with ignoring specific keys) between the ngrx store and localstorage/sessionstorage.
 
