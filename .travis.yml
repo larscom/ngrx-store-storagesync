@@ -1,14 +1,14 @@
 language: node_js
 node_js:
   - "10"
-  
+before_install:
+  - echo $TRAVIS_TAG
 deploy:
   - provider: script
     script: "cp .npmrc.template $HOME/.npmrc && npm publish"   
     skip_cleanup: true
     on:
       tags: true
-      branch: master
   - provider: script
     script: "npm test"  
     skip_cleanup: true 
