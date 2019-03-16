@@ -70,7 +70,11 @@ export const syncStateUpdate = (
   });
 };
 
-export const storageSync = (storageConfig: IStorageSyncConfig) => (reducer: any) => {
+/**
+ * The storageSync MetaReducer
+ * @param cfg The configuration
+ */
+export const storageSync = (cfg: IStorageSyncConfig) => (reducer: any) => {
   const INIT_ACTION = '@ngrx/store/init';
   const UPDATE_ACTION = '@ngrx/store/update-reducers';
 
@@ -78,7 +82,7 @@ export const storageSync = (storageConfig: IStorageSyncConfig) => (reducer: any)
     rehydrate: true,
     restoreDates: true,
     storageKeySerializer: (key: string) => key,
-    ...storageConfig
+    ...cfg
   };
 
   const stateKeys = config.features.map(({ stateKey }) => stateKey);

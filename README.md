@@ -1,8 +1,8 @@
 # @larscom/ngrx-store-storagesync
-![npm (scoped)](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg)
-![Travis (.com) branch](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)
-![Travis (.com) branch](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/release.svg?label=build%20%28release%29)
-![NPM](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)
+
+[![npm](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
+[![travis build](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)](https://travis-ci.com/larscom/ngrx-store-storagesync/builds)
+[![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
 Simple syncing (with ignoring specific keys) between the ngrx store and localstorage/sessionstorage.
 
