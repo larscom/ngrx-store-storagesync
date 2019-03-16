@@ -10,7 +10,8 @@ deploy:
       tags: true
       branch: release
   - provider: script
-    script: "npm test"   
+    script: "npm test"  
+    skip_cleanup: true 
     on:
       branch: master
 
