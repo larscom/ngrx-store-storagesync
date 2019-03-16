@@ -18,6 +18,6 @@ deploy:
 notifications:
   email:
     recipients:
-      - larskniep@gmail.com
+      - "$NPM_EMAIL"
     on_success: change
     on_failure: always
