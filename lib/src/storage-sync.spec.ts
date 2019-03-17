@@ -1,5 +1,11 @@
 import { IStorageSyncConfig } from './models/storage-sync-config';
-import { dateReviver, filterObject, rehydrateApplicationState, storageSync, syncStateUpdate } from './storage-sync';
+import {
+  dateReviver,
+  filterObject,
+  rehydrateApplicationState,
+  storageSync,
+  syncStateUpdate
+} from './storage-sync';
 
 class MockStorage implements Storage {
   public get length(): number {
@@ -40,10 +46,6 @@ describe('StorageSync', () => {
   });
 
   describe('RehydrateApplicationState', () => {
-    it('should revive dates', () => {
-      expect(dateReviver('key', '2019-01-01T13:37:00.002Z')).toBeInstanceOf(Date);
-    });
-
     it('should re hydrate the application state', () => {
       const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
       const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
@@ -68,6 +70,42 @@ describe('StorageSync', () => {
   });
 
   describe('SyncStateUpdate', () => {
+    it('should not sync if shouldSync condition on a feature state returns false', () => {
+      const feature1 = { checkMe: true, prop1: false, prop2: 100, prop3: { check: false } };
+      const feature2 = { checkMe: false, prop2: 200, prop3: { check: false } };
+
+      const state = { feature1, feature2 };
+
+      const config: IStorageSyncConfig = {
+        storage,
+        storageKeySerializer: (key: string) => key,
+        features: [
+          {
+            stateKey: 'feature1',
+            shouldSync: featureState => {
+              return featureState.checkMe;
+            }
+          },
+          {
+            stateKey: 'feature2',
+            shouldSync: featureState => {
+              return featureState.checkMe;
+            }
+          }
+        ]
+      };
+
+      expect(storage.length).toEqual(0);
+
+      // sync to storage
+      syncStateUpdate(state, config);
+
+      expect(storage.length).toEqual(1);
+
+      expect(JSON.parse(storage.getItem('feature1'))).toEqual(feature1);
+      expect(storage.getItem('feature2')).toBeNull();
+    });
+
     it('should sync the complete state to the provided storage', () => {
       const feature1 = { prop1: false, prop2: 100, prop3: { check: false } };
       const feature2 = { prop1: false, prop2: 200, prop3: { check: false } };
@@ -225,5 +263,9 @@ describe('StorageSync', () => {
         random: undefined
       }
     });
+  });
+
+  it('should revive dates', () => {
+    expect(dateReviver('key', '2019-01-01T13:37:00.002Z')).toBeInstanceOf(Date);
   });
 });

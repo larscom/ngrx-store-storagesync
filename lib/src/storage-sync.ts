@@ -63,11 +63,13 @@ export const syncStateUpdate = (
   state: any,
   { features, storage, storageKeySerializer }: IStorageSyncConfig
 ): void => {
-  features.forEach(feature => {
-    const featureState = JSON.parse(JSON.stringify(state[feature.stateKey]));
-    const filteredState = filterObject(featureState, feature.ignoreKeys);
-    storage.setItem(storageKeySerializer(feature.stateKey), JSON.stringify(filteredState));
-  });
+  features
+    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey]) : true))
+    .forEach(({ stateKey, ignoreKeys }) => {
+      const featureState = JSON.parse(JSON.stringify(state[stateKey]));
+      const filteredState = filterObject(featureState, ignoreKeys);
+      storage.setItem(storageKeySerializer(stateKey), JSON.stringify(filteredState));
+    });
 };
 
 export const storageSync = (cfg: IStorageSyncConfig) => (reducer: any) => {
