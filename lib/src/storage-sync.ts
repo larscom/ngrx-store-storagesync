@@ -73,7 +73,7 @@ export const syncStateUpdate = (
   { features, storage, storageKeySerializer }: IStorageSyncOptions
 ): void => {
   features
-    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey]) : true))
+    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
     .forEach(({ stateKey, ignoreKeys, storageKeySerializerForFeature, serialize }) => {
       const featureState = cloneDeep(state[stateKey]);
       const filteredState = filterObject(featureState, ignoreKeys);
