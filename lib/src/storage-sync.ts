@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import { cloneDeep, merge } from 'lodash';
 
 import { IStorageSyncConfig } from './models/storage-sync-config';
 
@@ -49,26 +49,19 @@ export const rehydrateApplicationState = ({
 }: IStorageSyncConfig): Object => {
   const reviver = restoreDates ? dateReviver : (k: string, v: any) => v;
   return features.reduce((acc, curr) => {
-    const { storageKeySerializerForFeature, stateKey } = curr;
+    const { storageKeySerializerForFeature, stateKey, deserialize } = curr;
 
-    const state = storage.getItem(
-      storageKeySerializerForFeature
-        ? storageKeySerializerForFeature(stateKey)
-        : storageKeySerializer(stateKey)
-    );
+    const key = storageKeySerializerForFeature
+      ? storageKeySerializerForFeature(stateKey)
+      : storageKeySerializer(stateKey);
+
+    const state = storage.getItem(key);
 
     return state
       ? {
           ...acc,
           ...{
-            [stateKey]: JSON.parse(
-              storage.getItem(
-                storageKeySerializerForFeature
-                  ? storageKeySerializerForFeature(stateKey)
-                  : storageKeySerializer(stateKey)
-              ),
-              reviver
-            )
+            [stateKey]: deserialize ? deserialize(state) : JSON.parse(state, reviver)
           }
         }
       : acc;
@@ -81,15 +74,15 @@ export const syncStateUpdate = (
 ): void => {
   features
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey]) : true))
-    .forEach(({ stateKey, ignoreKeys, storageKeySerializerForFeature }) => {
-      const featureState = JSON.parse(JSON.stringify(state[stateKey]));
+    .forEach(({ stateKey, ignoreKeys, storageKeySerializerForFeature, serialize }) => {
+      const featureState = cloneDeep(state[stateKey]);
       const filteredState = filterObject(featureState, ignoreKeys);
-      storage.setItem(
-        storageKeySerializerForFeature
-          ? storageKeySerializerForFeature(stateKey)
-          : storageKeySerializer(stateKey),
-        JSON.stringify(filteredState)
-      );
+
+      const key = storageKeySerializerForFeature
+        ? storageKeySerializerForFeature(stateKey)
+        : storageKeySerializer(stateKey);
+
+      storage.setItem(key, serialize ? serialize(filteredState) : JSON.stringify(filteredState));
     });
 };
 

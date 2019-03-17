@@ -20,4 +20,16 @@ export interface IFeatureConfig {
    * @default (key: string) => key
    */
   storageKeySerializerForFeature?: (key: string) => string;
+  /**
+   * Serializer for the feature state (before saving to a storage location)
+   * @param featureState the next feature state
+   * @default (featureState: any) => JSON.stringify(featureState)
+   */
+  serialize?: (featureState: any) => string;
+  /**
+   * Deserializer for the feature state (after getting the state from a storage location)
+   * @param featureState the feature state retrieved from a storage location
+   * @default (featureState: string) => JSON.Parse(featureState)
+   */
+  deserialize?: (featureState: string) => any;
 }
