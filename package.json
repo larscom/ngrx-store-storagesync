@@ -18,11 +18,13 @@
     "url": "git+https://github.com/larscom/ngrx-store-storagesync.git"
   },
   "keywords": [
-    "ngrx",
-    "ngrx/store",
+    "angular",
+    "ngrx",    
     "redux",
+    "store",
     "state",
-    "storage"
+    "storage",
+    "rxjs"
   ],
   "author": "Lars Kniep",
   "license": "MIT",

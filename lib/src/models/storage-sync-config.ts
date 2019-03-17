@@ -10,12 +10,12 @@ export interface IStorageSyncConfig {
    */
   storage: Storage;
   /**
-   * Should the state be restored from storage?
+   * Pull initial state from storage on startup
    * @default true
    */
   rehydrate?: boolean;
   /**
-   * Should the Dates be converted back to a 'Date' object after rehydration?
+  * Restore serialized date objects. If you work directly with ISO date strings, set this to false
    * @default true
    */
   restoreDates?: boolean;

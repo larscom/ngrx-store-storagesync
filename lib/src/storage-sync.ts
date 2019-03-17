@@ -48,8 +48,8 @@ export const rehydrateApplicationState = ({
   features
 }: IStorageSyncConfig): Object => {
   const reviver = restoreDates ? dateReviver : (k: string, v: any) => v;
-  return features.reduce((featureA, featureB) => {
-    const { storageKeySerializerForFeature, stateKey } = featureB;
+  return features.reduce((acc, curr) => {
+    const { storageKeySerializerForFeature, stateKey } = curr;
 
     const state = storage.getItem(
       storageKeySerializerForFeature
@@ -59,7 +59,7 @@ export const rehydrateApplicationState = ({
 
     return state
       ? {
-          ...featureA,
+          ...acc,
           ...{
             [stateKey]: JSON.parse(
               storage.getItem(
@@ -71,7 +71,7 @@ export const rehydrateApplicationState = ({
             )
           }
         }
-      : featureA;
+      : acc;
   }, {});
 };
 
