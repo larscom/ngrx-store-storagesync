@@ -41,21 +41,37 @@ export const filterObject = (obj: Object, keys?: string[]): Object => {
   return obj;
 };
 
-export const rehydrateApplicationState = (
-  keys: string[],
-  { restoreDates, storage, storageKeySerializer }: IStorageSyncConfig
-): Object => {
+export const rehydrateApplicationState = ({
+  restoreDates,
+  storage,
+  storageKeySerializer,
+  features
+}: IStorageSyncConfig): Object => {
   const reviver = restoreDates ? dateReviver : (k: string, v: any) => v;
-  return keys.reduce((acc, curr) => {
-    const state = storage.getItem(storageKeySerializer(curr));
+  return features.reduce((featureA, featureB) => {
+    const { storageKeySerializerForFeature, stateKey } = featureB;
+
+    const state = storage.getItem(
+      storageKeySerializerForFeature
+        ? storageKeySerializerForFeature(stateKey)
+        : storageKeySerializer(stateKey)
+    );
+
     return state
       ? {
-          ...acc,
+          ...featureA,
           ...{
-            [curr]: JSON.parse(storage.getItem(storageKeySerializer(curr)), reviver)
+            [stateKey]: JSON.parse(
+              storage.getItem(
+                storageKeySerializerForFeature
+                  ? storageKeySerializerForFeature(stateKey)
+                  : storageKeySerializer(stateKey)
+              ),
+              reviver
+            )
           }
         }
-      : acc;
+      : featureA;
   }, {});
 };
 
@@ -83,8 +99,7 @@ export const storageSync = (cfg: IStorageSyncConfig) => (reducer: any) => {
     ...cfg
   };
 
-  const stateKeys = config.features.map(({ stateKey }) => stateKey);
-  const rehydratedState = config.rehydrate ? rehydrateApplicationState(stateKeys, config) : null;
+  const rehydratedState = config.rehydrate ? rehydrateApplicationState(config) : null;
 
   return (state: any, action: any) => {
     let nextState = null;

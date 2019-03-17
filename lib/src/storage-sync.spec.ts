@@ -46,7 +46,7 @@ describe('StorageSync', () => {
   });
 
   describe('RehydrateApplicationState', () => {
-    it('should re hydrate the application state', () => {
+    it('should re hydrate the state to a default object', () => {
       const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
       const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
       const feature3 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
@@ -63,9 +63,31 @@ describe('StorageSync', () => {
 
       expect(storage.length).toEqual(3);
 
-      const rehydratedState = rehydrateApplicationState(['feature1', 'feature2'], config);
+      const rehydratedState = rehydrateApplicationState(config);
 
-      expect(rehydratedState).toEqual({ feature1, feature2 });
+      expect(rehydratedState).toEqual({});
+    });
+
+    it('should re hydrate the application state with custom serializer function for feature', () => {
+      const storageKeySerializerForFeature = (key: string) => {
+        return `_${key}_`;
+      };
+
+      const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+
+      storage.setItem(storageKeySerializerForFeature('feature1'), JSON.stringify(feature1));
+
+      expect(storage.length).toEqual(1);
+
+      const config: IStorageSyncConfig = {
+        storage,
+        features: [{ stateKey: 'feature1', storageKeySerializerForFeature }],
+        storageKeySerializer: (key: string) => key
+      };
+
+      const rehydratedState = rehydrateApplicationState(config);
+
+      expect(rehydratedState).toEqual({ feature1 });
     });
   });
 
