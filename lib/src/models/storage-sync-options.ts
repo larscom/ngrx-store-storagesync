@@ -10,6 +10,11 @@ export interface IStorageSyncOptions {
    */
   storage: Storage;
   /**
+   * Function that gets executed on a storage error
+   * @param error the error that occurred
+   */
+  storageError?: (error: any) => void;
+  /**
    * Pull initial state from storage on startup
    * @default true
    */

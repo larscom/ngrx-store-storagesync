@@ -45,45 +45,69 @@ export const rehydrateApplicationState = ({
   restoreDates,
   storage,
   storageKeySerializer,
-  features
+  features,
+  storageError
 }: IStorageSyncOptions): any => {
   const reviver = restoreDates ? dateReviver : (k: string, v: any) => v;
   return features.reduce((acc, curr) => {
-    const { storageKeySerializerForFeature, stateKey, deserialize } = curr;
+    const { storageKeySerializerForFeature, stateKey, deserialize, storageForFeature } = curr;
 
     const key = storageKeySerializerForFeature
       ? storageKeySerializerForFeature(stateKey)
       : storageKeySerializer(stateKey);
 
-    const state = storage.getItem(key);
-
-    return state
-      ? {
-          ...acc,
-          ...{
-            [stateKey]: deserialize ? deserialize(state) : JSON.parse(state, reviver)
+    try {
+      const state = storageForFeature ? storageForFeature.getItem(key) : storage.getItem(key);
+      return state
+        ? {
+            ...acc,
+            ...{
+              [stateKey]: deserialize ? deserialize(state) : JSON.parse(state, reviver)
+            }
           }
-        }
-      : acc;
+        : acc;
+    } catch (e) {
+      if (storageError) {
+        storageError(e);
+      } else {
+        throw e;
+      }
+    }
   }, {});
 };
 
 export const syncStateUpdate = (
   state: any,
-  { features, storage, storageKeySerializer }: IStorageSyncOptions
+  { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions
 ): void => {
   features
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
-    .forEach(({ stateKey, ignoreKeys, storageKeySerializerForFeature, serialize }) => {
-      const featureState = cloneDeep(state[stateKey]);
-      const filteredState = filterObject(featureState, ignoreKeys);
+    .forEach(
+      ({ stateKey, ignoreKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
+        const featureState = cloneDeep(state[stateKey]);
+        const filteredState = filterObject(featureState, ignoreKeys);
 
-      const key = storageKeySerializerForFeature
-        ? storageKeySerializerForFeature(stateKey)
-        : storageKeySerializer(stateKey);
+        const key = storageKeySerializerForFeature
+          ? storageKeySerializerForFeature(stateKey)
+          : storageKeySerializer(stateKey);
 
-      storage.setItem(key, serialize ? serialize(filteredState) : JSON.stringify(filteredState));
-    });
+        const value = serialize ? serialize(filteredState) : JSON.stringify(filteredState);
+
+        try {
+          if (storageForFeature) {
+            storageForFeature.setItem(key, value);
+          } else {
+            storage.setItem(key, value);
+          }
+        } catch (e) {
+          if (storageError) {
+            storageError(e);
+          } else {
+            throw e;
+          }
+        }
+      }
+    );
 };
 
 export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {

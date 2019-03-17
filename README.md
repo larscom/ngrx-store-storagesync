@@ -1,10 +1,16 @@
 # @larscom/ngrx-store-storagesync
+
 [![npm-release](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg?label=npm%20release)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
 [![git-release](https://img.shields.io/github/tag/larscom/ngrx-store-storagesync.svg?label=git%20release)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
 [![travis build](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)](https://travis-ci.com/larscom/ngrx-store-storagesync/builds)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
 Simple syncing (with ignoring specific keys) between the ngrx store and localstorage/sessionstorage.
+You can even sync different 'feature' states to different storage locations.
+For example:
+- feature1 to sessionStorage
+- feature2 to localStorage
+
 
 ## Dependencies
 
@@ -17,6 +23,7 @@ npm i --save @larscom/ngrx-store-storagesync
 ```
 
 ## Usage
+
 **1. Wrap storageSync in an exported function and include it in your meta-reducers array in `StoreModule.forRoot`**
 
 ```ts
@@ -34,8 +41,12 @@ export const reducers: ActionReducerMap<IState> = {
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return storageSync({
-    features: [{ stateKey: 'router' }, { stateKey: 'app', ignoreKeys: ['success', 'loading'] }],
-    storage: window.sessionStorage
+    features: [
+      // saves only router state to sessionStorage
+      { stateKey: 'router', storageForFeature: window.sessionStorage },
+      { stateKey: 'app', ignoreKeys: ['success', 'loading'] }
+    ],
+    storage: window.localStorage
   })(reducer);
 }
 
@@ -60,6 +71,11 @@ export interface IStorageSyncOptions {
    */
   storage: Storage;
   /**
+   * Function that gets executed on a storage error
+   * @param error the error that occurred
+   */
+  storageError?: (error: any) => void;
+  /**
    * Pull initial state from storage on startup
    * @default true
    */
@@ -83,6 +99,7 @@ export interface IStorageSyncOptions {
   rehydrateStateMerger?: (state: any, rehydratedState: any) => any;
 }
 ```
+
 ```ts
 export interface IFeatureOptions {
   /**
@@ -93,6 +110,12 @@ export interface IFeatureOptions {
    * Filter out properties that exist on the feature state.
    */
   ignoreKeys?: string[];
+  /**
+   * Provide the storage type to sync the feature state to, it can be any storage which implements the 'Storage' interface.
+   * 
+   * It will override the global storage property for this feature
+   */
+  storageForFeature?: Storage;
   /**
    * Sync to storage will only occur when this function returns true
    * @param featureState the next feature state

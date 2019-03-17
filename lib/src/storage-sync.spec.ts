@@ -237,9 +237,45 @@ describe('StorageSync', () => {
       );
       expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
     });
+
+    it('should sync the complete state in 2 storage locations with a custom storageKeySerializerForFeature', () => {
+      const storageForFeature = new MockStorage();
+
+      const storageKeySerializerForFeature = (key: string) => {
+        return `_${key}_`;
+      };
+
+      const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+      const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
+
+      const state = { feature1, feature2 };
+
+      const config: IStorageSyncOptions = {
+        storage,
+        storageKeySerializer: (key: string) => key,
+        features: [
+          { stateKey: 'feature1', storageKeySerializerForFeature, storageForFeature },
+          { stateKey: 'feature2' }
+        ]
+      };
+
+      expect(storage.length).toEqual(0);
+      expect(storageForFeature.length).toEqual(0);
+
+      // sync to storage
+      syncStateUpdate(state, config);
+
+      expect(storage.length).toEqual(1);
+      expect(storageForFeature.length).toEqual(1);
+
+      expect(
+        JSON.parse(storageForFeature.getItem(storageKeySerializerForFeature('feature1')))
+      ).toEqual(feature1);
+      expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
+    });
   });
 
-  it('should merge and keep all properties in the initialState and rehydrated state', () => {
+  it('should deep merge the initialState and rehydrated state', () => {
     const feature1 = { prop1: false, prop2: 100, prop3: { check: false } };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false } };
 
@@ -252,6 +288,32 @@ describe('StorageSync', () => {
 
     const metaReducer = storageSync({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
+      storage
+    });
+
+    const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
+    expect(finalState).toEqual({
+      ...initialState,
+      feature1: { ...feature1, prop1: true },
+      feature2: { ...feature2, prop1: true, prop3: { check: true } }
+    });
+  });
+
+  it('should deep merge the initialState and rehydrated state from different storage locations', () => {
+    const storageForFeature = new MockStorage();
+
+    const feature1 = { prop1: false, prop2: 100, prop3: { check: false } };
+    const feature2 = { prop1: false, prop2: 200, prop3: { check: false } };
+
+    const initialState = { feature1, feature2 };
+
+    storage.setItem('feature1', JSON.stringify({ prop1: true }));
+    storageForFeature.setItem('feature2', JSON.stringify({ prop1: true, prop3: { check: true } }));
+
+    const reducer = (state = initialState, action: any) => state;
+
+    const metaReducer = storageSync({
+      features: [{ stateKey: 'feature1' }, { stateKey: 'feature2', storageForFeature }],
       storage
     });
 
