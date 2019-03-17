@@ -221,7 +221,6 @@ describe('StorageSync', () => {
     const metaReducer = storageSync({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
       storage,
-      rehydrate: true
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
@@ -267,11 +266,40 @@ describe('StorageSync', () => {
     const metaReducer = storageSync({
       features: [],
       storage,
-      rehydrate: true
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
     expect(finalState).toEqual(initialState);
+  });
+
+  it('should merge the nextstate and rehydrated state by using a custom rehydrateStateMerger', () => {
+    const feature1 = { prop1: false, prop2: 100 };
+    const feature2 = { prop1: false, prop2: 200 };
+
+    const initialState = { feature1, feature2 };
+
+    storage.setItem('feature1', JSON.stringify({ prop1: true }));
+    storage.setItem('feature2', JSON.stringify({ prop1: true }));
+
+    const reducer = (state = initialState, action: any) => state;
+
+    const metaReducer = storageSync({
+      features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
+      storage,
+      rehydrateStateMerger: (state, rehydratedState) => {
+        return { ...state, ...rehydratedState };
+      }
+    });
+
+    const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
+    expect(finalState).toEqual({
+      feature1: {
+        prop1: true
+      },
+      feature2: {
+        prop1: true
+      }
+    });
   });
 
   it('should remove properties from object', () => {

@@ -96,6 +96,7 @@ export const storageSync = (cfg: IStorageSyncConfig) => (reducer: any) => {
     rehydrate: true,
     restoreDates: true,
     storageKeySerializer: (key: string) => key,
+    rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
     ...cfg
   };
 
@@ -110,8 +111,8 @@ export const storageSync = (cfg: IStorageSyncConfig) => (reducer: any) => {
       nextState = { ...state };
     }
 
-    if ((action.type === INIT_ACTION || action.type === UPDATE_ACTION) && rehydratedState) {
-      nextState = merge({}, nextState, rehydratedState);
+    if (rehydratedState && (action.type === INIT_ACTION || action.type === UPDATE_ACTION)) {
+      nextState = config.rehydrateStateMerger(nextState, rehydratedState);
     }
 
     nextState = reducer(nextState, action);

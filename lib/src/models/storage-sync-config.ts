@@ -15,13 +15,20 @@ export interface IStorageSyncConfig {
    */
   rehydrate?: boolean;
   /**
-  * Restore serialized date objects. If you work directly with ISO date strings, set this to false
+   * Restore serialized date objects. If you work directly with ISO date strings, set this to false
    * @default true
    */
   restoreDates?: boolean;
   /**
    * Serializer for storage keys
-   * @default (key: string) => string
+   * @param key the storage item key
+   * @default (key: string) => key
    */
   storageKeySerializer?: (key: string) => string;
+  /**
+   * Custom state merge function after rehydration (by default it does a deep merge)
+   * @param state the next state
+   * @param rehydratedState the state returned from a storage location
+   */
+  rehydrateStateMerger?: (state: any, rehydratedState: any) => Object;
 }
