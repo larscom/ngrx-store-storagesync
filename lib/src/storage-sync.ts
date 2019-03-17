@@ -81,14 +81,19 @@ export const syncStateUpdate = (
 ): void => {
   features
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey]) : true))
-    .forEach(({ stateKey, ignoreKeys }) => {
+    .forEach(({ stateKey, ignoreKeys, storageKeySerializerForFeature }) => {
       const featureState = JSON.parse(JSON.stringify(state[stateKey]));
       const filteredState = filterObject(featureState, ignoreKeys);
-      storage.setItem(storageKeySerializer(stateKey), JSON.stringify(filteredState));
+      storage.setItem(
+        storageKeySerializerForFeature
+          ? storageKeySerializerForFeature(stateKey)
+          : storageKeySerializer(stateKey),
+        JSON.stringify(filteredState)
+      );
     });
 };
 
-export const storageSync = (cfg: IStorageSyncConfig) => (reducer: any) => {
+export const storageSync = (storageSyncConfig: IStorageSyncConfig) => (reducer: any) => {
   const INIT_ACTION = '@ngrx/store/init';
   const UPDATE_ACTION = '@ngrx/store/update-reducers';
 
@@ -97,7 +102,7 @@ export const storageSync = (cfg: IStorageSyncConfig) => (reducer: any) => {
     restoreDates: true,
     storageKeySerializer: (key: string) => key,
     rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
-    ...cfg
+    ...storageSyncConfig
   };
 
   const rehydratedState = config.rehydrate ? rehydrateApplicationState(config) : null;

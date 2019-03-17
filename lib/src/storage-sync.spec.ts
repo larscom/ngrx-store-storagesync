@@ -205,6 +205,38 @@ describe('StorageSync', () => {
       expect(JSON.parse(storage.getItem('feature1'))).toEqual(expected);
       expect(storage.getItem('feature2')).toBeNull();
     });
+
+    it('should sync the complete state by using a custom storageKeySerializerForFeature', () => {
+      const storageKeySerializerForFeature = (key: string) => {
+        return `_${key}_`;
+      };
+
+      const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+      const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
+
+      const state = { feature1, feature2 };
+
+      const config: IStorageSyncConfig = {
+        storage,
+        storageKeySerializer: (key: string) => key,
+        features: [
+          { stateKey: 'feature1', storageKeySerializerForFeature },
+          { stateKey: 'feature2' }
+        ]
+      };
+
+      expect(storage.length).toEqual(0);
+
+      // sync to storage
+      syncStateUpdate(state, config);
+
+      expect(storage.length).toEqual(2);
+
+      expect(JSON.parse(storage.getItem(storageKeySerializerForFeature('feature1')))).toEqual(
+        feature1
+      );
+      expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
+    });
   });
 
   it('should merge and keep all properties in the initialState and rehydrated state', () => {
@@ -220,7 +252,7 @@ describe('StorageSync', () => {
 
     const metaReducer = storageSync({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
-      storage,
+      storage
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
@@ -265,7 +297,7 @@ describe('StorageSync', () => {
 
     const metaReducer = storageSync({
       features: [],
-      storage,
+      storage
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
