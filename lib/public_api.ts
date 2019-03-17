@@ -1,3 +1,3 @@
 export { storageSync } from './src/storage-sync';
-export { IStorageSyncConfig } from './src/models/storage-sync-config';
-export { IFeatureConfig } from './src/models/feature-config';
+export { IStorageSyncOptions } from './src/models/storage-sync-options';
+export { IFeatureOptions } from './src/models/feature-options';

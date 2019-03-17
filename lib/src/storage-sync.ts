@@ -1,6 +1,6 @@
 import { cloneDeep, merge } from 'lodash';
 
-import { IStorageSyncConfig } from './models/storage-sync-config';
+import { IStorageSyncOptions } from './models/storage-sync-options';
 
 export const dateReviver = (key: string, value: any) => {
   const isDateString =
@@ -46,7 +46,7 @@ export const rehydrateApplicationState = ({
   storage,
   storageKeySerializer,
   features
-}: IStorageSyncConfig): Object => {
+}: IStorageSyncOptions): any => {
   const reviver = restoreDates ? dateReviver : (k: string, v: any) => v;
   return features.reduce((acc, curr) => {
     const { storageKeySerializerForFeature, stateKey, deserialize } = curr;
@@ -70,7 +70,7 @@ export const rehydrateApplicationState = ({
 
 export const syncStateUpdate = (
   state: any,
-  { features, storage, storageKeySerializer }: IStorageSyncConfig
+  { features, storage, storageKeySerializer }: IStorageSyncOptions
 ): void => {
   features
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey]) : true))
@@ -86,16 +86,16 @@ export const syncStateUpdate = (
     });
 };
 
-export const storageSync = (storageSyncConfig: IStorageSyncConfig) => (reducer: any) => {
+export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {
   const INIT_ACTION = '@ngrx/store/init';
   const UPDATE_ACTION = '@ngrx/store/update-reducers';
 
-  const config: IStorageSyncConfig = {
+  const config: IStorageSyncOptions = {
     rehydrate: true,
     restoreDates: true,
     storageKeySerializer: (key: string) => key,
     rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
-    ...storageSyncConfig
+    ...options
   };
 
   const rehydratedState = config.rehydrate ? rehydrateApplicationState(config) : null;

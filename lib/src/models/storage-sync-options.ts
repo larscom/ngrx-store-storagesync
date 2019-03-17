@@ -1,10 +1,10 @@
-import { IFeatureConfig } from './feature-config';
+import { IFeatureOptions } from './feature-options';
 
-export interface IStorageSyncConfig {
+export interface IStorageSyncOptions {
   /**
    * By default, states are not synced, provide the feature states you want to sync.
    */
-  features: IFeatureConfig[];
+  features: IFeatureOptions[];
   /**
    * Provide the storage type to sync the state to, it can be any storage which implements the 'Storage' interface.
    */
@@ -30,5 +30,5 @@ export interface IStorageSyncConfig {
    * @param state the next state
    * @param rehydratedState the state returned from a storage location
    */
-  rehydrateStateMerger?: (state: any, rehydratedState: any) => Object;
+  rehydrateStateMerger?: (state: any, rehydratedState: any) => any;
 }

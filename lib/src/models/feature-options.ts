@@ -1,4 +1,4 @@
-export interface IFeatureConfig {
+export interface IFeatureOptions {
   /**
    * The name of the feature state
    */
