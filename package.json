@@ -1,6 +1,6 @@
 {
   "name": "@larscom/ngrx-store-storagesync",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Simple way of syncing state to any storage type (localstorage/sessionstorage) for @ngrx/store",
   "main": "./dist/public_api.js",
   "typings": "./dist/public_api.d.ts",
@@ -19,7 +19,7 @@
   },
   "keywords": [
     "angular",
-    "ngrx",    
+    "ngrx",
     "redux",
     "store",
     "state",
