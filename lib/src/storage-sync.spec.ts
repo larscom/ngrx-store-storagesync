@@ -1,5 +1,5 @@
 import { IStorageSyncConfig } from './models/storage-sync-config';
-import { filterObject, rehydrateApplicationState, storageSync, syncStateUpdate } from './storage-sync';
+import { dateReviver, filterObject, rehydrateApplicationState, storageSync, syncStateUpdate } from './storage-sync';
 
 class MockStorage implements Storage {
   public get length(): number {
@@ -40,6 +40,10 @@ describe('StorageSync', () => {
   });
 
   describe('RehydrateApplicationState', () => {
+    it('should revive dates', () => {
+      expect(dateReviver('key', '2019-01-01T13:37:00.002Z')).toBeInstanceOf(Date);
+    });
+
     it('should re hydrate the application state', () => {
       const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
       const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
@@ -183,6 +187,27 @@ describe('StorageSync', () => {
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
       storage,
       rehydrate: false
+    });
+
+    const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
+    expect(finalState).toEqual(initialState);
+  });
+
+  it('should give back the initial state when no features are given', () => {
+    const feature1 = { prop1: false, prop2: 100 };
+    const feature2 = { prop1: false, prop2: 200 };
+
+    const initialState = { feature1, feature2 };
+
+    storage.setItem('feature1', JSON.stringify({ prop1: true }));
+    storage.setItem('feature2', JSON.stringify({ prop1: true }));
+
+    const reducer = (state = initialState, action: any) => state;
+
+    const metaReducer = storageSync({
+      features: [],
+      storage,
+      rehydrate: true
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });

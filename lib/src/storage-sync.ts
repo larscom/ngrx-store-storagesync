@@ -2,7 +2,7 @@ import { merge } from 'lodash';
 
 import { IStorageSyncConfig } from './models/storage-sync-config';
 
-const dateReviver = (key: string, value: any) => {
+export const dateReviver = (key: string, value: any) => {
   const isDateString =
     typeof value === 'string' && /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.test(value);
   return isDateString ? new Date(value) : value;
@@ -70,10 +70,6 @@ export const syncStateUpdate = (
   });
 };
 
-/**
- * The storageSync MetaReducer
- * @param cfg The configuration
- */
 export const storageSync = (cfg: IStorageSyncConfig) => (reducer: any) => {
   const INIT_ACTION = '@ngrx/store/init';
   const UPDATE_ACTION = '@ngrx/store/update-reducers';
