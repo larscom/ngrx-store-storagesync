@@ -11,8 +11,7 @@
     "test:update": "jest -u",
     "test:watch": "jest --watch",
     "test:ci": "jest --runInBand",
-    "test:coverage": "jest --coverage",
-    "typings": "typings install"
+    "test:coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
