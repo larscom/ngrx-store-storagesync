@@ -8,8 +8,9 @@ export interface IFeatureOptions {
    */
   ignoreKeys?: string[];
   /**
-   * Provide the storage type to sync the feature state to, it can be any storage which implements the 'Storage' interface.
-   * 
+   * Provide the storage type to sync the feature state to,
+   * it can be any storage which implements the 'Storage' interface.
+   *
    * It will override the global storage property for this feature
    */
   storageForFeature?: Storage;

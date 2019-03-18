@@ -1,5 +1,5 @@
 {
-  "extends": "tslint:latest",
+  "extends": "tslint:recommended",
   "rules": {
     "ban-types": false,
     "quotemark": false,
@@ -8,5 +8,6 @@
     "prefer-conditional-expression": false,
     "no-console": false,
     "no-debugger": false,
+    "object-literal-sort-keys": false
   }
 }

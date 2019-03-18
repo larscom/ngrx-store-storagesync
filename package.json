@@ -6,6 +6,7 @@
   "typings": "./dist/public_api.d.ts",
   "scripts": {
     "build": "rimraf dist && tsc",
+    "lint": "tslint -p tslint.json -t stylish",
     "test": "jest",
     "test:update": "jest -u",
     "test:watch": "jest --watch",

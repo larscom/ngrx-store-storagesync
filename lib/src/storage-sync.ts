@@ -122,7 +122,7 @@ export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {
     ...options
   };
 
-  const rehydratedState = config.rehydrate ? rehydrateApplicationState(config) : null;
+  const rehydratedApplicationState = config.rehydrate ? rehydrateApplicationState(config) : null;
 
   return (state: any, action: any) => {
     let nextState = null;
@@ -133,8 +133,8 @@ export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {
       nextState = { ...state };
     }
 
-    if (rehydratedState && (action.type === INIT_ACTION || action.type === UPDATE_ACTION)) {
-      nextState = config.rehydrateStateMerger(nextState, rehydratedState);
+    if (rehydratedApplicationState && [INIT_ACTION, UPDATE_ACTION].includes(action.type)) {
+      nextState = config.rehydrateStateMerger(nextState, rehydratedApplicationState);
     }
 
     nextState = reducer(nextState, action);
