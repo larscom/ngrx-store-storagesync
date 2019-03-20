@@ -132,12 +132,16 @@ describe('StateSync', () => {
   it('should selectively sync parts of the feature states', () => {
     const feature1 = {
       prop1: false,
+      random: 1337,
+      check: false,
       prop3: { check: false, random: 1337 },
       prop4: { check: false, random: 1337 }
     };
 
     const feature2 = {
       prop1: false,
+      random: 1337,
+      check: false,
       prop3: { check: false, random: 1337 },
       prop4: { check: false, random: 1337 }
     };

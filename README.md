@@ -47,12 +47,13 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
       // saves only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
 
-      // will ignore all keys with success / loading inside the 'app' state
+      // will ignore all keys with success / loading inside the 'app' feature state
       { stateKey: 'app', ignoreKeys: ['success', 'loading'] },
 
       // will ignore only 'success' on feature.auth
-      // NOTE: only goes 3 levels deep in total (feature.auth.success)
-      { stateKey: 'feature', ignoreKeys: ['auth.success', 'loading'] }
+      // NOTE: for now, ignoring keys like 'auth.success' will only go 3 levels deep max
+      // if you need deeper ignoring, don't use the '.'
+      { stateKey: 'feature', ignoreKeys: ['auth.success'] }
     ],
     // defaults to localStorage
     storage: window.localStorage
