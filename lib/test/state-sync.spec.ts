@@ -148,7 +148,7 @@ describe('StateSync', () => {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
-        { stateKey: 'feature1', ignoreKeys: ['prop1', 'prop4.check'] },
+        { stateKey: 'feature1', ignoreKeys: ['prop1', 'prop4.check', 'prop3.random'] },
         { stateKey: 'feature2', ignoreKeys: ['prop1', 'prop4.random'] }
       ]
     };
@@ -163,6 +163,10 @@ describe('StateSync', () => {
     expect(JSON.parse(storage.getItem('feature1'))).toEqual({
       ...feature1,
       prop1: undefined,
+      prop3: {
+        ...feature1.prop3,
+        random: undefined
+      },
       prop4: {
         ...feature1.prop4,
         check: undefined
