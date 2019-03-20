@@ -50,8 +50,7 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
       // will ignore all keys with success / loading inside the 'app' feature state
       { stateKey: 'app', ignoreKeys: ['success', 'loading'] },
 
-      // will ignore object 'auth' with key 'success' inside the 'feature1' state
-      // ignoring keys with 'object.key' can only be used in pairs (so, object.key.object doesn't work)
+      // will ignore key 'success' on object 'auth' inside the 'feature1' state
       { stateKey: 'feature1', ignoreKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
