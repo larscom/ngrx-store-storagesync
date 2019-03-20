@@ -33,10 +33,12 @@ import { StoreModule, ActionReducerMap, ActionReducer, MetaReducer } from '@ngrx
 import { routerReducer } from '@ngrx/router-store';
 import { storageSync } from '@larscom/ngrx-store-storagesync';
 import * as fromApp from './app/reducer';
+import * as fromFeature from './feature/reducer';
 
 export const reducers: ActionReducerMap<IState> = {
   router: routerReducer,
-  app: fromApp.reducer
+  app: fromApp.reducer,
+  feature: fromFeature.reducer
 };
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -44,8 +46,15 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
     features: [
       // saves only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
-      { stateKey: 'app', ignoreKeys: ['success', 'loading'] }
+
+      // will ignore all keys with success / loading inside the 'app' state
+      { stateKey: 'app', ignoreKeys: ['success', 'loading'] },
+
+      // will ignore only 'success' on feature.auth
+      // NOTE: only goes 1 level deep
+      { stateKey: 'feature', ignoreKeys: ['auth.success', 'loading'] },
     ],
+    // defaults to localStorage
     storage: window.localStorage
   })(reducer);
 }
@@ -57,6 +66,11 @@ const metaReducers: Array<MetaReducer<any, any>> = [storageSyncReducer];
 })
 export class AppModule {}
 ```
+## Deserializing
+By default the state gets deserialized and parsed by `JSON.parse` with an ISO date reviver.
+This means that your ISO date objects gets stored as `string`, and restored as `Date`
+
+If you do not want this behaviour, you can implement your own `deserialize` function.
 
 ## Configuration
 
@@ -80,11 +94,6 @@ export interface IStorageSyncOptions {
    * @default true
    */
   rehydrate?: boolean;
-  /**
-   * Restore serialized date objects. If you work directly with ISO date strings, set this to false
-   * @default true
-   */
-  restoreDates?: boolean;
   /**
    * Serializer for storage keys
    * @param key the storage item key
@@ -138,6 +147,8 @@ export interface IFeatureOptions {
   serialize?: (featureState: any) => string;
   /**
    * Deserializer for the feature state (after getting the state from a storage location)
+   * 
+   * ISO Date objects which are stored as a string gets revived as Date object by default.
    * @param featureState the feature state retrieved from a storage location
    * @default (featureState: string) => JSON.Parse(featureState)
    */

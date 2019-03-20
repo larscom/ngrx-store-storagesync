@@ -1,5 +1,5 @@
 import { IStorageSyncOptions } from '../src/models/storage-sync-options';
-import { filterObject, stateSync } from '../src/state-sync';
+import { filterState, stateSync } from '../src/state-sync';
 import { MockStorage } from './mock-storage';
 
 describe('StateSync', () => {
@@ -12,7 +12,7 @@ describe('StateSync', () => {
   it('should remove properties from object', () => {
     const subject = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
 
-    expect(filterObject(subject, ['prop1', 'random'])).toEqual({
+    expect(filterState(subject, ['prop1', 'random'])).toEqual({
       ...subject,
       prop1: undefined,
       prop3: {
@@ -104,6 +104,56 @@ describe('StateSync', () => {
     expect(storage.getItem('feature2')).toBeNull();
   });
 
+  it('should selectively sync parts of the feature states', () => {
+    const feature1 = {
+      prop1: false,
+      prop3: { check: false, random: 1337 },
+      prop4: { check: false, random: 1337 }
+    };
+
+    const feature2 = {
+      prop1: false,
+      prop3: { check: false, random: 1337 },
+      prop4: { check: false, random: 1337 }
+    };
+
+    const state = { feature1, feature2 };
+
+    const config: IStorageSyncOptions = {
+      storage,
+      storageKeySerializer: (key: string) => key,
+      features: [
+        { stateKey: 'feature1', ignoreKeys: ['prop1', 'prop4.check'] },
+        { stateKey: 'feature2', ignoreKeys: ['prop1', 'prop4.random'] }
+      ]
+    };
+
+    expect(storage.length).toEqual(0);
+
+    // sync to storage
+    stateSync(state, config);
+
+    expect(storage.length).toEqual(2);
+
+    expect(JSON.parse(storage.getItem('feature1'))).toEqual({
+      ...feature1,
+      prop1: undefined,
+      prop4: {
+        ...feature1.prop4,
+        check: undefined
+      }
+    });
+
+    expect(JSON.parse(storage.getItem('feature2'))).toEqual({
+      ...feature2,
+      prop1: undefined,
+      prop4: {
+        ...feature2.prop4,
+        random: undefined
+      }
+    });
+  });
+
   it('should sync only a part of a feature of the state to the provided storage', () => {
     const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
@@ -123,16 +173,14 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(1);
 
-    const expected = {
+    expect(JSON.parse(storage.getItem('feature1'))).toEqual({
       ...feature1,
       prop1: undefined,
       prop3: {
         ...feature1.prop3,
         check: undefined
       }
-    };
-
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual(expected);
+    });
     expect(storage.getItem('feature2')).toBeNull();
   });
 

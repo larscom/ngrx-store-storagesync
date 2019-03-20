@@ -20,11 +20,6 @@ export interface IStorageSyncOptions {
    */
   rehydrate?: boolean;
   /**
-   * Restore serialized date objects. If you work directly with ISO date strings, set this to false
-   * @default true
-   */
-  restoreDates?: boolean;
-  /**
    * Serializer for storage keys
    * @param key the storage item key
    * @default (key: string) => key

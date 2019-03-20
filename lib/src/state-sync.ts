@@ -2,37 +2,46 @@ import { cloneDeep } from 'lodash';
 
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
-export const filterObject = (obj: Object, keys?: string[]): Object => {
-  if (!keys) {
-    return obj;
+export const filterState = (state: any, keys?: string[]): any => {
+  if (!keys || !keys.length) {
+    return state;
   }
   let index = 0;
-  for (const prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      switch (typeof obj[prop]) {
+  for (const prop in state) {
+    if (state.hasOwnProperty(prop)) {
+      switch (typeof state[prop]) {
         case 'string':
           index = keys.indexOf(prop);
           if (index > -1) {
-            delete obj[prop];
+            delete state[prop];
           }
           break;
         case 'object':
           index = keys.indexOf(prop);
           if (index > -1) {
-            delete obj[prop];
+            delete state[prop];
           } else {
-            filterObject(obj[prop], keys);
+            filterState(state[prop], keys);
           }
           break;
         default: {
+          keys
+            .filter(key => key.includes('.'))
+            .map(key => {
+              const splitted = key.split('.');
+              return { key: splitted[0], ignoreKeys: [splitted[1]] };
+            })
+            .filter(({ key }) => state[key] != null)
+            .forEach(({ key, ignoreKeys }) => filterState(state[key], ignoreKeys));
+
           if (keys.includes(prop)) {
-            delete obj[prop];
+            delete state[prop];
           }
         }
       }
     }
   }
-  return obj;
+  return state;
 };
 
 export const stateSync = (
@@ -44,7 +53,7 @@ export const stateSync = (
     .forEach(
       ({ stateKey, ignoreKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
         const featureState = cloneDeep(state[stateKey]);
-        const filteredState = filterObject(featureState, ignoreKeys);
+        const filteredState = filterState(featureState, ignoreKeys);
 
         const key = storageKeySerializerForFeature
           ? storageKeySerializerForFeature(stateKey)

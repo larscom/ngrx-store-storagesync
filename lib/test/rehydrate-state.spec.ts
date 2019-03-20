@@ -1,5 +1,5 @@
 import { IStorageSyncOptions } from '../src/models/storage-sync-options';
-import { dateReviver, rehydrateState } from '../src/rehydrate-state';
+import { rehydrateState } from '../src/rehydrate-state';
 import { MockStorage } from './mock-storage';
 
 describe('RehydrateState', () => {
@@ -7,10 +7,6 @@ describe('RehydrateState', () => {
 
   beforeEach(() => {
     storage = new MockStorage();
-  });
-
-  it('should revive dates', () => {
-    expect(dateReviver('key', '2019-01-01T13:37:00.002Z')).toBeInstanceOf(Date);
   });
 
   it('should re hydrate the state to a default object', () => {
@@ -40,7 +36,12 @@ describe('RehydrateState', () => {
       return `_${key}_`;
     };
 
-    const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+    const feature1 = {
+      date: new Date(),
+      prop1: false,
+      prop2: 100,
+      prop3: { check: false, random: 1337 }
+    };
 
     storage.setItem(storageKeySerializerForFeature('feature1'), JSON.stringify(feature1));
 

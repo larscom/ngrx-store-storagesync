@@ -1,9 +1,8 @@
+import { INIT_ACTION } from '../src/actions';
 import { storageSync } from '../src/storage-sync';
 import { MockStorage } from './mock-storage';
 
 describe('StorageSync', () => {
-  const INIT_ACTION = '@ngrx/store/init';
-
   let storage: Storage;
 
   beforeEach(() => {

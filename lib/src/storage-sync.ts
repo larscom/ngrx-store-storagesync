@@ -1,22 +1,19 @@
 import { merge } from 'lodash';
 
+import { INIT_ACTION, UPDATE_ACTION } from './actions';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
 import { stateSync } from './state-sync';
 
 export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {
-  const INIT_ACTION = '@ngrx/store/init';
-  const UPDATE_ACTION = '@ngrx/store/update-reducers';
-
   const config: IStorageSyncOptions = {
     rehydrate: true,
-    restoreDates: true,
     storageKeySerializer: (key: string) => key,
     rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
     ...options
   };
 
-  const rehydratedApplicationState = config.rehydrate ? rehydrateState(config) : null;
+  const restoredState = config.rehydrate ? rehydrateState(config) : null;
 
   return (state: any, action: any) => {
     let nextState = null;
@@ -27,8 +24,8 @@ export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {
       nextState = { ...state };
     }
 
-    if (rehydratedApplicationState && [INIT_ACTION, UPDATE_ACTION].includes(action.type)) {
-      nextState = config.rehydrateStateMerger(nextState, rehydratedApplicationState);
+    if (restoredState && [INIT_ACTION, UPDATE_ACTION].includes(action.type)) {
+      nextState = config.rehydrateStateMerger(nextState, restoredState);
     }
 
     nextState = reducer(nextState, action);

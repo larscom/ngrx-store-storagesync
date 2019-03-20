@@ -36,6 +36,8 @@ export interface IFeatureOptions {
   serialize?: (featureState: any) => string;
   /**
    * Deserializer for the feature state (after getting the state from a storage location)
+   *
+   * ISO Date objects which are stored as a string gets revived as Date object by default.
    * @param featureState the feature state retrieved from a storage location
    * @default (featureState: string) => JSON.Parse(featureState)
    */
