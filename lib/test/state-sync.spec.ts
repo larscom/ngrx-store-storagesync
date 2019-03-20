@@ -1,5 +1,5 @@
 import { IStorageSyncOptions } from '../src/models/storage-sync-options';
-import { filterState, stateSync, cleanState } from '../src/state-sync';
+import { cleanState, filterState, stateSync } from '../src/state-sync';
 import { MockStorage } from './mock-storage';
 
 describe('StateSync', () => {
