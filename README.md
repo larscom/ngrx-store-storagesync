@@ -52,7 +52,7 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
 
       // will ignore only 'success' on feature.auth
       // NOTE: only goes 1 level deep
-      { stateKey: 'feature', ignoreKeys: ['auth.success', 'loading'] },
+      { stateKey: 'feature', ignoreKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
     storage: window.localStorage
