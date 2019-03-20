@@ -6,7 +6,7 @@
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
 Simple syncing (with ignoring specific keys) between the ngrx store and localstorage/sessionstorage.
-You can even sync different 'feature' states to different storage locations.
+You can also sync different 'feature' states to different storage locations.
 For example:
 
 - feature1 to sessionStorage
@@ -51,7 +51,7 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
       { stateKey: 'app', ignoreKeys: ['success', 'loading'] },
 
       // will ignore only 'success' on feature.auth
-      // NOTE: only goes 1 level deep
+      // NOTE: only goes 3 levels deep in total (feature.auth.success)
       { stateKey: 'feature', ignoreKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
