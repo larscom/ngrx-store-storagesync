@@ -6,18 +6,19 @@ export const filterState = (state: any, keys?: string[]): any => {
   if (!keys) {
     return state;
   }
+
+  keys
+    .filter(key => key.includes('.'))
+    .forEach(key => {
+      const splitted = key.split('.');
+      const rootKey = splitted[0];
+      const nestedKey = splitted[1];
+      filterState(state[rootKey], [nestedKey]);
+    });
+
   let index = 0;
   for (const prop in state) {
     if (state.hasOwnProperty(prop)) {
-      keys
-        .filter(key => key.includes('.'))
-        .forEach(key => {
-          const splitted = key.split('.');
-          const rootKey = splitted[0];
-          const nestedKey = splitted[1];
-          filterState(state[rootKey], [nestedKey]);
-        });
-
       switch (typeof state[prop]) {
         case 'string':
           index = keys.indexOf(prop);
