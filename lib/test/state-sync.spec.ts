@@ -1,5 +1,5 @@
 import { IStorageSyncOptions } from '../src/models/storage-sync-options';
-import { filterState, stateSync } from '../src/state-sync';
+import { filterState, stateSync, cleanState } from '../src/state-sync';
 import { MockStorage } from './mock-storage';
 
 describe('StateSync', () => {
@@ -19,6 +19,34 @@ describe('StateSync', () => {
         ...state.prop3,
         random: undefined
       }
+    });
+  });
+
+  it('should clean the state from empty objects', () => {
+    const state = {
+      prop1: false,
+      prop2: {
+        check: true,
+        nested: {
+          check: false,
+          nested: {}
+        }
+      },
+      prop3: {},
+      prop4: {}
+    };
+
+    expect(cleanState(state)).toEqual({
+      ...state,
+      prop2: {
+        ...state.prop2,
+        nested: {
+          ...state.prop2.nested,
+          nested: undefined
+        }
+      },
+      prop3: undefined,
+      prop4: undefined
     });
   });
 
