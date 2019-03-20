@@ -45,13 +45,13 @@ export const filterState = (state: any, keys?: string[]): any => {
   return state;
 };
 
-export const cleanEmptyObjects = (state: any): any => {
+export const cleanState = (state: any): any => {
   for (const key in state) {
     if (!state[key] || typeof state[key] !== 'object') {
       continue;
     }
 
-    cleanEmptyObjects(state[key]);
+    cleanState(state[key]);
 
     if (!Object.keys(state[key]).length) {
       delete state[key];
@@ -72,7 +72,7 @@ export const stateSync = (
 
         const filteredState = syncEmptyObjects
           ? filterState(featureState, ignoreKeys)
-          : cleanEmptyObjects(filterState(featureState, ignoreKeys));
+          : cleanState(filterState(featureState, ignoreKeys));
 
         const needsSync = Object.keys(filteredState).length || syncEmptyObjects;
 
