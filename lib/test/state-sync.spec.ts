@@ -9,14 +9,14 @@ describe('StateSync', () => {
     storage = new MockStorage();
   });
 
-  it('should remove properties from object', () => {
-    const subject = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+  it('should filter properties on state', () => {
+    const state = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
 
-    expect(filterState(subject, ['prop1', 'random'])).toEqual({
-      ...subject,
+    expect(filterState(state, ['prop1', 'random'])).toEqual({
+      ...state,
       prop1: undefined,
       prop3: {
-        ...subject.prop3,
+        ...state.prop3,
         random: undefined
       }
     });
@@ -56,6 +56,31 @@ describe('StateSync', () => {
 
     expect(JSON.parse(storage.getItem('feature1'))).toEqual(feature1);
     expect(storage.getItem('feature2')).toBeNull();
+  });
+
+  it('should not sync empty objects the provided storage', () => {
+    const feature1 = { prop1: false, prop2: { check: false } };
+    const feature2 = { prop1: false, prop2: { check: false } };
+    const state = { feature1, feature2 };
+
+    const config: IStorageSyncOptions = {
+      storage,
+      storageKeySerializer: (key: string) => key,
+      features: [
+        { stateKey: 'feature1', ignoreKeys: ['prop1', 'check'] },
+        { stateKey: 'feature2', ignoreKeys: ['check'] }
+      ]
+    };
+
+    expect(storage.length).toEqual(0);
+
+    // sync to storage
+    stateSync(state, config);
+
+    expect(storage.length).toEqual(1);
+
+    expect(JSON.parse(storage.getItem('feature1'))).toBeNull();
+    expect(JSON.parse(storage.getItem('feature2'))).toEqual({ prop1: false });
   });
 
   it('should sync the complete state to the provided storage', () => {

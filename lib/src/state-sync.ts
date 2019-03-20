@@ -44,16 +44,40 @@ export const filterState = (state: any, keys?: string[]): any => {
   return state;
 };
 
+export const cleanState = (state: any): any => {
+  for (const key in state) {
+    if (!state[key] || typeof state[key] !== 'object') {
+      continue;
+    }
+
+    cleanState(state[key]);
+
+    if (!Object.keys(state[key]).length) {
+      delete state[key];
+    }
+  }
+  return state;
+};
+
 export const stateSync = (
   state: any,
-  { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions
+  { features, storage, storageKeySerializer, storageError, syncEmptyObjects }: IStorageSyncOptions
 ): void => {
   features
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
     .forEach(
       ({ stateKey, ignoreKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
         const featureState = cloneDeep(state[stateKey]);
-        const filteredState = filterState(featureState, ignoreKeys);
+
+        const filteredState = syncEmptyObjects
+          ? filterState(featureState, ignoreKeys)
+          : cleanState(filterState(featureState, ignoreKeys));
+
+        const needsSync = Object.keys(filteredState).length || syncEmptyObjects;
+
+        if (!needsSync) {
+          return;
+        }
 
         const key = storageKeySerializerForFeature
           ? storageKeySerializerForFeature(stateKey)

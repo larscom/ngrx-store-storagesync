@@ -8,6 +8,7 @@ import { stateSync } from './state-sync';
 export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {
   const config: IStorageSyncOptions = {
     rehydrate: true,
+    syncEmptyObjects: false,
     storageKeySerializer: (key: string) => key,
     rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
     ...options

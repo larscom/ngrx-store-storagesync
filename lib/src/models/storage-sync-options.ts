@@ -10,19 +10,24 @@ export interface IStorageSyncOptions {
    */
   storage: Storage;
   /**
+   * Sync empty objects to storage
+   * @default syncEmptyObjects false
+   */
+  syncEmptyObjects?: boolean;
+  /**
    * Function that gets executed on a storage error
    * @param error the error that occurred
    */
   storageError?: (error: any) => void;
   /**
    * Pull initial state from storage on startup
-   * @default true
+   * @default rehydrate true
    */
   rehydrate?: boolean;
   /**
    * Serializer for storage keys
    * @param key the storage item key
-   * @default (key: string) => key
+   * @default storageKeySerializer (key: string) => key
    */
   storageKeySerializer?: (key: string) => string;
   /**

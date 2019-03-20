@@ -59,7 +59,7 @@ describe('StorageSync', () => {
     });
   });
 
-  it('should give back the initial state when rehydrate is disabled and the storage is filled', () => {
+  it('should get the initial state when rehydrate is disabled', () => {
     const feature1 = { prop1: false, prop2: 100 };
     const feature2 = { prop1: false, prop2: 200 };
 
@@ -80,7 +80,7 @@ describe('StorageSync', () => {
     expect(finalState).toEqual(initialState);
   });
 
-  it('should give back the initial state when no features are given', () => {
+  it('should get the initial state when no features are defined', () => {
     const feature1 = { prop1: false, prop2: 100 };
     const feature2 = { prop1: false, prop2: 200 };
 
@@ -98,6 +98,33 @@ describe('StorageSync', () => {
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
     expect(finalState).toEqual(initialState);
+  });
+
+  it('should get the feature states as number and string', () => {
+    const feature1 = 0;
+    const feature2 = null;
+
+    const initialState = { feature1, feature2 };
+
+    storage.setItem('feature1', JSON.stringify(1337));
+    storage.setItem('feature2', JSON.stringify('myValue'));
+
+    const reducer = (state = initialState, action: any) => state;
+
+    const metaReducer = storageSync({
+      features: [
+        {
+          stateKey: 'feature1'
+        },
+        {
+          stateKey: 'feature2'
+        }
+      ],
+      storage
+    });
+
+    const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
+    expect(finalState).toEqual({ feature1: 1337, feature2: 'myValue' });
   });
 
   it('should merge the nextstate and rehydrated state by using a custom rehydrateStateMerger', () => {
