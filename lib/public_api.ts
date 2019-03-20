@@ -1,3 +1,1 @@
-export { storageSync } from './src/storage-sync';
-export { IStorageSyncOptions } from './src/models/storage-sync-options';
-export { IFeatureOptions } from './src/models/feature-options';
+export * from './src/public_api';
