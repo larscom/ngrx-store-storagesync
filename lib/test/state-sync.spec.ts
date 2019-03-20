@@ -134,7 +134,11 @@ describe('StateSync', () => {
       prop1: false,
       random: 1337,
       check: false,
-      prop3: { check: false, random: 1337 },
+      prop3: {
+        check: false,
+        random: 1337,
+        prop5: { check: true, value: 100, prop6: { check: false, value: 200 } }
+      },
       prop4: { check: false, random: 1337 }
     };
 
@@ -152,8 +156,8 @@ describe('StateSync', () => {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
-        { stateKey: 'feature1', ignoreKeys: ['prop1', 'prop4.check', 'prop3.random'] },
-        { stateKey: 'feature2', ignoreKeys: ['prop1', 'prop4.random'] }
+        { stateKey: 'feature1', ignoreKeys: ['prop5.check', 'prop6.check', 'prop1'] },
+        { stateKey: 'feature2', ignoreKeys: ['prop4.check', 'prop1'] }
       ]
     };
 
@@ -169,20 +173,22 @@ describe('StateSync', () => {
       prop1: undefined,
       prop3: {
         ...feature1.prop3,
-        random: undefined
-      },
-      prop4: {
-        ...feature1.prop4,
-        check: undefined
+        prop5: {
+          ...feature1.prop3.prop5,
+          check: undefined,
+          prop6: {
+            ...feature1.prop3.prop5.prop6,
+            check: undefined
+          }
+        }
       }
     });
-
     expect(JSON.parse(storage.getItem('feature2'))).toEqual({
       ...feature2,
       prop1: undefined,
       prop4: {
         ...feature2.prop4,
-        random: undefined
+        check: undefined
       }
     });
   });

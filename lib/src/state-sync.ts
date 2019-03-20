@@ -3,12 +3,21 @@ import { cloneDeep } from 'lodash';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
 export const filterState = (state: any, keys?: string[]): any => {
-  if (!keys || !keys.length) {
+  if (!keys) {
     return state;
   }
   let index = 0;
   for (const prop in state) {
     if (state.hasOwnProperty(prop)) {
+      keys
+        .filter(key => key.includes('.'))
+        .forEach(key => {
+          const splitted = key.split('.');
+          const rootKey = splitted[0];
+          const nestedKey = splitted[1];
+          filterState(state[rootKey], [nestedKey]);
+        });
+
       switch (typeof state[prop]) {
         case 'string':
           index = keys.indexOf(prop);
@@ -25,15 +34,6 @@ export const filterState = (state: any, keys?: string[]): any => {
           }
           break;
         default: {
-          keys
-            .filter(key => key.includes('.'))
-            .map(key => {
-              const splitted = key.split('.');
-              return { key: splitted[0], ignoreKeys: [splitted[1]] };
-            })
-            .filter(({ key }) => state[key] != null)
-            .forEach(({ key, ignoreKeys }) => filterState(state[key], ignoreKeys));
-
           if (keys.includes(prop)) {
             delete state[prop];
           }
@@ -44,13 +44,13 @@ export const filterState = (state: any, keys?: string[]): any => {
   return state;
 };
 
-export const cleanState = (state: any): any => {
+export const cleanEmptyObjects = (state: any): any => {
   for (const key in state) {
     if (!state[key] || typeof state[key] !== 'object') {
       continue;
     }
 
-    cleanState(state[key]);
+    cleanEmptyObjects(state[key]);
 
     if (!Object.keys(state[key]).length) {
       delete state[key];
@@ -71,7 +71,7 @@ export const stateSync = (
 
         const filteredState = syncEmptyObjects
           ? filterState(featureState, ignoreKeys)
-          : cleanState(filterState(featureState, ignoreKeys));
+          : cleanEmptyObjects(filterState(featureState, ignoreKeys));
 
         const needsSync = Object.keys(filteredState).length || syncEmptyObjects;
 

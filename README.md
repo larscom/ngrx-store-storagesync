@@ -33,12 +33,12 @@ import { StoreModule, ActionReducerMap, ActionReducer, MetaReducer } from '@ngrx
 import { routerReducer } from '@ngrx/router-store';
 import { storageSync } from '@larscom/ngrx-store-storagesync';
 import * as fromApp from './app/reducer';
-import * as fromFeature from './feature/reducer';
+import * as fromFeature1 from './feature/reducer';
 
 export const reducers: ActionReducerMap<IState> = {
   router: routerReducer,
   app: fromApp.reducer,
-  feature: fromFeature.reducer
+  feature1: fromFeature1.reducer
 };
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -50,10 +50,9 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
       // will ignore all keys with success / loading inside the 'app' feature state
       { stateKey: 'app', ignoreKeys: ['success', 'loading'] },
 
-      // will ignore only 'success' on feature.auth
-      // NOTE: for now, ignoring keys like 'auth.success' will only go 3 levels deep max
-      // if you need deeper ignoring, don't use the '.'
-      { stateKey: 'feature', ignoreKeys: ['auth.success'] }
+      // will ignore object 'auth' with key 'success' inside the 'feature1' state
+      // ignoring keys with 'object.key' can only be used in pairs (so, object.key.object doesn't work)
+      { stateKey: 'feature1', ignoreKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
     storage: window.localStorage
