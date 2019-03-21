@@ -87,15 +87,15 @@ describe('StateSync', () => {
   });
 
   it('should not sync empty objects the provided storage', () => {
-    const feature1 = { prop1: false, prop2: { check: false } };
-    const feature2 = { prop1: false, prop2: { check: false } };
+    const feature1 = { prop1: false, array: ['1'], prop2: { check: false } };
+    const feature2 = { prop1: false, prop2: { check: false, array: [] } };
     const state = { feature1, feature2 };
 
     const config: IStorageSyncOptions = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
-        { stateKey: 'feature1', ignoreKeys: ['prop1', 'check'] },
+        { stateKey: 'feature1', ignoreKeys: ['prop1', 'check', 'array'] },
         { stateKey: 'feature2', ignoreKeys: ['check'] }
       ]
     };
@@ -112,8 +112,8 @@ describe('StateSync', () => {
   });
 
   it('should sync the complete state to the provided storage', () => {
-    const feature1 = { prop1: false, prop2: 100, prop3: { check: false } };
-    const feature2 = { prop1: false, prop2: 200, prop3: { check: false } };
+    const feature1 = { prop1: false, prop2: 100, array: [1, 2, 3], prop3: { check: false } };
+    const feature2 = { prop1: false, prop2: 200, array: [1, 2, 3], prop3: { check: false } };
 
     const state = { feature1, feature2 };
 
@@ -222,7 +222,12 @@ describe('StateSync', () => {
   });
 
   it('should sync only a part of a feature of the state to the provided storage', () => {
-    const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+    const feature1 = {
+      prop1: false,
+      array: ['check'],
+      prop2: 100,
+      prop3: { check: false, random: 1337 }
+    };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
 
     const state = { feature1, feature2 };

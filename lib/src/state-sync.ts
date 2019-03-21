@@ -2,9 +2,9 @@ import { cloneDeep } from 'lodash';
 
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
-export const filterState = <T>(featureState: Partial<T>, keys?: string[]): Partial<T> => {
+export const filterState = <T>(state: Partial<T>, keys?: string[]): Partial<T> => {
   if (!keys) {
-    return featureState;
+    return state;
   }
 
   keys
@@ -13,36 +13,31 @@ export const filterState = <T>(featureState: Partial<T>, keys?: string[]): Parti
       const splitted = key.split('.');
       const rootKey = splitted[0];
       const nestedKey = splitted[1];
-      filterState(featureState[rootKey], [nestedKey]);
+      filterState(state[rootKey], [nestedKey]);
     });
 
   let index = 0;
-  for (const prop in featureState) {
-    if (featureState.hasOwnProperty(prop)) {
-      switch (typeof featureState[prop]) {
-        case 'string':
-          index = keys.indexOf(prop);
-          if (index > -1) {
-            delete featureState[prop];
-          }
-          break;
+  for (const prop in state) {
+    if (state.hasOwnProperty(prop)) {
+      switch (typeof state[prop]) {
         case 'object':
           index = keys.indexOf(prop);
           if (index > -1) {
-            delete featureState[prop];
+            delete state[prop];
           } else {
-            filterState(featureState[prop], keys);
+            filterState(state[prop], keys);
           }
           break;
         default: {
-          if (keys.includes(prop)) {
-            delete featureState[prop];
+          index = keys.indexOf(prop);
+          if (index > -1) {
+            delete state[prop];
           }
         }
       }
     }
   }
-  return featureState;
+  return state;
 };
 
 export const cleanState = <T>(featureState: Partial<T>): Partial<T> => {
