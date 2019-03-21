@@ -42,7 +42,7 @@ export const reducers: ActionReducerMap<IState> = {
 };
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return storageSync({
+  return storageSync<IState>({
     features: [
       // saves only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
@@ -111,7 +111,7 @@ export interface IStorageSyncOptions {
    * @param state the next state
    * @param rehydratedState the state returned from a storage location
    */
-  rehydrateStateMerger?: (state: any, rehydratedState: any) => any;
+  rehydrateStateMerger?: <T>(state: T, rehydratedState: T) => T;
 }
 ```
 
@@ -136,22 +136,22 @@ export interface IFeatureOptions {
    * Sync to storage will only occur when this function returns true
    * @param featureState the next feature state
    * @param state the next state
-   * @default shouldSync (featureState: any) => true
+   * @default shouldSync(featureState: Partial<T>) => true
    */
-  shouldSync?: (featureState: any, state: any) => boolean;
+  shouldSync?: <T>(featureState: Partial<T>, state: T) => boolean;
   /**
    * Serializer for storage keys (feature state),
    * it will override the global storageKeySerializer for this feature
    * @param key the storage item key
-   * @default storageKeySerializerForFeature (key: string) => key
+   * @default storageKeySerializerForFeature(key: string) => key
    */
   storageKeySerializerForFeature?: (key: string) => string;
   /**
    * Serializer for the feature state (before saving to a storage location)
    * @param featureState the next feature state
-   * @default serialize (featureState: any) => JSON.stringify(featureState)
+   * @default serialize(featureState: Partial<T>) => JSON.stringify(featureState)
    */
-  serialize?: (featureState: any) => string;
+  serialize?: <T>(featureState: Partial<T>) => string;
   /**
    * Deserializer for the feature state (after getting the state from a storage location)
    *
@@ -159,6 +159,6 @@ export interface IFeatureOptions {
    * @param featureState the feature state retrieved from a storage location
    * @default deserialize (featureState: string) => JSON.Parse(featureState)
    */
-  deserialize?: (featureState: string) => any;
+  deserialize?: <T>(featureState: string) => Partial<T>;
 }
 ```

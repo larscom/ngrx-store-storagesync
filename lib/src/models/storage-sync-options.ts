@@ -35,5 +35,5 @@ export interface IStorageSyncOptions {
    * @param state the next state
    * @param rehydratedState the state returned from a storage location
    */
-  rehydrateStateMerger?: (state: any, rehydratedState: any) => any;
+  rehydrateStateMerger?: <T>(state: T, rehydratedState: T) => T;
 }

@@ -2,9 +2,9 @@ import { cloneDeep } from 'lodash';
 
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
-export const filterState = (state: any, keys?: string[]): any => {
+export const filterState = <T>(featureState: Partial<T>, keys?: string[]): Partial<T> => {
   if (!keys) {
-    return state;
+    return featureState;
   }
 
   keys
@@ -13,62 +13,62 @@ export const filterState = (state: any, keys?: string[]): any => {
       const splitted = key.split('.');
       const rootKey = splitted[0];
       const nestedKey = splitted[1];
-      filterState(state[rootKey], [nestedKey]);
+      filterState(featureState[rootKey], [nestedKey]);
     });
 
   let index = 0;
-  for (const prop in state) {
-    if (state.hasOwnProperty(prop)) {
-      switch (typeof state[prop]) {
+  for (const prop in featureState) {
+    if (featureState.hasOwnProperty(prop)) {
+      switch (typeof featureState[prop]) {
         case 'string':
           index = keys.indexOf(prop);
           if (index > -1) {
-            delete state[prop];
+            delete featureState[prop];
           }
           break;
         case 'object':
           index = keys.indexOf(prop);
           if (index > -1) {
-            delete state[prop];
+            delete featureState[prop];
           } else {
-            filterState(state[prop], keys);
+            filterState(featureState[prop], keys);
           }
           break;
         default: {
           if (keys.includes(prop)) {
-            delete state[prop];
+            delete featureState[prop];
           }
         }
       }
     }
   }
-  return state;
+  return featureState;
 };
 
-export const cleanState = (state: any): any => {
-  for (const key in state) {
-    if (!state[key] || typeof state[key] !== 'object') {
+export const cleanState = <T>(featureState: Partial<T>): Partial<T> => {
+  for (const key in featureState) {
+    if (!featureState[key] || typeof featureState[key] !== 'object') {
       continue;
     }
 
-    cleanState(state[key]);
+    cleanState(featureState[key]);
 
-    if (!Object.keys(state[key]).length) {
-      delete state[key];
+    if (!Object.keys(featureState[key]).length) {
+      delete featureState[key];
     }
   }
-  return state;
+  return featureState;
 };
 
-export const stateSync = (
-  state: any,
+export const stateSync = <T>(
+  state: T,
   { features, storage, storageKeySerializer, storageError, syncEmptyObjects }: IStorageSyncOptions
 ): void => {
   features
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
     .forEach(
       ({ stateKey, ignoreKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
-        const featureState = cloneDeep(state[stateKey]);
+        const featureState = cloneDeep<Partial<T>>(state[stateKey]);
 
         const filteredState = syncEmptyObjects
           ? filterState(featureState, ignoreKeys)
@@ -84,7 +84,7 @@ export const stateSync = (
           ? storageKeySerializerForFeature(stateKey)
           : storageKeySerializer(stateKey);
 
-        const value = serialize ? serialize(filteredState) : JSON.stringify(filteredState);
+        const value = serialize ? serialize<T>(filteredState) : JSON.stringify(filteredState);
 
         try {
           if (storageForFeature) {

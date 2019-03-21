@@ -1,3 +1,4 @@
+import { Action } from '@ngrx/store';
 import { INIT_ACTION } from '../src/actions';
 import { storageSync } from '../src/storage-sync';
 import { MockStorage } from './mock-storage';
@@ -18,7 +19,7 @@ describe('StorageSync', () => {
     storage.setItem('feature1', JSON.stringify({ prop1: true }));
     storage.setItem('feature2', JSON.stringify({ prop1: true, prop3: { check: true } }));
 
-    const reducer = (state = initialState, action: any) => state;
+    const reducer = (state = initialState, action: Action) => state;
 
     const metaReducer = storageSync({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
@@ -44,7 +45,7 @@ describe('StorageSync', () => {
     storage.setItem('feature1', JSON.stringify({ prop1: true }));
     storageForFeature.setItem('feature2', JSON.stringify({ prop1: true, prop3: { check: true } }));
 
-    const reducer = (state = initialState, action: any) => state;
+    const reducer = (state = initialState, action: Action) => state;
 
     const metaReducer = storageSync({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2', storageForFeature }],
@@ -68,7 +69,7 @@ describe('StorageSync', () => {
     storage.setItem('feature1', JSON.stringify({ prop1: true }));
     storage.setItem('feature2', JSON.stringify({ prop1: true }));
 
-    const reducer = (state = initialState, action: any) => state;
+    const reducer = (state = initialState, action: Action) => state;
 
     const metaReducer = storageSync({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
@@ -89,7 +90,7 @@ describe('StorageSync', () => {
     storage.setItem('feature1', JSON.stringify({ prop1: true }));
     storage.setItem('feature2', JSON.stringify({ prop1: true }));
 
-    const reducer = (state = initialState, action: any) => state;
+    const reducer = (state = initialState, action: Action) => state;
 
     const metaReducer = storageSync({
       features: [],
@@ -109,7 +110,7 @@ describe('StorageSync', () => {
     storage.setItem('feature1', JSON.stringify(1337));
     storage.setItem('feature2', JSON.stringify('myValue'));
 
-    const reducer = (state = initialState, action: any) => state;
+    const reducer = (state = initialState, action: Action) => state;
 
     const metaReducer = storageSync({
       features: [
@@ -136,7 +137,7 @@ describe('StorageSync', () => {
     storage.setItem('feature1', JSON.stringify({ prop1: true }));
     storage.setItem('feature2', JSON.stringify({ prop1: true }));
 
-    const reducer = (state = initialState, action: any) => state;
+    const reducer = (state = initialState, action: Action) => state;
 
     const metaReducer = storageSync({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],

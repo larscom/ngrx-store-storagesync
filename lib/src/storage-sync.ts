@@ -1,3 +1,4 @@
+import { Action } from '@ngrx/store';
 import { merge } from 'lodash';
 
 import { INIT_ACTION, UPDATE_ACTION } from './actions';
@@ -5,7 +6,9 @@ import { IStorageSyncOptions } from './models/storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
 import { stateSync } from './state-sync';
 
-export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {
+export const storageSync = <T>(options: IStorageSyncOptions) => (
+  reducer: (state: T, action: Action) => T
+): ((state: T, action: Action) => T) => {
   const config: IStorageSyncOptions = {
     rehydrate: true,
     syncEmptyObjects: false,
@@ -14,10 +17,10 @@ export const storageSync = (options: IStorageSyncOptions) => (reducer: any) => {
     ...options
   };
 
-  const restoredState = config.rehydrate ? rehydrateState(config) : null;
+  const restoredState = config.rehydrate ? rehydrateState<T>(config) : null;
 
-  return (state: any, action: any) => {
-    let nextState = null;
+  return (state: T, action: Action): T => {
+    let nextState: T = null;
 
     if (action.type === INIT_ACTION && !state) {
       nextState = reducer(state, action);

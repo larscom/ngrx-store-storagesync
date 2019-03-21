@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "lint": "tslint -p tslint.json -t stylish",
-    "test": "jest",
+    "test": "npm run lint && jest",
     "test:update": "jest -u",
     "test:watch": "jest --watch",
     "test:ci": "jest --runInBand",
@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/larscom/ngrx-store-storagesync#readme",
   "devDependencies": {
+    "@ngrx/store": "^7.3.0",
     "@types/jest": "^24.0.11",
     "@types/lodash": "^4.14.123",
     "@types/node": "^11.11.3",

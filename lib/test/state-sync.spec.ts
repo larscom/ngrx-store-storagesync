@@ -62,13 +62,13 @@ describe('StateSync', () => {
       features: [
         {
           stateKey: 'feature1',
-          shouldSync: featureState => {
+          shouldSync: (featureState: any) => {
             return featureState.checkMe;
           }
         },
         {
           stateKey: 'feature2',
-          shouldSync: featureState => {
+          shouldSync: (featureState: any) => {
             return featureState.checkMe;
           }
         }
