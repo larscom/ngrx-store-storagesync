@@ -2,12 +2,12 @@ import { cloneDeep } from 'lodash';
 
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
-export const filterState = <T>(state: Partial<T>, keys?: string[]): Partial<T> => {
-  if (!keys) {
+export const filterState = <T>(state: Partial<T>, ignoreKeys?: string[]): Partial<T> => {
+  if (!ignoreKeys) {
     return state;
   }
 
-  keys
+  ignoreKeys
     .filter(key => key.includes('.'))
     .forEach(key => {
       const splitted = key.split('.');
@@ -16,43 +16,41 @@ export const filterState = <T>(state: Partial<T>, keys?: string[]): Partial<T> =
       filterState(state[rootKey], [nestedKey]);
     });
 
-  let index = 0;
-  for (const prop in state) {
-    if (state.hasOwnProperty(prop)) {
-      switch (typeof state[prop]) {
+  for (const key in state) {
+    if (state.hasOwnProperty(key)) {
+      switch (typeof state[key]) {
         case 'object':
-          index = keys.indexOf(prop);
-          if (index > -1) {
-            delete state[prop];
+          if (ignoreKeys.includes(key)) {
+            delete state[key];
           } else {
-            filterState(state[prop], keys);
+            filterState(state[key], ignoreKeys);
           }
           break;
         default: {
-          index = keys.indexOf(prop);
-          if (index > -1) {
-            delete state[prop];
+          if (ignoreKeys.includes(key)) {
+            delete state[key];
           }
         }
       }
     }
   }
+
   return state;
 };
 
-export const cleanState = <T>(featureState: Partial<T>): Partial<T> => {
-  for (const key in featureState) {
-    if (!featureState[key] || typeof featureState[key] !== 'object') {
+export const cleanState = <T>(state: Partial<T>): Partial<T> => {
+  for (const key in state) {
+    if (!state[key] || typeof state[key] !== 'object') {
       continue;
     }
 
-    cleanState(featureState[key]);
+    cleanState(state[key]);
 
-    if (!Object.keys(featureState[key]).length) {
-      delete featureState[key];
+    if (!Object.keys(state[key]).length) {
+      delete state[key];
     }
   }
-  return featureState;
+  return state;
 };
 
 export const stateSync = <T>(
@@ -69,7 +67,7 @@ export const stateSync = <T>(
           ? filterState(featureState, ignoreKeys)
           : cleanState(filterState(featureState, ignoreKeys));
 
-        const needsSync = Object.keys(filteredState).length || syncEmptyObjects;
+        const needsSync = Object.keys(filteredState).length > 0 || syncEmptyObjects;
 
         if (!needsSync) {
           return;
