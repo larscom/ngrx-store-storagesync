@@ -1,33 +1,73 @@
 import { cloneDeep } from 'lodash';
 
+import { StorageSyncError } from './errors';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
-export const filterState = <T>(state: Partial<T>, ignoreKeys?: string[]): Partial<T> => {
-  if (!ignoreKeys) {
+export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[]): Partial<T> => {
+  if (!excludeKeys) {
     return state;
   }
 
-  ignoreKeys
-    .filter(key => key.includes('.'))
-    .forEach(key => {
-      const splitted = key.split('.');
-      const rootKey = splitted[0];
-      const nestedKey = splitted[1];
-      filterState(state[rootKey], [nestedKey]);
-    });
+  const keyPairs = excludeKeys.map(key => ({
+    rootKey: key.split('.')[0],
+    nestedKey: key.split('.')[1]
+  }));
 
   for (const key in state) {
     if (state.hasOwnProperty(key)) {
+      const keyPair = keyPairs.find(pair => pair.rootKey === key);
+      const rootKey = keyPair ? keyPair.rootKey : null;
+      const nestedKey = keyPair ? keyPair.nestedKey : null;
+
       switch (typeof state[key]) {
-        case 'object':
-          if (ignoreKeys.includes(key)) {
+        case 'object': {
+          if (rootKey && nestedKey) {
+            excludeKeysFromState<T>(state[key], [...excludeKeys, nestedKey]);
+          } else if (rootKey) {
             delete state[key];
           } else {
-            filterState(state[key], ignoreKeys);
+            excludeKeysFromState<T>(state[key], excludeKeys);
           }
           break;
+        }
         default: {
-          if (ignoreKeys.includes(key)) {
+          if (rootKey) {
+            delete state[key];
+          }
+        }
+      }
+    }
+  }
+  return state;
+};
+
+export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]): Partial<T> => {
+  if (!includedKeys) {
+    return state;
+  }
+
+  const keyPairs = includedKeys.map(key => ({
+    rootKey: key.split('.')[0],
+    nestedKey: key.split('.')[1]
+  }));
+
+  for (const key in state) {
+    if (state.hasOwnProperty(key)) {
+      const keyPair = keyPairs.find(pair => pair.rootKey === key);
+      const rootKey = keyPair ? keyPair.rootKey : null;
+      const nestedKey = keyPair ? keyPair.nestedKey : null;
+
+      switch (typeof state[key]) {
+        case 'object': {
+          if (rootKey && nestedKey) {
+            includeKeysOnState<T>(state[key], [...includedKeys, nestedKey]);
+          } else {
+            includeKeysOnState<T>(state[key], includedKeys);
+          }
+          break;
+        }
+        default: {
+          if (!rootKey) {
             delete state[key];
           }
         }
@@ -44,7 +84,7 @@ export const cleanState = <T>(state: Partial<T>): Partial<T> => {
       continue;
     }
 
-    cleanState(state[key]);
+    cleanState<T>(state[key]);
 
     if (!Object.keys(state[key]).length) {
       delete state[key];
@@ -58,14 +98,33 @@ export const stateSync = <T>(
   { features, storage, storageKeySerializer, storageError, syncEmptyObjects }: IStorageSyncOptions
 ): void => {
   features
+    .filter(({ excludeKeys, includeKeys, stateKey }) => {
+      if (excludeKeys && includeKeys) {
+        throw new StorageSyncError(
+          `You can't have both 'excludeKeys' and 'includeKeys' on '${stateKey}'`
+        );
+      }
+      return true;
+    })
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
     .forEach(
-      ({ stateKey, ignoreKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
+      ({
+        stateKey,
+        excludeKeys,
+        includeKeys,
+        storageKeySerializerForFeature,
+        serialize,
+        storageForFeature
+      }) => {
         const featureState = cloneDeep<Partial<T>>(state[stateKey]);
 
         const filteredState = syncEmptyObjects
-          ? filterState(featureState, ignoreKeys)
-          : cleanState(filterState(featureState, ignoreKeys));
+          ? includeKeys
+            ? includeKeysOnState(featureState, includeKeys)
+            : excludeKeysFromState(featureState, excludeKeys)
+          : includeKeys
+          ? cleanState(includeKeysOnState(featureState, includeKeys))
+          : cleanState(excludeKeysFromState(featureState, excludeKeys));
 
         const needsSync = Object.keys(filteredState).length > 0 || syncEmptyObjects;
 

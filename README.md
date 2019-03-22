@@ -5,12 +5,16 @@
 [![travis build](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)](https://travis-ci.com/larscom/ngrx-store-storagesync/builds)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
-Simple syncing (with ignoring specific keys) between the ngrx store and localstorage/sessionstorage.
-You can also sync different 'feature' states to different storage locations.
+Simple state syncing between the ngrx store and localstorage/sessionstorage.
+
+## State sync
+You can sync only the objects you need, allowing you to exclude/include **deeply nested** keys.
+
+You can sync different 'feature' states to different **storage** locations.
 For example:
 
-- feature1 to sessionStorage
-- feature2 to localStorage
+- feature1 to `sessionStorage`
+- feature2 to `localStorage`
 
 ## Dependencies
 
@@ -47,11 +51,11 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
       // saves only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
 
-      // will ignore all keys with success / loading inside the 'app' feature state
-      { stateKey: 'app', ignoreKeys: ['success', 'loading'] },
+      // will exclude all keys with success / loading inside the 'app' feature state
+      { stateKey: 'app', excludeKeys: ['success', 'loading'] },
 
-      // will ignore key 'success' on object 'auth' inside the 'feature1' state
-      { stateKey: 'feature1', ignoreKeys: ['auth.success', 'loading'] }
+      // will exclude key 'success' on object 'auth' inside the 'feature1' state
+      { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
     storage: window.localStorage
@@ -124,7 +128,7 @@ export interface IFeatureOptions {
   /**
    * Filter out properties that exist on the feature state.
    */
-  ignoreKeys?: string[];
+  excludeKeys?: string[];
   /**
    * Provide the storage type to sync the feature state to,
    * it can be any storage which implements the 'Storage' interface.

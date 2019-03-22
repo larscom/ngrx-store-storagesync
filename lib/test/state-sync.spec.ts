@@ -1,5 +1,6 @@
+import { StorageSyncError } from '../src/errors';
 import { IStorageSyncOptions } from '../src/models/storage-sync-options';
-import { cleanState, filterState, stateSync } from '../src/state-sync';
+import { cleanState, excludeKeysFromState, includeKeysOnState, stateSync } from '../src/state-sync';
 import { MockStorage } from './mock-storage';
 
 describe('StateSync', () => {
@@ -9,20 +10,51 @@ describe('StateSync', () => {
     storage = new MockStorage();
   });
 
-  it('should filter properties on state', () => {
-    const state = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+  it('should exclude keys from state', () => {
+    const state = {
+      prop1: false,
+      prop2: 100,
+      prop3: { check: false, random: 1337 },
+      prop4: { check: false, random: 1337, array: [1, 2, 3] }
+    };
 
-    expect(filterState(state, ['prop1', 'random'])).toEqual({
+    expect(excludeKeysFromState(state, ['prop1', 'random', 'prop4.array'])).toEqual({
       ...state,
       prop1: undefined,
       prop3: {
         ...state.prop3,
         random: undefined
+      },
+      prop4: {
+        ...state.prop4,
+        array: undefined
       }
     });
   });
 
-  it('should clean the state from empty objects', () => {
+  it('should include keys on state', () => {
+    const state = {
+      prop1: false,
+      prop2: 100,
+      prop3: { check: false, random: 1337 },
+      prop4: { check: false, random: 1337, array: [1, 2, 3] }
+    };
+
+    expect(includeKeysOnState(state, ['prop1', 'random', 'prop4.array'])).toEqual({
+      ...state,
+      prop2: undefined,
+      prop3: {
+        ...state.prop3,
+        check: undefined
+      },
+      prop4: {
+        ...state.prop4,
+        check: undefined
+      }
+    });
+  });
+
+  it('should remove empty objects from state', () => {
     const state = {
       prop1: false,
       prop2: {
@@ -95,8 +127,8 @@ describe('StateSync', () => {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
-        { stateKey: 'feature1', ignoreKeys: ['prop1', 'check', 'array'] },
-        { stateKey: 'feature2', ignoreKeys: ['check'] }
+        { stateKey: 'feature1', excludeKeys: ['prop1', 'check', 'array'] },
+        { stateKey: 'feature2', excludeKeys: ['check'] }
       ]
     };
 
@@ -157,7 +189,7 @@ describe('StateSync', () => {
     expect(storage.getItem('feature2')).toBeNull();
   });
 
-  it('should selectively sync parts of the feature states', () => {
+  it('should selectively sync parts of the feature states with includeKeys and excludeKeys', () => {
     const feature1 = {
       prop1: false,
       random: 1337,
@@ -165,7 +197,7 @@ describe('StateSync', () => {
       prop3: {
         check: false,
         random: 1337,
-        prop5: { check: true, value: 100, prop6: { check: false, value: 200 } }
+        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } }
       },
       prop4: { check: false, random: 1337 }
     };
@@ -174,7 +206,11 @@ describe('StateSync', () => {
       prop1: false,
       random: 1337,
       check: false,
-      prop3: { check: false, random: 1337 },
+      prop3: {
+        check: false,
+        random: 1337,
+        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } }
+      },
       prop4: { check: false, random: 1337 }
     };
 
@@ -184,8 +220,8 @@ describe('StateSync', () => {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
-        { stateKey: 'feature1', ignoreKeys: ['prop5.check', 'prop6.check', 'prop1'] },
-        { stateKey: 'feature2', ignoreKeys: ['prop4.check', 'prop1'] }
+        { stateKey: 'feature1', excludeKeys: ['prop5.check', 'prop6.check', 'prop1'] },
+        { stateKey: 'feature2', includeKeys: ['prop5.check', 'prop6.check', 'prop1'] }
       ]
     };
 
@@ -197,26 +233,20 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(2);
 
     expect(JSON.parse(storage.getItem('feature1'))).toEqual({
-      ...feature1,
-      prop1: undefined,
+      random: 1337,
+      check: false,
       prop3: {
-        ...feature1.prop3,
-        prop5: {
-          ...feature1.prop3.prop5,
-          check: undefined,
-          prop6: {
-            ...feature1.prop3.prop5.prop6,
-            check: undefined
-          }
-        }
-      }
+        check: false,
+        random: 1337,
+        prop5: { value: 100, prop6: { value: 200 } }
+      },
+      prop4: { check: false, random: 1337 }
     });
+
     expect(JSON.parse(storage.getItem('feature2'))).toEqual({
-      ...feature2,
-      prop1: undefined,
-      prop4: {
-        ...feature2.prop4,
-        check: undefined
+      prop1: false,
+      prop3: {
+        prop5: { check: true, prop6: { check: false, prop1: true } }
       }
     });
   });
@@ -235,7 +265,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1', ignoreKeys: ['prop1', 'check'] }]
+      features: [{ stateKey: 'feature1', excludeKeys: ['prop1', 'check'] }]
     };
 
     expect(storage.length).toEqual(0);
@@ -254,6 +284,39 @@ describe('StateSync', () => {
       }
     });
     expect(storage.getItem('feature2')).toBeNull();
+  });
+
+  it('should throw error if includeKeys and excludeKeys are present', () => {
+    const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+    const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
+
+    const state = { feature1, feature2 };
+
+    const config: IStorageSyncOptions = {
+      storage,
+      storageKeySerializer: (key: string) => key,
+      features: [
+        { stateKey: 'feature1', includeKeys: ['prop1', 'check'] },
+        { stateKey: 'feature2', includeKeys: ['prop1', 'check'], excludeKeys: ['random'] }
+      ]
+    };
+
+    expect(storage.length).toEqual(0);
+
+    let thrownError = null;
+
+    try {
+      // sync to storage
+      stateSync(state, config);
+    } catch (error) {
+      thrownError = error;
+    }
+
+    const expectedError = new StorageSyncError(
+      `You can't have both 'excludeKeys' and 'includeKeys' on 'feature2'`
+    );
+
+    expect(thrownError).toEqual(expectedError);
   });
 
   it('should sync the complete state by using a custom storageKeySerializerForFeature', () => {
