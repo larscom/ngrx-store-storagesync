@@ -1,7 +1,7 @@
 {
   "name": "@larscom/ngrx-store-storagesync",
   "version": "2.0.7",
-  "description": "Simple way of syncing state to any storage type (localstorage/sessionstorage) for @ngrx/store",
+  "description": "Highly configurable state syncing (with include/exlcude keys) between the ngrx store and localstorage/sessionstorage.",
   "main": "./dist/public_api.js",
   "typings": "./dist/public_api.d.ts",
   "scripts": {
