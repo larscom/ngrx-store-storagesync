@@ -6,9 +6,19 @@ import { IStorageSyncOptions } from './models/storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
 import { stateSync } from './state-sync';
 
+// @internal
+export const isNotBrowser = typeof window === 'undefined';
+
 export const storageSync = <T>(options: IStorageSyncOptions) => (
   reducer: (state: T, action: Action) => T
 ): ((state: T, action: Action) => T) => {
+  if (isNotBrowser) {
+    return (state: T, action: Action): T => {
+      const isInit = !state && action.type === INIT_ACTION;
+      return isInit ? reducer(state, action) : { ...state };
+    };
+  }
+
   const config: IStorageSyncOptions = {
     rehydrate: true,
     syncEmptyObjects: false,
@@ -22,7 +32,7 @@ export const storageSync = <T>(options: IStorageSyncOptions) => (
   return (state: T, action: Action): T => {
     let nextState: T = null;
 
-    if (action.type === INIT_ACTION && !state) {
+    if (!state && action.type === INIT_ACTION) {
       nextState = reducer(state, action);
     } else {
       nextState = { ...state };
