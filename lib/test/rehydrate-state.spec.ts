@@ -9,7 +9,7 @@ describe('RehydrateState', () => {
     storage = new MockStorage();
   });
 
-  it('should re hydrate the state to a default object', () => {
+  it('should re hydrate the state to an empty object', () => {
     const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
     const feature3 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };

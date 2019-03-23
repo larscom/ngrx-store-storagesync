@@ -27,11 +27,13 @@ describe('StorageSync', () => {
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
-    expect(finalState).toEqual({
-      ...initialState,
-      feature1: { ...feature1, prop1: true },
-      feature2: { ...feature2, prop1: true, prop3: { check: true } }
-    });
+
+    const expected = {
+      feature1: { prop1: true, prop2: 100, prop3: { check: false } },
+      feature2: { prop1: true, prop2: 200, prop3: { check: true } }
+    };
+
+    expect(finalState).toEqual(expected);
   });
 
   it('should deep merge the initialState and rehydrated state from different storage locations', () => {
@@ -53,11 +55,13 @@ describe('StorageSync', () => {
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
-    expect(finalState).toEqual({
-      ...initialState,
-      feature1: { ...feature1, prop1: true },
-      feature2: { ...feature2, prop1: true, prop3: { check: true } }
-    });
+
+    const expected = {
+      feature1: { prop1: true, prop2: 100, prop3: { check: false } },
+      feature2: { prop1: true, prop2: 200, prop3: { check: true } }
+    };
+
+    expect(finalState).toEqual(expected);
   });
 
   it('should get the initial state when rehydrate is disabled', () => {
@@ -125,7 +129,10 @@ describe('StorageSync', () => {
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
-    expect(finalState).toEqual({ feature1: 1337, feature2: 'myValue' });
+
+    const expected = { feature1: 1337, feature2: 'myValue' };
+
+    expect(finalState).toEqual(expected);
   });
 
   it('should merge the nextstate and rehydrated state by using a custom rehydrateStateMerger', () => {
@@ -148,13 +155,16 @@ describe('StorageSync', () => {
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
-    expect(finalState).toEqual({
+
+    const expected = {
       feature1: {
         prop1: true
       },
       feature2: {
         prop1: true
       }
-    });
+    };
+
+    expect(finalState).toEqual(expected);
   });
 });

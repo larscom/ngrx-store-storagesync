@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isArray } from 'lodash';
 
 import { StorageSyncError } from './errors';
 import { IStorageSyncOptions } from './models/storage-sync-options';
@@ -59,7 +59,9 @@ export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]
 
       switch (typeof state[key]) {
         case 'object': {
-          if (rootKey && nestedKey) {
+          if (rootKey && isArray(state[key])) {
+            continue;
+          } else if (rootKey && nestedKey) {
             includeKeysOnState<T>(state[key], [...includedKeys, nestedKey]);
           } else {
             includeKeysOnState<T>(state[key], includedKeys);

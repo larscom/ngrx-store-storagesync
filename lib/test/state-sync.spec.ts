@@ -18,18 +18,13 @@ describe('StateSync', () => {
       prop4: { check: false, random: 1337, array: [1, 2, 3] }
     };
 
-    expect(excludeKeysFromState(state, ['prop1', 'random', 'prop4.array'])).toEqual({
-      ...state,
-      prop1: undefined,
-      prop3: {
-        ...state.prop3,
-        random: undefined
-      },
-      prop4: {
-        ...state.prop4,
-        array: undefined
-      }
-    });
+    const expected = {
+      prop2: 100,
+      prop3: { check: false },
+      prop4: { check: false }
+    };
+
+    expect(excludeKeysFromState(state, ['prop1', 'random', 'prop4.array'])).toEqual(expected);
   });
 
   it('should include keys on state', () => {
@@ -40,18 +35,13 @@ describe('StateSync', () => {
       prop4: { check: false, random: 1337, array: [1, 2, 3] }
     };
 
-    expect(includeKeysOnState(state, ['prop1', 'random', 'prop4.array'])).toEqual({
-      ...state,
-      prop2: undefined,
-      prop3: {
-        ...state.prop3,
-        check: undefined
-      },
-      prop4: {
-        ...state.prop4,
-        check: undefined
-      }
-    });
+    const expected = {
+      prop1: false,
+      prop3: { random: 1337 },
+      prop4: { random: 1337, array: [1, 2, 3] }
+    };
+
+    expect(includeKeysOnState(state, ['prop1', 'random', 'prop4.array'])).toEqual(expected);
   });
 
   it('should remove empty objects from state', () => {
@@ -68,18 +58,17 @@ describe('StateSync', () => {
       prop4: {}
     };
 
-    expect(cleanState(state)).toEqual({
-      ...state,
+    const expected = {
+      prop1: false,
       prop2: {
-        ...state.prop2,
+        check: true,
         nested: {
-          ...state.prop2.nested,
-          nested: undefined
+          check: false
         }
-      },
-      prop3: undefined,
-      prop4: undefined
-    });
+      }
+    };
+
+    expect(cleanState(state)).toEqual(expected);
   });
 
   it('should not sync if shouldSync condition on a feature state returns false', () => {
@@ -275,14 +264,13 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(1);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual({
-      ...feature1,
-      prop1: undefined,
-      prop3: {
-        ...feature1.prop3,
-        check: undefined
-      }
-    });
+    const expected = {
+      array: ['check'],
+      prop2: 100,
+      prop3: { random: 1337 }
+    };
+
+    expect(JSON.parse(storage.getItem('feature1'))).toEqual(expected);
     expect(storage.getItem('feature2')).toBeNull();
   });
 
