@@ -4,25 +4,24 @@ export class MockStorage implements Storage {
   }
 
   public clear(): void {
-    throw Error('Not Implemented');
+    for (const key of Object.keys(this)) {
+      delete this[key];
+    }
   }
 
-  public getItem(key: string): string | null {
-    return this[key] ? this[key] : null;
+  public getItem(key: string): string {
+    return this[key] || null;
   }
 
-  public key(index: number): string | null {
-    throw Error('Not Implemented');
+  public key(index: number): string {
+    return Object.keys(this)[index];
   }
 
   public removeItem(key: string): void {
-    this[key] = undefined;
+    delete this[key];
   }
 
   public setItem(key: string, data: string): void {
     this[key] = data;
   }
-
-  [key: string]: any;
-  [index: number]: string;
 }

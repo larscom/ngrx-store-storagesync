@@ -5,13 +5,15 @@ export interface IFeatureOptions {
   stateKey: string;
   /**
    * Filter out properties that exist on the feature state.
-   * Can't be used together with includeKeys @see includeKeys
+   * Can't be used together with includeKeys
+   * @see includeKeys
    * @throws StorageSyncError if includeKeys is also present
    */
   excludeKeys?: string[];
   /**
    * Only sync these properties on the feature state
-   * Can't be used together with excludeKeys @see excludeKeys
+   * Can't be used together with excludeKeys
+   * @see excludeKeys
    * @throws StorageSyncError if excludeKeys is also present
    */
   includeKeys?: string[];
@@ -19,7 +21,8 @@ export interface IFeatureOptions {
    * Provide the storage type to sync the feature state to,
    * it can be any storage which implements the 'Storage' interface.
    *
-   * It will override the global storage property for this feature
+   * It will override the storage property in StorageSyncOptions
+   * @see IStorageSyncOptions
    */
   storageForFeature?: Storage;
   /**

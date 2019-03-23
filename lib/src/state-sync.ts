@@ -3,6 +3,10 @@ import { cloneDeep, isArray } from 'lodash';
 import { StorageSyncError } from './errors';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
+/**
+ * @internal Blacklisting
+ * @returns returns the filtered state
+ */
 export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[]): Partial<T> => {
   if (!excludeKeys) {
     return state;
@@ -41,6 +45,10 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
   return state;
 };
 
+/**
+ * @internal Whitelisting
+ * @returns returns the filtered state
+ */
 export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]): Partial<T> => {
   if (!includedKeys) {
     return state;
@@ -80,6 +88,10 @@ export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]
   return state;
 };
 
+/**
+ * @internal Remove empty objects from state
+ * @returns returns the cleaned state
+ */
 export const cleanState = <T>(state: Partial<T>): Partial<T> => {
   for (const key in state) {
     if (!state[key] || typeof state[key] !== 'object') {
@@ -95,6 +107,11 @@ export const cleanState = <T>(state: Partial<T>): Partial<T> => {
   return state;
 };
 
+/**
+ * @internal Sync state with storage
+ * @param state the next state
+ * @param options the configurable options
+ */
 export const stateSync = <T>(
   state: T,
   { features, storage, storageKeySerializer, storageError, syncEmptyObjects }: IStorageSyncOptions

@@ -6,14 +6,21 @@ import { IStorageSyncOptions } from './models/storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
 import { stateSync } from './state-sync';
 
-// @internal
+/**
+ * @internal Check to see if not inside a browser (for SSR)
+ * @returns returns true if not in a browser
+ */
 export const isNotBrowser = typeof window === 'undefined';
 
 /**
  * The StorageSync Meta Reducer for @ngrx/store.
  *
+ * @param options The configuration for the meta reducer
+ *
  * Check out github for more information.
- * @see https://github.com/larscom/ngrx-store-storagesync
+ * @see https://github.com/larscom/ngrx-store-storagesync *
+ *
+ * @returns returns the meta reducer function
  */
 export const storageSync = <T>(options: IStorageSyncOptions) => (
   reducer: (state: T, action: Action) => T

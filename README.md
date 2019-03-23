@@ -5,7 +5,7 @@
 [![travis build](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)](https://travis-ci.com/larscom/ngrx-store-storagesync/builds)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
-Highly configurable state syncing between the ngrx store and localstorage/sessionstorage.
+Highly configurable state syncing between the @ngrx/store and localstorage/sessionstorage.
 
 ## State sync
 
@@ -42,7 +42,7 @@ import * as fromFeature2 from './feature2/reducer';
 export const reducers: ActionReducerMap<IState> = {
   router: routerReducer,
   feature1: fromFeature1.reducer,
-  feature2: fromFeature2.reducer  
+  feature2: fromFeature2.reducer
 };
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -51,10 +51,10 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
       // saves only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
 
-      // will exclude key 'success' inside 'auth' and key 'loading' inside 'feature1' 
+      // will exclude key 'success' inside 'auth' and key 'loading' inside 'feature1'
       { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] },
 
-      // will only include key 'success' inside 'auth' and key 'loading' inside 'feature2' 
+      // will only include key 'success' inside 'auth' and key 'loading' inside 'feature2'
       { stateKey: 'feature2', includeKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
@@ -113,7 +113,8 @@ export interface IStorageSyncOptions {
   /**
    * Custom state merge function after rehydration (by default it does a deep merge)
    * @param state the next state
-   * @param rehydratedState the state returned from a storage location
+   * @param rehydratedState the state resolved from a storage location
+   * @default rehydrateStateMerger (state: T, rehydratedState: T) => deepMerge(state, rehydratedState)
    */
   rehydrateStateMerger?: <T>(state: T, rehydratedState: T) => T;
 }
@@ -127,13 +128,15 @@ export interface IFeatureOptions {
   stateKey: string;
   /**
    * Filter out properties that exist on the feature state.
-   * Can't be used together with includeKeys @see includeKeys
+   * Can't be used together with includeKeys
+   * @see includeKeys
    * @throws StorageSyncError if includeKeys is also present
    */
   excludeKeys?: string[];
   /**
    * Only sync these properties on the feature state
-   * Can't be used together with excludeKeys @see excludeKeys
+   * Can't be used together with excludeKeys
+   * @see excludeKeys
    * @throws StorageSyncError if excludeKeys is also present
    */
   includeKeys?: string[];
@@ -141,7 +144,8 @@ export interface IFeatureOptions {
    * Provide the storage type to sync the feature state to,
    * it can be any storage which implements the 'Storage' interface.
    *
-   * It will override the global storage property for this feature
+   * It will override the storage property in StorageSyncOptions
+   * @see IStorageSyncOptions
    */
   storageForFeature?: Storage;
   /**

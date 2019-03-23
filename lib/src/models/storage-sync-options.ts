@@ -33,7 +33,8 @@ export interface IStorageSyncOptions {
   /**
    * Custom state merge function after rehydration (by default it does a deep merge)
    * @param state the next state
-   * @param rehydratedState the state returned from a storage location
+   * @param rehydratedState the state resolved from a storage location
+   * @default rehydrateStateMerger (state: T, rehydratedState: T) => deepMerge(state, rehydratedState)
    */
   rehydrateStateMerger?: <T>(state: T, rehydratedState: T) => T;
 }
