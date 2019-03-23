@@ -18,7 +18,7 @@ export const isNotBrowser = typeof window === 'undefined';
  * @param options The configuration for the meta reducer
  *
  * Check out github for more information.
- * @see https://github.com/larscom/ngrx-store-storagesync *
+ * @see https://github.com/larscom/ngrx-store-storagesync
  *
  * @returns returns the meta reducer function
  */
