@@ -9,6 +9,12 @@ import { stateSync } from './state-sync';
 // @internal
 export const isNotBrowser = typeof window === 'undefined';
 
+/**
+ * The StorageSync Meta Reducer for @ngrx/store.
+ *
+ * Check out github for more information.
+ * @see https://github.com/larscom/ngrx-store-storagesync
+ */
 export const storageSync = <T>(options: IStorageSyncOptions) => (
   reducer: (state: T, action: Action) => T
 ): ((state: T, action: Action) => T) => {

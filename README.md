@@ -42,7 +42,7 @@ import * as fromFeature2 from './feature2/reducer';
 export const reducers: ActionReducerMap<IState> = {
   router: routerReducer,
   feature1: fromFeature1.reducer,
-  feature2: fromFeature2.reducer,  
+  feature2: fromFeature2.reducer  
 };
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {

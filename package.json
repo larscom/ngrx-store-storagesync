@@ -1,7 +1,7 @@
 {
   "name": "@larscom/ngrx-store-storagesync",
   "version": "3.0.2",
-  "description": "Highly configurable state syncing (with include/exlcude keys) between the ngrx store and localstorage/sessionstorage.",
+  "description": "Highly configurable state syncing (with include/exclude keys) between the @ngrx/store and localstorage/sessionstorage.",
   "main": "./dist/public_api.js",
   "typings": "./dist/public_api.d.ts",
   "scripts": {
