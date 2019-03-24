@@ -152,7 +152,7 @@ export interface IFeatureOptions {
    * Sync to storage will only occur when this function returns true
    * @param featureState the next feature state
    * @param state the next state
-   * @default shouldSync(featureState: Partial<T>) => true
+   * @default shouldSync(featureState: Partial<T>, state: T) => true
    */
   shouldSync?: <T>(featureState: Partial<T>, state: T) => boolean;
   /**
