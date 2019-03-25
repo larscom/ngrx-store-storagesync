@@ -67,7 +67,9 @@ export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]
 
       switch (typeof state[key]) {
         case 'object': {
-          if (rootKey && isArray(state[key])) {
+          if (!rootKey && !state[key]) {
+            delete state[key];
+          } else if (rootKey && isArray(state[key])) {
             continue;
           } else if (rootKey && nestedKey) {
             includeKeysOnState<T>(state[key], [...includedKeys, nestedKey]);

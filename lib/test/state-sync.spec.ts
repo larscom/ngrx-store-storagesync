@@ -203,14 +203,20 @@ describe('StateSync', () => {
       prop4: { check: false, random: 1337 }
     };
 
-    const state = { feature1, feature2 };
+    const feature3 = {
+      auth: { bearerToken: null, loading: false, messageFail: null },
+      credentials: { loading: false, messageFail: null, messageSuccess: null }
+    };
+
+    const state = { feature1, feature2, feature3 };
 
     const config: IStorageSyncOptions = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
         { stateKey: 'feature1', excludeKeys: ['prop5.check', 'prop6.check', 'prop1'] },
-        { stateKey: 'feature2', includeKeys: ['prop5.check', 'prop6.check', 'prop1'] }
+        { stateKey: 'feature2', includeKeys: ['prop5.check', 'prop6.check', 'prop1'] },
+        { stateKey: 'feature3', includeKeys: ['bearerToken'] }
       ]
     };
 
@@ -219,7 +225,7 @@ describe('StateSync', () => {
     // sync to storage
     stateSync(state, config);
 
-    expect(storage.length).toEqual(2);
+    expect(storage.length).toEqual(3);
 
     expect(JSON.parse(storage.getItem('feature1'))).toEqual({
       random: 1337,
@@ -237,6 +243,10 @@ describe('StateSync', () => {
       prop3: {
         prop5: { check: true, prop6: { check: false, prop1: true } }
       }
+    });
+
+    expect(JSON.parse(storage.getItem('feature3'))).toEqual({
+      auth: { bearerToken: null }
     });
   });
 
