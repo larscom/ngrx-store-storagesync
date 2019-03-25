@@ -2,6 +2,17 @@
 
 All notable changes to @larscom/ngrx-store-storagesync will be documented in this file.
 
+## [ 4.0.0 ]
+
+### Breaking Changes
+
+- removed **syncEmptyObjects** on interface `IStorageSyncOptions`.
+
+### Fixed
+
+- typings for function callbacks and overall typing
+- bug with values that are `null` and not syncing properly
+
 ## [ 3.0.3 ]
 
 ### Added

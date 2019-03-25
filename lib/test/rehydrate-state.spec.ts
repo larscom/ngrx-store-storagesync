@@ -18,7 +18,7 @@ describe('RehydrateState', () => {
     storage.setItem('feature2', JSON.stringify(feature2));
     storage.setItem('feature3', JSON.stringify(feature3));
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       features: [],
       storageKeySerializer: (key: string) => key
@@ -47,7 +47,7 @@ describe('RehydrateState', () => {
 
     expect(storage.length).toEqual(1);
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       features: [{ stateKey: 'feature1', storageKeySerializerForFeature }],
       storageKeySerializer: (key: string) => key

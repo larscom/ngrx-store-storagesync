@@ -10,7 +10,7 @@ export const rehydrateState = <T>({
   storageKeySerializer,
   features,
   storageError
-}: IStorageSyncOptions): T => {
+}: IStorageSyncOptions<T>): T => {
   return features.reduce<T>(
     (acc, curr) => {
       const { storageKeySerializerForFeature, stateKey, deserialize, storageForFeature } = curr;
@@ -28,7 +28,7 @@ export const rehydrateState = <T>({
               ...acc,
               ...{
                 [stateKey]: deserialize
-                  ? deserialize<T>(featureState)
+                  ? deserialize(featureState)
                   : JSON.parse(featureState, (_: string, value: string) => {
                       // parse ISO date strings
                       return /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.test(String(value))

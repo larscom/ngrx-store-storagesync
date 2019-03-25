@@ -1,19 +1,14 @@
 import { IFeatureOptions } from './feature-options';
 
-export interface IStorageSyncOptions {
+export interface IStorageSyncOptions<T> {
   /**
    * By default, states are not synced, provide the feature states you want to sync.
    */
-  features: IFeatureOptions[];
+  features: Array<IFeatureOptions<T>>;
   /**
    * Provide the storage type to sync the state to, it can be any storage which implements the 'Storage' interface.
    */
   storage: Storage;
-  /**
-   * Sync empty objects to storage
-   * @default syncEmptyObjects false
-   */
-  syncEmptyObjects?: boolean;
   /**
    * Function that gets executed on a storage error
    * @param error the error that occurred
@@ -36,5 +31,5 @@ export interface IStorageSyncOptions {
    * @param rehydratedState the state resolved from a storage location
    * @default rehydrateStateMerger (state: T, rehydratedState: T) => deepMerge(state, rehydratedState)
    */
-  rehydrateStateMerger?: <T>(state: T, rehydratedState: T) => T;
+  rehydrateStateMerger?: (state: T, rehydratedState: T) => T;
 }

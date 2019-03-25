@@ -22,7 +22,7 @@ export const isNotBrowser = typeof window === 'undefined';
  *
  * @returns returns the meta reducer function
  */
-export const storageSync = <T>(options: IStorageSyncOptions) => (
+export const storageSync = <T>(options: IStorageSyncOptions<T>) => (
   reducer: (state: T, action: Action) => T
 ): ((state: T, action: Action) => T) => {
   if (isNotBrowser) {
@@ -32,9 +32,8 @@ export const storageSync = <T>(options: IStorageSyncOptions) => (
     };
   }
 
-  const config: IStorageSyncOptions = {
+  const config: IStorageSyncOptions<T> = {
     rehydrate: true,
-    syncEmptyObjects: false,
     storageKeySerializer: (key: string) => key,
     rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
     ...options

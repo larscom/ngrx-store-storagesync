@@ -1,4 +1,4 @@
-export interface IFeatureOptions {
+export interface IFeatureOptions<T> {
   /**
    * The name of the feature state
    */
@@ -31,7 +31,7 @@ export interface IFeatureOptions {
    * @param state the next state
    * @default shouldSync(featureState: Partial<T>, state: T) => true
    */
-  shouldSync?: <T>(featureState: Partial<T>, state: T) => boolean;
+  shouldSync?: (featureState: Partial<T>, state: T) => boolean;
   /**
    * Serializer for storage keys (feature state),
    * it will override the global storageKeySerializer for this feature
@@ -44,7 +44,7 @@ export interface IFeatureOptions {
    * @param featureState the next feature state
    * @default serialize(featureState: Partial<T>) => JSON.stringify(featureState)
    */
-  serialize?: <T>(featureState: Partial<T>) => string;
+  serialize?: (featureState: Partial<T>) => string;
   /**
    * Deserializer for the feature state (after getting the state from a storage location)
    *
@@ -52,5 +52,5 @@ export interface IFeatureOptions {
    * @param featureState the feature state retrieved from a storage location
    * @default deserialize (featureState: string) => JSON.Parse(featureState)
    */
-  deserialize?: <T>(featureState: string) => Partial<T>;
+  deserialize?: (featureState: string) => Partial<T>;
 }

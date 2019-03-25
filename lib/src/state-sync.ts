@@ -25,7 +25,9 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
 
       switch (typeof state[key]) {
         case 'object': {
-          if (rootKey && nestedKey) {
+          if (!state[key]) {
+            delete state[key];
+          } else if (rootKey && nestedKey) {
             excludeKeysFromState<T>(state[key], [...excludeKeys, nestedKey]);
           } else if (rootKey) {
             delete state[key];
@@ -67,7 +69,7 @@ export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]
 
       switch (typeof state[key]) {
         case 'object': {
-          if (!rootKey && !state[key]) {
+          if (!state[key]) {
             delete state[key];
           } else if (rootKey && isArray(state[key])) {
             continue;
@@ -116,7 +118,7 @@ export const cleanState = <T>(state: Partial<T>): Partial<T> => {
  */
 export const stateSync = <T>(
   state: T,
-  { features, storage, storageKeySerializer, storageError, syncEmptyObjects }: IStorageSyncOptions
+  { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions<T>
 ): void => {
   features
     .filter(({ excludeKeys, includeKeys, stateKey }) => {
@@ -139,15 +141,11 @@ export const stateSync = <T>(
       }) => {
         const featureState = cloneDeep<Partial<T>>(state[stateKey]);
 
-        const filteredState = syncEmptyObjects
-          ? includeKeys
-            ? includeKeysOnState(featureState, includeKeys)
-            : excludeKeysFromState(featureState, excludeKeys)
-          : includeKeys
+        const filteredState = includeKeys
           ? cleanState(includeKeysOnState(featureState, includeKeys))
           : cleanState(excludeKeysFromState(featureState, excludeKeys));
 
-        const needsSync = Object.keys(filteredState).length > 0 || syncEmptyObjects;
+        const needsSync = Object.keys(filteredState).length > 0;
 
         if (!needsSync) {
           return;
@@ -157,7 +155,7 @@ export const stateSync = <T>(
           ? storageKeySerializerForFeature(stateKey)
           : storageKeySerializer(stateKey);
 
-        const value = serialize ? serialize<T>(filteredState) : JSON.stringify(filteredState);
+        const value = serialize ? serialize(filteredState) : JSON.stringify(filteredState);
 
         try {
           if (storageForFeature) {

@@ -54,7 +54,7 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
       // will exclude key 'success' inside 'auth' and key 'loading' inside 'feature1'
       { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] },
 
-      // will only include key 'success' inside 'auth' and key 'loading' inside 'feature2'
+      // will only include key 'success' inside 'auth' and all keys with 'loading' inside 'feature2'
       { stateKey: 'feature2', includeKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
@@ -80,20 +80,15 @@ If you do not want this behaviour, you can implement your own `deserialize` func
 ## Configuration
 
 ```ts
-export interface IStorageSyncOptions {
+export interface IStorageSyncOptions<T> {
   /**
    * By default, states are not synced, provide the feature states you want to sync.
    */
-  features: IFeatureOptions[];
+  features: Array<IFeatureOptions<T>>;
   /**
    * Provide the storage type to sync the state to, it can be any storage which implements the 'Storage' interface.
    */
   storage: Storage;
-  /**
-   * Sync empty objects to storage
-   * @default syncEmptyObjects false
-   */
-  syncEmptyObjects?: boolean;
   /**
    * Function that gets executed on a storage error
    * @param error the error that occurred
@@ -116,12 +111,12 @@ export interface IStorageSyncOptions {
    * @param rehydratedState the state resolved from a storage location
    * @default rehydrateStateMerger (state: T, rehydratedState: T) => deepMerge(state, rehydratedState)
    */
-  rehydrateStateMerger?: <T>(state: T, rehydratedState: T) => T;
+  rehydrateStateMerger?: (state: T, rehydratedState: T) => T;
 }
 ```
 
 ```ts
-export interface IFeatureOptions {
+export interface IFeatureOptions<T> {
   /**
    * The name of the feature state
    */
@@ -154,7 +149,7 @@ export interface IFeatureOptions {
    * @param state the next state
    * @default shouldSync(featureState: Partial<T>, state: T) => true
    */
-  shouldSync?: <T>(featureState: Partial<T>, state: T) => boolean;
+  shouldSync?: (featureState: Partial<T>, state: T) => boolean;
   /**
    * Serializer for storage keys (feature state),
    * it will override the global storageKeySerializer for this feature
@@ -167,7 +162,7 @@ export interface IFeatureOptions {
    * @param featureState the next feature state
    * @default serialize(featureState: Partial<T>) => JSON.stringify(featureState)
    */
-  serialize?: <T>(featureState: Partial<T>) => string;
+  serialize?: (featureState: Partial<T>) => string;
   /**
    * Deserializer for the feature state (after getting the state from a storage location)
    *
@@ -175,6 +170,6 @@ export interface IFeatureOptions {
    * @param featureState the feature state retrieved from a storage location
    * @default deserialize (featureState: string) => JSON.Parse(featureState)
    */
-  deserialize?: <T>(featureState: string) => Partial<T>;
+  deserialize?: (featureState: string) => Partial<T>;
 }
 ```

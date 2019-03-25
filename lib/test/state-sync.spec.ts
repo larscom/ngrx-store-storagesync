@@ -77,7 +77,7 @@ describe('StateSync', () => {
 
     const state = { feature1, feature2 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
@@ -112,7 +112,7 @@ describe('StateSync', () => {
     const feature2 = { prop1: false, prop2: { check: false, array: [] } };
     const state = { feature1, feature2 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
@@ -138,7 +138,7 @@ describe('StateSync', () => {
 
     const state = { feature1, feature2 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }]
@@ -161,7 +161,7 @@ describe('StateSync', () => {
 
     const state = { feature1, feature2 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [{ stateKey: 'feature1' }]
@@ -204,13 +204,13 @@ describe('StateSync', () => {
     };
 
     const feature3 = {
-      auth: { bearerToken: null, loading: false, messageFail: null },
+      auth: { bearerToken: 'aaa', loading: false, messageFail: null },
       credentials: { loading: false, messageFail: null, messageSuccess: null }
     };
 
     const state = { feature1, feature2, feature3 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
@@ -246,7 +246,7 @@ describe('StateSync', () => {
     });
 
     expect(JSON.parse(storage.getItem('feature3'))).toEqual({
-      auth: { bearerToken: null }
+      auth: { bearerToken: 'aaa' }
     });
   });
 
@@ -261,7 +261,7 @@ describe('StateSync', () => {
 
     const state = { feature1, feature2 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [{ stateKey: 'feature1', excludeKeys: ['prop1', 'check'] }]
@@ -290,7 +290,7 @@ describe('StateSync', () => {
 
     const state = { feature1, feature2 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
@@ -327,7 +327,7 @@ describe('StateSync', () => {
 
     const state = { feature1, feature2 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [{ stateKey: 'feature1', storageKeySerializerForFeature }, { stateKey: 'feature2' }]
@@ -358,7 +358,7 @@ describe('StateSync', () => {
 
     const state = { feature1, feature2 };
 
-    const config: IStorageSyncOptions = {
+    const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
       features: [
