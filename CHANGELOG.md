@@ -2,6 +2,12 @@
 
 All notable changes to @larscom/ngrx-store-storagesync will be documented in this file.
 
+## [ 4.0.1 ]
+
+### Fixed
+
+- bug with values that are `null` and not syncing properly
+
 ## [ 4.0.0 ]
 
 ### Breaking Changes
@@ -11,7 +17,6 @@ All notable changes to @larscom/ngrx-store-storagesync will be documented in thi
 ### Fixed
 
 - typings for function callbacks and overall typing
-- bug with values that are `null` and not syncing properly
 
 ## [ 3.0.3 ]
 
