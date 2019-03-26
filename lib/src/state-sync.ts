@@ -25,7 +25,7 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
 
       switch (typeof state[key]) {
         case 'object': {
-          if (!state[key]) {
+          if (rootKey && !state[key]) {
             delete state[key];
           } else if (rootKey && nestedKey) {
             excludeKeysFromState<T>(state[key], [...excludeKeys, nestedKey]);
@@ -69,7 +69,7 @@ export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]
 
       switch (typeof state[key]) {
         case 'object': {
-          if (!state[key]) {
+          if (!rootKey && !state[key]) {
             delete state[key];
           } else if (rootKey && isArray(state[key])) {
             continue;
