@@ -44,7 +44,8 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
       }
     }
   }
-  return state;
+
+  return cleanState(state);
 };
 
 /**
@@ -89,7 +90,7 @@ export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]
     }
   }
 
-  return state;
+  return cleanState(state);
 };
 
 /**
@@ -115,11 +116,12 @@ export const cleanState = <T>(state: Partial<T>): Partial<T> => {
  * @internal Sync state with storage
  * @param state the next state
  * @param options the configurable options
+ * @returns returns the next state
  */
 export const stateSync = <T>(
   state: T,
   { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions<T>
-): void => {
+): T => {
   features
     .filter(({ excludeKeys, includeKeys, stateKey }) => {
       if (excludeKeys && includeKeys) {
@@ -142,12 +144,10 @@ export const stateSync = <T>(
         const featureState = cloneDeep<Partial<T>>(state[stateKey]);
 
         const filteredState = includeKeys
-          ? cleanState(includeKeysOnState(featureState, includeKeys))
-          : cleanState(excludeKeysFromState(featureState, excludeKeys));
+          ? includeKeysOnState(featureState, includeKeys)
+          : excludeKeysFromState(featureState, excludeKeys);
 
-        const needsSync = Object.keys(filteredState).length > 0;
-
-        if (!needsSync) {
+        if (!Object.keys(filteredState).length) {
           return;
         }
 
@@ -172,4 +172,6 @@ export const stateSync = <T>(
         }
       }
     );
+
+  return state;
 };

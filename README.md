@@ -38,23 +38,26 @@ import { routerReducer } from '@ngrx/router-store';
 import { storageSync } from '@larscom/ngrx-store-storagesync';
 import * as fromFeature1 from './feature/reducer';
 import * as fromFeature2 from './feature2/reducer';
+import * as fromFeature3 from './feature3/reducer';
 
 export const reducers: ActionReducerMap<IState> = {
   router: routerReducer,
   feature1: fromFeature1.reducer,
-  feature2: fromFeature2.reducer
+  feature2: fromFeature2.reducer,
+  // feature3 does not get synced to storage at all
+  feature3: fromFeature3.reducer
 };
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return storageSync<IState>({
     features: [
-      // saves only router state to sessionStorage
+      // save only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
 
-      // will exclude key 'success' inside 'auth' and key 'loading' inside 'feature1'
+      // exclude key 'success' inside 'auth' and key 'loading' inside 'feature1'
       { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] },
 
-      // will only include key 'success' inside 'auth' and all keys with 'loading' inside 'feature2'
+      // only include key 'success' inside 'auth' and all keys with 'loading' inside 'feature2'
       { stateKey: 'feature2', includeKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage

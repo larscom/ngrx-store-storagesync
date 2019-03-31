@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { merge } from 'lodash';
+import { merge as _merge } from 'lodash';
 
 import { INIT_ACTION, UPDATE_ACTION } from './actions';
 import { IStorageSyncOptions } from './models/storage-sync-options';
@@ -35,31 +35,20 @@ export const storageSync = <T>(options: IStorageSyncOptions<T>) => (
   const config: IStorageSyncOptions<T> = {
     rehydrate: true,
     storageKeySerializer: (key: string) => key,
-    rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
+    rehydrateStateMerger: (nextState, rehydratedState) => _merge({}, nextState, rehydratedState),
     ...options
   };
 
-  const restoredState = config.rehydrate ? rehydrateState<T>(config) : null;
+  const { rehydrate, rehydrateStateMerger } = config;
+
+  const restoredState = rehydrate ? rehydrateState<T>(config) : null;
 
   return (state: T, action: Action): T => {
-    let nextState: T = null;
+    const nextState = !state && action.type === INIT_ACTION ? reducer(state, action) : { ...state };
 
-    if (!state && action.type === INIT_ACTION) {
-      nextState = reducer(state, action);
-    } else {
-      nextState = { ...state };
-    }
+    const merge = restoredState && [INIT_ACTION, UPDATE_ACTION].includes(action.type);
+    const mergedState = reducer(merge ? rehydrateStateMerger(nextState, restoredState) : nextState, action);
 
-    if (restoredState && [INIT_ACTION, UPDATE_ACTION].includes(action.type)) {
-      nextState = config.rehydrateStateMerger(nextState, restoredState);
-    }
-
-    nextState = reducer(nextState, action);
-
-    if (action.type !== INIT_ACTION) {
-      stateSync(nextState, config);
-    }
-
-    return nextState;
+    return action.type !== INIT_ACTION ? stateSync(mergedState, config) : mergedState;
   };
 };
