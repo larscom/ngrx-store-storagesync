@@ -1,6 +1,7 @@
 .vscode
 jest.config.js
 lib
+demo
 
 # Logs
 logs

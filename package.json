@@ -5,6 +5,7 @@
   "main": "./dist/public_api.js",
   "typings": "./dist/public_api.d.ts",
   "scripts": {
+    "start": "npm run build && npm run ng serve --prefix demo",
     "build": "rimraf dist && tsc",
     "lint": "tslint -p tslint.json -t stylish",
     "test": "jest",
