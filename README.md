@@ -115,6 +115,11 @@ export interface IStorageSyncOptions<T> {
    * @default rehydrateStateMerger (state: T, rehydratedState: T) => deepMerge(state, rehydratedState)
    */
   rehydrateStateMerger?: (state: T, rehydratedState: T) => T;
+  /**
+   * Keep empty objects ({}) in state
+   * @default keepEmptyObjects false
+   */
+  keepEmptyObjects?: boolean;
 }
 ```
 
