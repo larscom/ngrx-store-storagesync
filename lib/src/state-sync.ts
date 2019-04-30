@@ -44,8 +44,7 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
       }
     }
   }
-
-  return cleanState(state);
+  return state;
 };
 
 /**
@@ -89,8 +88,7 @@ export const includeKeysOnState = <T>(state: Partial<T>, includedKeys?: string[]
       }
     }
   }
-
-  return cleanState(state);
+  return state;
 };
 
 /**
@@ -120,58 +118,49 @@ export const cleanState = <T>(state: Partial<T>): Partial<T> => {
  */
 export const stateSync = <T>(
   state: T,
-  { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions<T>
+  { features, storage, storageKeySerializer, storageError, keepEmptyObjects }: IStorageSyncOptions<T>
 ): T => {
   features
     .filter(({ excludeKeys, includeKeys, stateKey }) => {
       if (excludeKeys && includeKeys) {
-        throw new StorageSyncError(
-          `You can't have both 'excludeKeys' and 'includeKeys' on '${stateKey}'`
-        );
+        throw new StorageSyncError(`You can't have both 'excludeKeys' and 'includeKeys' on '${stateKey}'`);
       }
       return true;
     })
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
-    .forEach(
-      ({
-        stateKey,
-        excludeKeys,
-        includeKeys,
-        storageKeySerializerForFeature,
-        serialize,
-        storageForFeature
-      }) => {
-        const featureState = cloneDeep<Partial<T>>(state[stateKey]);
+    .forEach(({ stateKey, excludeKeys, includeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
+      const featureState = cloneDeep<Partial<T>>(state[stateKey]);
 
-        const filteredState = includeKeys
-          ? includeKeysOnState(featureState, includeKeys)
-          : excludeKeysFromState(featureState, excludeKeys);
+      const filteredState = includeKeys
+        ? includeKeysOnState(featureState, includeKeys)
+        : excludeKeysFromState(featureState, excludeKeys);
 
-        if (!Object.keys(filteredState).length) {
-          return;
+      const finalState = keepEmptyObjects ? filteredState : cleanState(filteredState);
+
+      if (!Object.keys(finalState).length) {
+        return;
+      }
+
+      const key = storageKeySerializerForFeature
+        ? storageKeySerializerForFeature(stateKey)
+        : storageKeySerializer(stateKey);
+
+      const value = serialize ? serialize(finalState) : JSON.stringify(finalState);
+
+      try {
+        if (storageForFeature) {
+          storageForFeature.setItem(key, value);
+        } else {
+          storage.setItem(key, value);
         }
-
-        const key = storageKeySerializerForFeature
-          ? storageKeySerializerForFeature(stateKey)
-          : storageKeySerializer(stateKey);
-
-        const value = serialize ? serialize(filteredState) : JSON.stringify(filteredState);
-
-        try {
-          if (storageForFeature) {
-            storageForFeature.setItem(key, value);
-          } else {
-            storage.setItem(key, value);
-          }
-        } catch (e) {
-          if (storageError) {
-            storageError(e);
-          } else {
-            throw e;
-          }
+      } catch (e) {
+        if (storageError) {
+          storageError(e);
+        } else {
+          throw e;
         }
       }
-    );
+    });
 
   return state;
 };
