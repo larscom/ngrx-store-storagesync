@@ -1,4 +1,4 @@
-import { IStorageSyncOptions } from './models/storage-sync-options';
+import { IStorageSyncOptions } from './interfaces/storage-sync-options';
 
 /**
  * @internal Restores the resolved state from a storage location
@@ -11,7 +11,7 @@ export const rehydrateState = <T>({
   features,
   storageError
 }: IStorageSyncOptions<T>): T => {
-  return features.reduce<T>(
+  const state = features.reduce<T>(
     (acc, curr) => {
       const { storageKeySerializerForFeature, stateKey, deserialize, storageForFeature } = curr;
 
@@ -48,4 +48,5 @@ export const rehydrateState = <T>({
     },
     {} as T
   );
+  return Object.keys(state).length ? state : null;
 };

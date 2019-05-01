@@ -9,7 +9,7 @@ Highly configurable state syncing between the @ngrx/store and localstorage/sessi
 
 ## State sync
 
-You can sync only the objects you need, allowing you to `exclude/include` **deeply nested** keys.  
+You can sync only the objects you need, allowing you to `exclude` **deeply nested** keys.  
 You can sync different 'feature' states to different **storage** locations.
 For example:
 
@@ -38,14 +38,12 @@ import { routerReducer } from '@ngrx/router-store';
 import { storageSync } from '@larscom/ngrx-store-storagesync';
 import * as fromFeature1 from './feature/reducer';
 import * as fromFeature2 from './feature2/reducer';
-import * as fromFeature3 from './feature3/reducer';
 
 export const reducers: ActionReducerMap<IState> = {
   router: routerReducer,
   feature1: fromFeature1.reducer,
-  feature2: fromFeature2.reducer,
-  // feature3 does not get synced to storage at all
-  feature3: fromFeature3.reducer
+  // feature2 does not get synced to storage at all
+  feature2: fromFeature2.reducer
 };
 
 export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -54,11 +52,8 @@ export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<a
       // save only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
 
-      // exclude key 'success' inside 'auth' and key 'loading' inside 'feature1'
-      { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] },
-
-      // only include key 'success' inside 'auth' and all keys with 'loading' inside 'feature2'
-      { stateKey: 'feature2', includeKeys: ['auth.success', 'loading'] }
+      // exclude key 'success' inside 'auth' and all keys 'loading' inside 'feature1'
+      { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
     storage: window.localStorage
@@ -115,34 +110,19 @@ export interface IStorageSyncOptions<T> {
    * @default rehydrateStateMerger (state: T, rehydratedState: T) => deepMerge(state, rehydratedState)
    */
   rehydrateStateMerger?: (state: T, rehydratedState: T) => T;
-  /**
-   * Keep empty objects ({}) in state
-   * @default keepEmptyObjects false
-   */
-  keepEmptyObjects?: boolean;
 }
 ```
 
 ```ts
 export interface IFeatureOptions<T> {
   /**
-   * The name of the feature state
+   * The name of the feature state to sync
    */
   stateKey: string;
   /**
-   * Filter out properties that exist on the feature state.
-   * Can't be used together with includeKeys
-   * @see includeKeys
-   * @throws StorageSyncError if includeKeys is also present
+   * Filter out (ignore) properties that exist on the feature state.
    */
   excludeKeys?: string[];
-  /**
-   * Only sync these properties on the feature state
-   * Can't be used together with excludeKeys
-   * @see excludeKeys
-   * @throws StorageSyncError if excludeKeys is also present
-   */
-  includeKeys?: string[];
   /**
    * Provide the storage type to sync the feature state to,
    * it can be any storage which implements the 'Storage' interface.

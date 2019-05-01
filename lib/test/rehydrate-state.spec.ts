@@ -1,4 +1,4 @@
-import { IStorageSyncOptions } from '../src/models/storage-sync-options';
+import { IStorageSyncOptions } from '../src/interfaces/storage-sync-options';
 import { rehydrateState } from '../src/rehydrate-state';
 import { MockStorage } from './mock-storage';
 
@@ -9,7 +9,7 @@ describe('RehydrateState', () => {
     storage = new MockStorage();
   });
 
-  it('should re hydrate the state to an empty object', () => {
+  it('should return null from rehydration', () => {
     const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
     const feature3 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
@@ -28,7 +28,7 @@ describe('RehydrateState', () => {
 
     const rehydratedState = rehydrateState(config);
 
-    expect(rehydratedState).toEqual({});
+    expect(rehydratedState).toBeNull();
   });
 
   it('should re hydrate the application state with custom serializer function for feature', () => {

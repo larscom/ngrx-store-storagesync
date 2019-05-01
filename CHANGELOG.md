@@ -2,6 +2,17 @@
 
 All notable changes to @larscom/ngrx-store-storagesync will be documented in this file.
 
+## [ 5.0.0 ]
+
+### Breaking Changes
+
+- removed **includeKeys** on interface `IFeatureOptions`. Only allowing **excludeKeys** for the moment
+- removed **keepEmptyObjects** on interface `IStorageSyncOptions`, no longer needed
+
+### Fixed
+
+- it now properly rehydrates the state from storage and now merges with the initialState to keep initial properties. The rehydrated state will override the initialState properties.
+
 ## [ 4.0.1 ]
 
 ### Fixed

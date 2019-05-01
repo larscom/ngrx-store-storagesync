@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
 import { merge as _merge } from 'lodash';
 
-import { INIT_ACTION, UPDATE_ACTION } from './actions';
-import { IStorageSyncOptions } from './models/storage-sync-options';
+import { INIT_ACTION, INIT_ACTION_EFFECTS, UPDATE_ACTION } from './actions';
+import { IStorageSyncOptions } from './interfaces/storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
 import { stateSync } from './state-sync';
 
@@ -27,8 +27,9 @@ export const storageSync = <T>(options: IStorageSyncOptions<T>) => (
 ): ((state: T, action: Action) => T) => {
   if (isNotBrowser) {
     return (state: T, action: Action): T => {
-      const isInit = !state && action.type === INIT_ACTION;
-      return isInit ? reducer(state, action) : { ...state };
+      return [INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type)
+        ? reducer(state, action)
+        : { ...state };
     };
   }
 
@@ -40,15 +41,22 @@ export const storageSync = <T>(options: IStorageSyncOptions<T>) => (
   };
 
   const { rehydrate, rehydrateStateMerger } = config;
-
-  const restoredState = rehydrate ? rehydrateState<T>(config) : null;
+  const revivedState = rehydrate ? rehydrateState<T>(config) : null;
 
   return (state: T, action: Action): T => {
-    const nextState = !state && action.type === INIT_ACTION ? reducer(state, action) : { ...state };
+    const initialState = action.type === INIT_ACTION ? reducer(state, action) : {};
+    const nextState = action.type === INIT_ACTION ? reducer(state, action) : { ...state };
+    const shouldMerge = revivedState && [INIT_ACTION, UPDATE_ACTION].includes(action.type);
 
-    const merge = restoredState && [INIT_ACTION, UPDATE_ACTION].includes(action.type);
-    const mergedState = reducer(merge ? rehydrateStateMerger(nextState, restoredState) : nextState, action);
+    const mergedState = reducer(
+      shouldMerge
+        ? rehydrateStateMerger(nextState, _merge({}, initialState, revivedState))
+        : nextState,
+      action
+    );
 
-    return action.type !== INIT_ACTION ? stateSync(mergedState, config) : mergedState;
+    return [INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type)
+      ? mergedState
+      : stateSync(mergedState, config);
   };
 };
