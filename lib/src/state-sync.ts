@@ -52,7 +52,7 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
  */
 export const cleanState = <T>(state: Partial<T>): Partial<T> => {
   for (const key in state) {
-    if (!state[key] || typeof state[key] !== 'object') {
+    if (!state[key] || typeof state[key] !== 'object' || state[key] instanceof Date) {
       continue;
     }
 
