@@ -2,6 +2,12 @@
 
 All notable changes to @larscom/ngrx-store-storagesync will be documented in this file.
 
+## [ 5.1.0 ]
+
+### Fixed
+
+- No longer removes date objects
+
 ## [ 5.0.0 ]
 
 ### Breaking Changes
