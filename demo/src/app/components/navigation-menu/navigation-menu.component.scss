@@ -1,0 +1,17 @@
+mat-nav-list {
+  padding: 0;
+}
+
+.disable-hover:hover {
+  background: rgba(0, 0, 0, 0);
+}
+
+.snapshot-menu-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.premium-text {
+  font-size: 12px;
+  color: darkgrey;
+}

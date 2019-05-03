@@ -1,0 +1,16 @@
+mat-toolbar {
+  position: fixed;
+  z-index: 2;
+}
+
+h1 {
+  cursor: pointer;
+
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 100%;
+}

@@ -1,0 +1,19 @@
+mat-drawer-container {
+  margin-top: 55px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+mat-drawer {
+  width: 220px;
+  overflow: hidden;
+}
+
+mat-drawer-content {
+  margin-left: 5px;
+  margin-right: 5px;
+  overflow: hidden;
+}

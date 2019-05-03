@@ -1,0 +1,7 @@
+<div class="container">
+  <app-header [isMobile]="isHandsetPortrait$ | async"
+    (menuClicked)="onMenuClicked()"></app-header>
+  <app-drawer>
+    <router-outlet></router-outlet>
+  </app-drawer>
+</div>

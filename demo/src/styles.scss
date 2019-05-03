@@ -1,0 +1,12 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+div,
+button,
+input {
+  transition: all 0.3s cubic-bezier(0.7, 0.27, 0.27, 1);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
