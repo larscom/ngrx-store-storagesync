@@ -1,9 +1,13 @@
 .storage-display__container {
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+  padding: 20px;
 }
 
 code {
   color: #8b0000;
+}
+
+.localstorage,
+.sessionstorage {
+  flex: 1;
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 
 import { IRootState } from '../../../../store/interfaces/root-state';
@@ -15,8 +15,21 @@ export class TodoListComponent {
   constructor(private readonly _store$: Store<IRootState>) {}
 
   todos$ = this._store$.pipe(select(todoSelectors.getTodos));
+  todo = String();
 
   onTodoClicked({ id }: ITodo): void {
-    this._store$.dispatch(new todoActions.DeleteTodo({ id }));
+    setTimeout(() => this._store$.dispatch(new todoActions.DeleteTodo({ id })), 425);
+  }
+
+  addTodo(): void {
+    if (this.todo.length) {
+      this._store$.dispatch(new todoActions.AddTodo({ todo: { value: this.todo } }));
+    }
+    this.todo = String();
+  }
+
+  @HostListener('document:keydown.enter')
+  onEnterPressed(): void {
+    this.addTodo();
   }
 }

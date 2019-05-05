@@ -2,10 +2,12 @@
   <div class="input__container">
     <mat-form-field>
       <input matInput
+        [(ngModel)]="todo"
         placeholder="Add simple todo">
     </mat-form-field>
     <button mat-raised-button
-      color="accent">Add</button>
+      color="accent"
+      (click)="addTodo()">Add</button>
   </div>
   <mat-selection-list>
     <ng-container *ngFor="let todo of todos$ | async">

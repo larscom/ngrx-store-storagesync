@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 
 import { MaterialModule } from '../../shared/modules/material/material.module';
@@ -15,6 +15,7 @@ import { TodoRoutingModule } from './todo-routing.module';
     CommonModule,
     TodoRoutingModule,
     MaterialModule,
+    FormsModule,
     ReactiveFormsModule
   ]
 })
