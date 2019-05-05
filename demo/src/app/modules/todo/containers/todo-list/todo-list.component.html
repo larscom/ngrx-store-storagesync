@@ -1,5 +1,16 @@
-<mat-list>
-  <mat-list-item> Pepper </mat-list-item>
-  <mat-list-item> Salt </mat-list-item>
-  <mat-list-item> Paprika </mat-list-item>
-</mat-list>
+<div class="todo-list__container">
+  <div class="input__container">
+    <mat-form-field>
+      <input matInput
+        placeholder="Add simple todo">
+    </mat-form-field>
+    <button mat-raised-button
+      color="accent">Add</button>
+  </div>
+  <mat-selection-list>
+    <ng-container *ngFor="let todo of todos$ | async">
+      <mat-list-option (click)="onTodoClicked(todo)">{{ todo.value }}</mat-list-option>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </mat-selection-list>
+</div>

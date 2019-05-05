@@ -8,12 +8,11 @@ mat-drawer-container {
 }
 
 mat-drawer {
-  width: 220px;
+  width: 200px;
   overflow: hidden;
 }
 
 mat-drawer-content {
-  margin-left: 5px;
-  margin-right: 5px;
-  overflow: hidden;
+  margin: 20px 5px 0 5px;
+  overflow-x: hidden;
 }

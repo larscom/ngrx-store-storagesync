@@ -1,0 +1,14 @@
+<div class="storage-display__container">
+  <div>
+    <h3 class="subheading-1">LocalStorage</h3>
+    <code>
+          {{ localStorage$ | async | json }}
+        </code>
+  </div>
+  <div>
+    <h3 class="subheading-1">SessionStorage</h3>
+    <code>
+      {{ sessionStorage$ | async | json }}
+    </code>
+  </div>
+</div>

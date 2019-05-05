@@ -4,6 +4,9 @@
     (menuButtonRendered)="onMenuButtonRendered($event)">
   </app-header>
   <app-drawer>
+    <ng-container *ngIf="!(isHandsetPortrait$ | async)">
+      <app-storage-display></app-storage-display>
+    </ng-container>
     <router-outlet></router-outlet>
   </app-drawer>
 </div>
