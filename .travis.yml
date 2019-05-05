@@ -1,11 +1,12 @@
 language: node_js
+branches:
+  only:
+    - master
 node_js:
   - "10"
 script:
   - npm run lint
   - npm run test
-    on:
-      branch: master
 before_deploy:
   - npm run build
 deploy:
