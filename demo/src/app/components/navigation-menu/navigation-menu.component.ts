@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-navigation-menu',
@@ -6,4 +6,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['navigation-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavigationMenuComponent {}
+export class NavigationMenuComponent {
+  @Output() navigate = new EventEmitter<string>();
+}

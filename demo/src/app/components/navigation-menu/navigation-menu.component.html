@@ -1,21 +1,8 @@
 <mat-nav-list>
-  <mat-divider></mat-divider>
-  <a mat-list-item>
-    <mat-icon class="mat-icon-grey">sd_storage</mat-icon>
-    <span>Local Storage</span>
-  </a>
-  <a mat-list-item>
-    <mat-icon class="mat-icon-grey">timer</mat-icon>
-    <span>Session Storage</span>
+  <a (click)="navigate.emit('/')"
+    mat-list-item>
+    <mat-icon>list_alt</mat-icon>
+    <span>Todo List</span>
   </a>
   <mat-divider></mat-divider>
-  <a mat-list-item>
-    <mat-icon class="mat-icon-grey">settings</mat-icon>
-    <span>Settings</span>
-  </a>
-  <mat-divider></mat-divider>
-  <a mat-list-item>
-    <mat-icon class="mat-icon-grey">account_circle</mat-icon>
-    <span>My Profile</span>
-  </a>
 </mat-nav-list>

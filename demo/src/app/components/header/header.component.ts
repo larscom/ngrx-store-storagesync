@@ -17,13 +17,13 @@ export class HeaderComponent implements AfterViewInit {
   @Input() isMobile: boolean;
 
   @Output()
-  disableFocus = new EventEmitter<HTMLButtonElement>();
+  menuButtonRendered = new EventEmitter<HTMLButtonElement>();
   @Output()
   navigateHome = new EventEmitter<void>();
   @Output()
   menuClicked = new EventEmitter<void>();
 
   ngAfterViewInit(): void {
-    this.disableFocus.emit(document.querySelector('button'));
+    this.menuButtonRendered.emit(document.querySelector('button'));
   }
 }

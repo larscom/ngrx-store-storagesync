@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: './todo/todo.module#TodoModule'
+    loadChildren: './modules/todo/todo.module#TodoModule'
   },
   { path: '**', redirectTo: '/' }
 ];

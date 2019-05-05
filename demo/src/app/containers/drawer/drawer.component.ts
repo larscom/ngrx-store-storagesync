@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 
-import { IRootState } from '../../store/interfaces/root-state';
 import * as appActions from '../../store/app.actions';
+import { IRootState } from '../../store/interfaces/root-state';
 
 @Component({
   selector: 'app-drawer',
@@ -10,7 +11,7 @@ import * as appActions from '../../store/app.actions';
   styleUrls: ['drawer.component.scss']
 })
 export class DrawerComponent {
-  constructor(private readonly _store$: Store<IRootState>) {}
+  constructor(private readonly _store$: Store<IRootState>, private readonly _router: Router) {}
 
   readonly drawerOpened$ = this._store$.pipe(select(({ app }) => app.drawerOpen));
 
@@ -18,5 +19,8 @@ export class DrawerComponent {
     this._store$.dispatch(new appActions.ToggleDrawer());
   }
 
-  onNavigate(path: string): void {}
+  onNavigate(path: string): void {
+    this._store$.dispatch(new appActions.ToggleDrawer());
+    this._router.navigate([path]);
+  }
 }

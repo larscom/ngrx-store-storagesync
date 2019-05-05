@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import * as appActions from './store/app.actions';
 import { IRootState } from './store/interfaces/root-state';
+import { FocusMonitor } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ import { IRootState } from './store/interfaces/root-state';
 export class AppComponent {
   constructor(
     private readonly _breakpoint: BreakpointObserver,
-    private readonly _store$: Store<IRootState>
+    private readonly _store$: Store<IRootState>,
+    private readonly _focusMonitor: FocusMonitor
   ) {}
 
   readonly isHandsetPortrait$ = this._breakpoint
@@ -23,5 +25,9 @@ export class AppComponent {
 
   onMenuClicked(): void {
     this._store$.dispatch(new appActions.ToggleDrawer());
+  }
+
+  onMenuButtonRendered(menuButton: HTMLButtonElement): void {
+    this._focusMonitor.stopMonitoring(menuButton);
   }
 }

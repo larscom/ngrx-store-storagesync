@@ -2,7 +2,7 @@
   (backdropClick)="onBackdropClicked()">
   <mat-drawer [opened]="drawerOpened$ | async"
     mode="side">
-    <app-navigation-menu></app-navigation-menu>
+    <app-navigation-menu (navigate)="onNavigate($event)"></app-navigation-menu>
   </mat-drawer>
   <mat-drawer-content>
     <ng-content></ng-content>
