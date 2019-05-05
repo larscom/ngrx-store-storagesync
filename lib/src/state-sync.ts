@@ -47,25 +47,6 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
 };
 
 /**
- * @internal Remove empty objects from state
- * @returns returns the cleaned state
- */
-export const cleanState = <T>(state: Partial<T>): Partial<T> => {
-  for (const key in state) {
-    if (!state[key] || typeof state[key] !== 'object' || state[key] instanceof Date) {
-      continue;
-    }
-
-    cleanState<T>(state[key]);
-
-    if (!Object.keys(state[key]).length) {
-      delete state[key];
-    }
-  }
-  return state;
-};
-
-/**
  * @internal Sync state with storage
  * @param state the next state
  * @param options the configurable options
@@ -80,11 +61,7 @@ export const stateSync = <T>(
     .forEach(
       ({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
         const featureState = cloneDeep<Partial<T>>(state[stateKey]);
-        const filteredState = cleanState(excludeKeysFromState(featureState, excludeKeys));
-
-        if (!Object.keys(filteredState).length) {
-          return;
-        }
+        const filteredState = excludeKeysFromState(featureState, excludeKeys);
 
         const key = storageKeySerializerForFeature
           ? storageKeySerializerForFeature(stateKey)
