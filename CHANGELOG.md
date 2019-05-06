@@ -2,6 +2,12 @@
 
 All notable changes to @larscom/ngrx-store-storagesync will be documented in this file.
 
+## [ 5.4.0 ]
+
+### Added
+
+- added (optional) version number to state. Versions that do not much will not rehydrate.
+
 ## [ 5.1.0 ]
 
 ### Fixed
