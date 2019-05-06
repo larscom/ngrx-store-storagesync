@@ -10,6 +10,29 @@ describe('StorageSync', () => {
     storage = new MockStorage();
   });
 
+  it('should return the initial state if versions do not match', () => {
+    const feature1 = { prop1: false, prop2: 100, prop3: { check: false } };
+    const feature2 = { prop1: false, prop2: 200, prop3: { check: false } };
+
+    const initialState = { feature1, feature2 };
+
+    storage.setItem('version', String(1));
+    storage.setItem('feature1', JSON.stringify({ prop1: true }));
+    storage.setItem('feature2', JSON.stringify({ prop1: true, prop3: { check: true } }));
+
+    const reducer = (state = initialState, action: Action) => state;
+
+    const metaReducer = storageSync({
+      version: 2,
+      features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
+      storage
+    });
+
+    const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
+
+    expect(finalState).toEqual(initialState);
+  });
+
   it('should deep merge the initialState and rehydrated state', () => {
     const feature1 = { prop1: false, prop2: 100, prop3: { check: false } };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false } };

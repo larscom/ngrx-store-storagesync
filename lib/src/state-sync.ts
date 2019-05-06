@@ -54,10 +54,28 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
  */
 export const stateSync = <T>(
   state: T,
-  { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions<T>
+  {
+    features,
+    storage,
+    storageKeySerializer,
+    storageError,
+    version: currentVersion
+  }: IStorageSyncOptions<T>
 ): T => {
-  features
-    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
+  if (currentVersion) {
+    try {
+      const key = storageKeySerializer('version');
+      storage.setItem(key, String(currentVersion));
+    } catch (e) {
+      if (storageError) {
+        storageError(e);
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  features.filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
     .forEach(
       ({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
         const featureState = cloneDeep<Partial<T>>(state[stateKey]);

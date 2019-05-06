@@ -10,6 +10,11 @@ export interface IStorageSyncOptions<T> {
    */
   storage: Storage;
   /**
+   * Give the state a version number. Version number will be checked on rehydration.
+   * @summary Skips rehydration if version from storage < version
+   */
+  version?: number;
+  /**
    * Function that gets executed on a storage error
    * @param error the error that occurred
    */
