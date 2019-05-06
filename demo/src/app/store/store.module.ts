@@ -10,6 +10,7 @@ import { IRootState } from './interfaces/root-state';
 
 export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionReducer<IRootState> {
   return storageSync<IRootState>({
+    version: 1,
     features: [{ stateKey: 'app', storageForFeature: window.sessionStorage }, { stateKey: 'todo' }],
     storageError: console.error,
     storage: window.localStorage
