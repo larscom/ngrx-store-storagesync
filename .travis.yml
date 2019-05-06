@@ -17,4 +17,4 @@ deploy:
     on:
       tags: true
 after_deploy:
-  - "curl -X POST -d {} https://api.netlify.com/build_hooks/5cd048d41ac52d25f732a104"
+  - "curl -X POST -d {} $DEMO_WEBHOOK"
