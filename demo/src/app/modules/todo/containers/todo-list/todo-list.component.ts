@@ -15,10 +15,15 @@ export class TodoListComponent {
   constructor(private readonly _store$: Store<IRootState>) {}
 
   todos$ = this._store$.pipe(select(todoSelectors.getTodos));
+  count$ = this._store$.pipe(select(todoSelectors.getCount));
+
+  completedTodos$ = this._store$.pipe(select(todoSelectors.getCompletedTodos));
+  completedCount$ = this._store$.pipe(select(todoSelectors.getCompletedCount));
+
   todo = String();
 
   onTodoClicked({ id }: ITodo): void {
-    setTimeout(() => this._store$.dispatch(new todoActions.DeleteTodo({ id })), 425);
+    setTimeout(() => this._store$.dispatch(new todoActions.CompleteTodo({ id })), 425);
   }
 
   addTodo(): void {

@@ -1,4 +1,5 @@
 <div class="todo-list__container">
+
   <div class="input__container">
     <mat-form-field>
       <input matInput
@@ -9,10 +10,27 @@
       color="accent"
       (click)="addTodo()">Add</button>
   </div>
-  <mat-selection-list>
-    <ng-container *ngFor="let todo of todos$ | async">
-      <mat-list-option (click)="onTodoClicked(todo)">{{ todo.value }}</mat-list-option>
-      <mat-divider></mat-divider>
-    </ng-container>
-  </mat-selection-list>
+
+  <ng-container *ngIf="count$ | async as count; else noTodo">
+    <h2>Todo ({{ count$ | async  }})</h2>
+    <mat-selection-list>
+      <ng-container *ngFor="let todo of todos$ | async">
+        <mat-list-option [title]="todo.id" (click)="onTodoClicked(todo)">{{ todo.value }}</mat-list-option>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-selection-list>
+  </ng-container>
+  <ng-template #noTodo>
+    <p>Nothing to do....</p>
+  </ng-template>
+
+  <ng-container *ngIf="completedCount$ | async as count">
+    <h2>Completed ({{ count }})</h2>
+    <mat-list>
+      <ng-container *ngFor="let todo of completedTodos$ | async">
+        <mat-list-item [title]="todo.id">{{ todo.value }}</mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
+  </ng-container>
 </div>

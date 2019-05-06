@@ -3,7 +3,7 @@ import { ITodo } from '../interfaces/todo';
 
 export enum TodoActionTypes {
   ADD_TODO = '[Todo] Add Todo',
-  DELETE_TODO = '[Todo] Delete Todo'
+  COMPLETE_TODO = '[Todo] Complete Todo'
 }
 
 export class AddTodo implements Action {
@@ -11,9 +11,9 @@ export class AddTodo implements Action {
   constructor(public readonly payload: { todo: ITodo }) {}
 }
 
-export class DeleteTodo implements Action {
-  readonly type = TodoActionTypes.DELETE_TODO;
+export class CompleteTodo implements Action {
+  readonly type = TodoActionTypes.COMPLETE_TODO;
   constructor(public readonly payload: { id: string }) {}
 }
 
-export type Action = AddTodo | DeleteTodo;
+export type Action = AddTodo | CompleteTodo;
