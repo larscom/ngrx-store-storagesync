@@ -22,6 +22,8 @@ export class HeaderComponent implements AfterViewInit {
   navigateHome = new EventEmitter<void>();
   @Output()
   menuClicked = new EventEmitter<void>();
+  @Output()
+  reset = new EventEmitter<void>();
 
   ngAfterViewInit(): void {
     this.menuButtonRendered.emit(document.querySelector('button'));

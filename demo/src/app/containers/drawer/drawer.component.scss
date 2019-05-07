@@ -14,5 +14,9 @@ mat-drawer {
 
 mat-drawer-content {
   margin: 20px 5px 0 5px;
+  padding: 20px;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
 }

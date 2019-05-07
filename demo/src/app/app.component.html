@@ -1,6 +1,7 @@
 <div class="container">
   <app-header [isMobile]="isHandsetPortrait$ | async"
     (menuClicked)="onMenuClicked()"
+    (reset)="onResetState()"
     (menuButtonRendered)="onMenuButtonRendered($event)">
   </app-header>
   <app-drawer>

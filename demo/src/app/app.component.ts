@@ -30,4 +30,16 @@ export class AppComponent {
   onMenuButtonRendered(menuButton: HTMLButtonElement): void {
     this._focusMonitor.stopMonitoring(menuButton);
   }
+
+  onResetState(): void {
+    if (!confirm('Reset state and reload?')) {
+      return;
+    }
+
+    try {
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      window.location.reload();
+    } catch (e) {}
+  }
 }

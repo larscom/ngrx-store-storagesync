@@ -1,6 +1,7 @@
 .storage-display__container {
   display: flex;
-  padding: 20px;
+  flex-direction: column;
+  margin-left: 20px;
 }
 
 code {

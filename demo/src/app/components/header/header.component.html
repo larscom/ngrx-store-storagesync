@@ -10,4 +10,10 @@
       {{ isMobile ? 'ngrx-store-storagesync' : '@larscom/ngrx-store-storagesync' }}
     </h1>
   </div>
+  <button mat-icon-button
+    title="reset state"
+    (click)="reset.emit()"
+    [disableRipple]="true">
+    <mat-icon>refresh</mat-icon>
+  </button>
 </mat-toolbar>
