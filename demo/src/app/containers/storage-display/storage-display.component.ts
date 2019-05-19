@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IRootState } from 'src/app/store/interfaces/root-state';
+
+import { IRootState } from '../../store/interfaces/root-state';
 
 @Component({
   selector: 'app-storage-display',
