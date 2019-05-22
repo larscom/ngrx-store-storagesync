@@ -1,7 +1,6 @@
 # @larscom/ngrx-store-storagesync
 
 [![npm-release](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg?label=npm%20release)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
-[![git-release](https://img.shields.io/github/tag/larscom/ngrx-store-storagesync.svg?label=git%20release)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
 [![travis build](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)](https://travis-ci.com/larscom/ngrx-store-storagesync/builds)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
