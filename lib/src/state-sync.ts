@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isPlainObject } from 'lodash';
 
 import { IStorageSyncOptions } from './interfaces/storage-sync-options';
 
@@ -47,6 +47,25 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
 };
 
 /**
+ * @internal Remove empty objects from state
+ * @returns returns the cleaned state
+ */
+export const cleanState = <T>(state: Partial<T>): Partial<T> => {
+  for (const key in state) {
+    if (!isPlainObject(state[key])) {
+      continue;
+    }
+
+    cleanState<T>(state[key]);
+
+    if (!Object.keys(state[key]).length) {
+      delete state[key];
+    }
+  }
+  return state;
+};
+
+/**
  * @internal Sync state with storage
  * @param state the next state
  * @param options the configurable options
@@ -75,11 +94,16 @@ export const stateSync = <T>(
     }
   }
 
-  features.filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
+  features
+    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
     .forEach(
       ({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
         const featureState = cloneDeep<Partial<T>>(state[stateKey]);
-        const filteredState = excludeKeysFromState(featureState, excludeKeys);
+        const filteredState = cleanState<T>(excludeKeysFromState<T>(featureState, excludeKeys));
+
+        if (isPlainObject(filteredState) && !Object.keys(filteredState).length) {
+          return;
+        }
 
         const key = storageKeySerializerForFeature
           ? storageKeySerializerForFeature(stateKey)

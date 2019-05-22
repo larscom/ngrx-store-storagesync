@@ -128,7 +128,7 @@ describe('StateSync', () => {
     });
   });
 
-  it('should sync empty objects the provided storage', () => {
+  it('should not sync empty objects the provided storage but keep empty arrays', () => {
     const feature1 = { prop1: false, array: ['1'], prop2: { check: false } };
     const feature2 = { prop1: false, prop2: { check: false, array: [] } };
     const state = { feature1, feature2 };
@@ -147,9 +147,9 @@ describe('StateSync', () => {
     // sync to storage
     stateSync(state, config);
 
-    expect(storage.length).toEqual(2);
+    expect(storage.length).toEqual(1);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual({ prop2: {} });
+    expect(JSON.parse(storage.getItem('feature1'))).toBeNull();
     expect(JSON.parse(storage.getItem('feature2'))).toEqual({ prop1: false, prop2: { array: [] } });
   });
 

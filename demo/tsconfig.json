@@ -17,5 +17,6 @@
       "@angular/*": ["node_modules/@angular/*"],
       "@ngrx/*": ["node_modules/@ngrx/*"]
     }
-  }
+  },
+  "exclude": ["**/**.spec.ts"]
 }
