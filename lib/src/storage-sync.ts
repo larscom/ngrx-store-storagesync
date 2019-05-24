@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { merge as _merge } from 'lodash';
+import { merge } from 'lodash';
 
 import { INIT_ACTION, INIT_ACTION_EFFECTS, UPDATE_ACTION } from './actions';
 import { IStorageSyncOptions } from './interfaces/storage-sync-options';
@@ -27,16 +27,14 @@ export const storageSync = <T>(options: IStorageSyncOptions<T>) => (
 ): ((state: T, action: Action) => T) => {
   if (isNotBrowser) {
     return (state: T, action: Action): T => {
-      return [INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type)
-        ? reducer(state, action)
-        : { ...state };
+      return [INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type) ? reducer(state, action) : { ...state };
     };
   }
 
   const config: IStorageSyncOptions<T> = {
     rehydrate: true,
     storageKeySerializer: (key: string) => key,
-    rehydrateStateMerger: (nextState, rehydratedState) => _merge({}, nextState, rehydratedState),
+    rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
     ...options
   };
 
@@ -44,19 +42,10 @@ export const storageSync = <T>(options: IStorageSyncOptions<T>) => (
   const revivedState = rehydrate ? rehydrateState<T>(config) : null;
 
   return (state: T, action: Action): T => {
-    const initialState = action.type === INIT_ACTION ? reducer(state, action) : {};
     const nextState = action.type === INIT_ACTION ? reducer(state, action) : { ...state };
     const shouldMerge = revivedState && [INIT_ACTION, UPDATE_ACTION].includes(action.type);
+    const mergedState = reducer(shouldMerge ? rehydrateStateMerger(nextState, revivedState) : nextState, action);
 
-    const mergedState = reducer(
-      shouldMerge
-        ? rehydrateStateMerger(nextState, _merge({}, initialState, revivedState))
-        : nextState,
-      action
-    );
-
-    return [INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type)
-      ? mergedState
-      : stateSync(mergedState, config);
+    return [INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type) ? mergedState : stateSync(mergedState, config);
   };
 };

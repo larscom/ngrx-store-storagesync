@@ -179,16 +179,7 @@ describe('StorageSync', () => {
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
 
-    const expected = {
-      feature1: {
-        prop1: true,
-        prop2: 100
-      },
-      feature2: {
-        prop1: true,
-        prop2: 200
-      }
-    };
+    const expected = { feature1: { prop1: true }, feature2: { prop1: true } };
 
     expect(finalState).toEqual(expected);
   });
