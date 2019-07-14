@@ -2,19 +2,19 @@ language: node_js
 branches:
   only:
     - master
-    - /^v\d+\.\d+\.\d+\-+[a-z]+\.+[0-9]?[0-9]$/
+    - /^v\d+\.\d+\.\d+$/
 node_js:
-  - "10"
+  - '10'
 script:
   - npm run test
 before_deploy:
   - npm run build
 deploy:
-    provider: npm
-    email: "$NPM_EMAIL"
-    api_key: "$NPM_API_TOKEN"
-    skip_cleanup: true
-    on:
-      tags: true
+  provider: npm
+  email: '$NPM_EMAIL'
+  api_key: '$NPM_API_TOKEN'
+  skip_cleanup: true
+  on:
+    tags: true
 after_deploy:
-  - "curl -X POST -d {} $DEMO_WEBHOOK"
+  - 'curl -X POST -d {} $DEMO_WEBHOOK'
