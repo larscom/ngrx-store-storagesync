@@ -36,10 +36,8 @@ export const rehydrateState = <T>({
         : storageKeySerializer(stateKey);
 
       try {
-        const featureState = storageForFeature
-          ? storageForFeature.getItem(key)
-          : storage.getItem(key);
-        return featureState
+        const featureState = storageForFeature ? storageForFeature.getItem(key) : storage.getItem(key);
+        return featureState && featureState !== 'undefined'
           ? {
               ...acc,
               ...{
