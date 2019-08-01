@@ -5,6 +5,8 @@ branches:
     - /^v\d+\.\d+\.\d+$/
 node_js:
   - '10'
+script:
+  - npm run test -- --watch=false --code-coverage --single-run
 before_deploy:
   - npm run build:lib
   - npm run copy:readme
