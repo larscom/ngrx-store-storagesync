@@ -1,5 +1,5 @@
-import { IStorageSyncOptions } from '../src/interfaces/storage-sync-options';
-import { excludeKeysFromState, stateSync } from '../src/state-sync';
+import { IStorageSyncOptions } from '../src/lib/interfaces/storage-sync-options';
+import { excludeKeysFromState, stateSync } from '../src/lib/state-sync';
 import { MockStorage } from './mock-storage';
 
 describe('StateSync', () => {
@@ -256,9 +256,7 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(2);
 
-    expect(JSON.parse(storage.getItem(storageKeySerializerForFeature('feature1')))).toEqual(
-      feature1
-    );
+    expect(JSON.parse(storage.getItem(storageKeySerializerForFeature('feature1')))).toEqual(feature1);
     expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
   });
 
@@ -277,10 +275,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [
-        { stateKey: 'feature1', storageKeySerializerForFeature, storageForFeature },
-        { stateKey: 'feature2' }
-      ]
+      features: [{ stateKey: 'feature1', storageKeySerializerForFeature, storageForFeature }, { stateKey: 'feature2' }]
     };
 
     expect(storage.length).toEqual(0);
@@ -292,9 +287,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(1);
     expect(storageForFeature.length).toEqual(1);
 
-    expect(
-      JSON.parse(storageForFeature.getItem(storageKeySerializerForFeature('feature1')))
-    ).toEqual(feature1);
+    expect(JSON.parse(storageForFeature.getItem(storageKeySerializerForFeature('feature1')))).toEqual(feature1);
     expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
   });
 });

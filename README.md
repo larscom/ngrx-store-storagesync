@@ -4,7 +4,7 @@
 [![travis build](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)](https://travis-ci.com/larscom/ngrx-store-storagesync/builds)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
-&#128588; Highly configurable &#128588; state syncing between the @ngrx/store and localstorage/sessionstorage.
+**Highly configurable** state syncing between the @ngrx/store and localstorage/sessionstorage.
 
 You can sync only the objects you need, allowing you to `exclude` **deeply nested** keys.  
 You can sync different 'feature' states to different **storage** locations.

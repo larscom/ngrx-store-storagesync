@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import isPlainObject from 'lodash/isPlainObject';
+
 import { IStorageSyncOptions } from './interfaces/storage-sync-options';
 
 /**

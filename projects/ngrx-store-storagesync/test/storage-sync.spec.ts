@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
-import { INIT_ACTION } from '../src/actions';
-import { storageSync } from '../src/storage-sync';
+
+import { INIT_ACTION } from '../src/lib/actions';
+import { storageSync } from '../src/lib/storage-sync';
 import { MockStorage } from './mock-storage';
 
 describe('StorageSync', () => {

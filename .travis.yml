@@ -4,17 +4,16 @@ branches:
     - master
     - /^v\d+\.\d+\.\d+$/
 node_js:
-  - '10'
-script:
-  - npm run test
+  - "10"
+after_success:
+  - npm run build:lib
+  - npm run copy:readme
 before_deploy:
-  - npm run build
+  - cd dist/ngrx-store-storagesync
 deploy:
-  provider: npm
-  email: '$NPM_EMAIL'
-  api_key: '$NPM_API_TOKEN'
-  skip_cleanup: true
-  on:
-    tags: true
-after_deploy:
-  - 'curl -X POST -d {} $DEMO_WEBHOOK'
+    provider: npm
+    email: "$NPM_EMAIL"
+    api_key: "$NPM_API_TOKEN"
+    skip_cleanup: true
+    on:
+      tags: true

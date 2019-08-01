@@ -1,0 +1,30 @@
+{
+  "name": "@larscom/ngrx-store-storagesync",
+  "version": "5.6.5",
+  "description": "Highly configurable state syncing between the @ngrx/store and localstorage/sessionstorage",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larscom/ngrx-store-storagesync.git"
+  },
+  "keywords": [
+    "angular",
+    "ngrx",
+    "redux",
+    "store",
+    "state",
+    "storage",
+    "rxjs"
+  ],
+  "author": "Lars Kniep",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/larscom/ngrx-store-storagesync/issues"
+  },
+  "homepage": "https://github.com/larscom/ngrx-store-storagesync#readme",
+  "peerDependencies": {
+    "@ngrx/store": ">=4.0.0",
+    "@angular/common": ">=2.0.0",
+    "@angular/core": ">=2.0.0",
+    "lodash": ">=4.0.0"
+  }
+}

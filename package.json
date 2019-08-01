@@ -1,61 +1,61 @@
 {
-  "name": "@larscom/ngrx-store-storagesync",
-  "version": "5.6.5",
-  "description": "Highly configurable state syncing between the @ngrx/store and localstorage/sessionstorage",
-  "main": "./dist/public_api.js",
-  "typings": "./dist/public_api.d.ts",
+  "name": "ngrx-store-storagesync-app",
+  "version": "0.0.0",
   "scripts": {
-    "build": "rimraf dist && tsc",
-    "lint": "tslint -p tslint.json -t stylish",
-    "test": "jest",
-    "test:update": "jest -u",
-    "test:watch": "jest --watch",
-    "test:ci": "jest --runInBand",
-    "test:coverage": "jest --coverage"
+    "ng": "ng",
+    "test": "ng test ngrx-store-storagesync",
+    "start": "npm run start:app",
+    "start:app": "ng serve",
+    "build:lib": "ng build ngrx-store-storagesync",
+    "build:app": "ng build --prod",
+    "copy:readme": "cpx README.md dist/ngrx-store-storagesync"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm test"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/larscom/ngrx-store-storagesync.git"
-  },
-  "keywords": [
-    "angular",
-    "ngrx",
-    "redux",
-    "store",
-    "state",
-    "storage",
-    "rxjs"
-  ],
-  "author": "Lars Kniep",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/larscom/ngrx-store-storagesync/issues"
-  },
-  "homepage": "https://github.com/larscom/ngrx-store-storagesync#readme",
-  "devDependencies": {
-    "@angular/core": "^7.2.10",
-    "@ngrx/store": "^7.3.0",
-    "@types/jest": "^24.0.11",
-    "@types/lodash": "^4.14.123",
-    "@types/node": "^11.11.3",
-    "husky": "^1.3.1",
-    "jest": "^24.5.0",
-    "rimraf": "^2.6.3",
-    "rxjs": "^6.4.0",
-    "ts-jest": "^24.0.0",
-    "ts-node": "^8.0.3",
-    "tslint": "^5.14.0",
-    "typescript": "^3.3.3333"
-  },
-  "peerDependencies": {
-    "@ngrx/store": ">=4.0.0"
-  },
+  "private": true,
   "dependencies": {
-    "lodash": "^4.17.13"
+    "@angular/animations": "~8.1.2",
+    "@angular/cdk": "^8.1.2",
+    "@angular/common": "~8.1.2",
+    "@angular/compiler": "~8.1.2",
+    "@angular/core": "~8.1.2",
+    "@angular/forms": "~8.1.2",
+    "@angular/material": "^8.1.2",
+    "@angular/platform-browser": "~8.1.2",
+    "@angular/platform-browser-dynamic": "~8.1.2",
+    "@angular/router": "~8.1.2",
+    "@ngrx/store": "^8.2.0",
+    "@ngrx/store-devtools": "^8.2.0",
+    "hammerjs": "^2.0.8",
+    "rxjs": "~6.4.0",
+    "tslib": "^1.9.0",
+    "uuid": "^3.3.2",
+    "web-animations-js": "^2.3.2",
+    "zone.js": "~0.9.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.801.2",
+    "@angular-devkit/build-ng-packagr": "~0.801.3",
+    "@angular/cli": "~8.1.2",
+    "@angular/compiler-cli": "~8.1.2",
+    "@angular/language-service": "~8.1.2",
+    "@types/jasmine": "~3.3.8",
+    "@types/jasminewd2": "~2.0.3",
+    "@types/lodash": "^4.14.136",
+    "@types/node": "~8.9.4",
+    "codelyzer": "^5.0.0",
+    "cpx": "^1.5.0",
+    "jasmine-core": "~3.4.0",
+    "jasmine-spec-reporter": "~4.2.1",
+    "karma": "~4.1.0",
+    "karma-chrome-launcher": "~2.2.0",
+    "karma-coverage-istanbul-reporter": "~2.0.1",
+    "karma-jasmine": "~2.0.1",
+    "karma-jasmine-html-reporter": "^1.4.0",
+    "ng-packagr": "^5.1.0",
+    "ngrx-store-freeze": "^0.2.4",
+    "protractor": "~5.4.0",
+    "ts-node": "~7.0.0",
+    "tsickle": "^0.35.0",
+    "tslint": "~5.15.0",
+    "typescript": "~3.4.3"
   }
 }
