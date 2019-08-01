@@ -6,7 +6,7 @@ branches:
 node_js:
   - '10'
 script:
-  - npm run test -- --watch=false --code-coverage
+  - npm run test -- --watch=false
 before_deploy:
   - npm run build:lib
   - npm run copy:readme
