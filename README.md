@@ -10,7 +10,7 @@ You can sync only the objects you need, allowing you to `exclude` **deeply neste
 You can sync different 'feature' states to different **storage** locations.
 For example:
 
-- feature1 to `sessionStorage`
+- feature1 to `sessionStorage` 
 - feature2 to `localStorage`
 
 ## Demo
