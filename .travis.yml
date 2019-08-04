@@ -7,8 +7,6 @@ node_js:
   - '10'
 script:
   - npm run test -- --code-coverage --watch=false
-after_success:
-  - 'curl -X POST -d {} $BUILD_DEMO'
 before_deploy:
   - npm run build:lib
   - npm run copy:readme
