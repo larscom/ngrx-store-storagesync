@@ -14,7 +14,7 @@ if [ "$1" ] && [ "$2" ]; then
   fi
 
   #update projects/ngrx-store-storagesync/package.json
-  npm version $1 --prefix projects/ngrx-store-storagesync -m $2
+  npm version "$1" --prefix projects/ngrx-store-storagesync -m "$2"
 else
   echo "provide version type and a commit message as argument! e.g.: ./version.sh patch \"my commit message\" "
   exit 1
