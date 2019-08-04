@@ -2,7 +2,6 @@
   "name": "ngrx-store-storagesync-app",
   "version": "0.0.0",
   "scripts": {
-    "preversion": "npm test",
     "ng": "ng",
     "test": "ng test ngrx-store-storagesync",
     "start": "npm run start:app",
