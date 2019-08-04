@@ -6,7 +6,7 @@ branches:
 node_js:
   - '10'
 script:
-  - npm run test -- --watch=false
+  - npm run test -- --code-coverage --watch=false
 after_success:
   - 'curl -X POST -d {} $BUILD_DEMO'
 before_deploy:

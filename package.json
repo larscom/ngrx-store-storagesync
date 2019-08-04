@@ -4,7 +4,7 @@
   "scripts": {
     "preversion": "npm test",
     "ng": "ng",
-    "test": "ng test ngrx-store-storagesync --code-coverage",
+    "test": "ng test ngrx-store-storagesync",
     "start": "npm run start:app",
     "start:app": "ng serve",
     "build:lib": "ng build ngrx-store-storagesync",

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# exit on error
+set -e
+
 # allowed versions
 declare -a versions
 versions=(patch minor major)
@@ -12,6 +15,9 @@ if [ "$1" ] && [ "$2" ]; then
     echo "$1 is not valid. Try one of the following: ${versions[*]}"
     exit 1
   fi
+
+  #run test
+  npm run test -- --watch=false
 
   #update projects/ngrx-store-storagesync/package.json
   npm version "$1" --prefix projects/ngrx-store-storagesync -m "$2"
