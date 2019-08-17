@@ -7,13 +7,12 @@ branches:
   only:
     - master
     - /^v\d+\.\d+\.\d+$/
+services:
+  - docker
 install:
   - npm ci
-  - curl -sSL "https://get.docker.com/gpg" | sudo -E apt-key add -
-  - echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update
-  - sudo apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --allow-unauthenticated --assume-yes install docker-engine
 before_script:
+  - npm run build:app
   - docker build -t ngrx_store_storagesync .
   - docker run -p 80:80 -d ngrx_store_storagesync
 script:
