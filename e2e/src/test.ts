@@ -1,7 +1,8 @@
 import { Selector } from 'testcafe';
 
-// tslint:disable-next-line: no-unused-expression
-fixture`Getting Started`.page`${process.env.NGRX_STORE_STORAGESYNC_URL}`;
+import config from './config';
+
+fixture(`Getting Started`).page(`${config.url}`);
 
 test('My first test', async t => {
   await t.expect(Selector('h2').innerText).eql('Local Storage');
