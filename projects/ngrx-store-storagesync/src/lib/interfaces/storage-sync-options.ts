@@ -11,7 +11,8 @@ export interface IStorageSyncOptions<T> {
   storage: Storage;
   /**
    * Give the state a version number. Version number will be checked on rehydration.
-   * @summary Skips rehydration if version from storage < version
+   *
+   * Skips rehydration if version from storage < version
    */
   version?: number;
   /**
@@ -20,21 +21,18 @@ export interface IStorageSyncOptions<T> {
    */
   storageError?: (error: any) => void;
   /**
-   * Pull initial state from storage on startup
-   * @default rehydrate true
+   * Restore last known state from storage on startup
    */
   rehydrate?: boolean;
   /**
    * Serializer for storage keys
    * @param key the storage item key
-   * @default storageKeySerializer (key: string) => key
    */
   storageKeySerializer?: (key: string) => string;
   /**
    * Custom state merge function after rehydration (by default it does a deep merge)
    * @param state the next state
    * @param rehydratedState the state resolved from a storage location
-   * @default rehydrateStateMerger (state: T, rehydratedState: T) => deepMerge(state, rehydratedState)
    */
   rehydrateStateMerger?: (state: T, rehydratedState: T) => T;
 }
