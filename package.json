@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "test": "ng test ngrx-store-storagesync",
-    "test:e2e": "testcafe chrome:headless e2e/src",
+    "test:e2e": "testcafe chrome:headless e2e/src/views",
+    "test:e2e-dev": "testcafe -L chrome e2e/src/views",
     "start": "npm run start:app",
     "start:app": "ng serve",
     "build:lib": "ng build ngrx-store-storagesync",
@@ -55,7 +56,6 @@
     "ng-packagr": "^5.1.0",
     "ngrx-store-freeze": "^0.2.4",
     "testcafe": "^1.4.1",
-    "testcafe-angular-selectors": "^0.3.2",
     "ts-node": "~7.0.0",
     "tsickle": "^0.35.0",
     "tslint": "~5.15.0",
