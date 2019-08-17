@@ -1,0 +1,20 @@
+language: node_js
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+\.\d+$/
+node_js:
+  - '10'
+script:
+  - npm run test -- --code-coverage --watch=false
+before_deploy:
+  - npm run build:lib
+  - npm run copy:readme
+  - cd dist/ngrx-store-storagesync
+deploy:
+  provider: npm
+  email: '$NPM_EMAIL'
+  api_key: '$NPM_API_TOKEN'
+  skip_cleanup: true
+  on:
+    tags: true

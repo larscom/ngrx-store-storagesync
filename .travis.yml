@@ -1,12 +1,24 @@
-language: node_js
+sudo: required
+dist: trusty
 branches:
   only:
     - master
     - /^v\d+\.\d+\.\d+$/
-node_js:
-  - '10'
+install:
+  - curl -sSL "https://get.docker.com/gpg" | sudo -E apt-key add -
+  - echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get update
+  - sudo apt-get install --assume-yes nodejs
+  - sudo apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --assume-yes install docker-engine
+  - docker version
+before_script:
+  - docker build -t ngrx_store_storagesync .
+  - docker run -p 80:80 -d --name testcafe ngrx_store_storagesync
 script:
   - npm run test -- --code-coverage --watch=false
+  - npm run test:e2e
+after_script:
+  - docker system prune
 before_deploy:
   - npm run build:lib
   - npm run copy:readme
