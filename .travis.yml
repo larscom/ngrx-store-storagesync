@@ -15,10 +15,11 @@ before_script:
   - docker build -t ngrx_store_storagesync .
   - docker run -p 80:80 -d --name testcafe ngrx_store_storagesync
 script:
+  - npm ci
   - npm run test -- --code-coverage --watch=false
   - npm run test:e2e
 after_script:
-  - docker system prune
+  - docker system prune -f
 before_deploy:
   - npm run build:lib
   - npm run copy:readme
