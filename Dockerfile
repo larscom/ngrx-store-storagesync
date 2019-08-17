@@ -11,7 +11,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY . /app
 
 # install and cache app dependencies
-RUN npm install
+RUN npm ci
 
 # generate build
 RUN npm run build:app
