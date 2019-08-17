@@ -15,7 +15,7 @@ install:
   - sudo apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --allow-unauthenticated --assume-yes install docker-engine
 before_script:
   - docker build -t ngrx_store_storagesync .
-  - docker run -p 80:80 -d --name testcafe ngrx_store_storagesync
+  - docker run -p 80:80 -d ngrx_store_storagesync
 script:
   - npm run test -- --code-coverage --watch=false
   - npm run test:e2e
