@@ -26,6 +26,6 @@ if [ "$1" ] && [ "$2" ]; then
   git push --follow-tags
   echo "publishing in progress..."
 else
-  echo "provide version type and a commit message as argument! e.g.: ./version.sh patch \"my commit message\" "
+  echo "provide version type and a commit message as argument! e.g.: ./publish.sh patch \"my commit message\" "
   exit 1
 fi
