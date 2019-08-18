@@ -7,6 +7,8 @@ import * as appActions from './store/app.actions';
 import { IRootState } from './store/interfaces/root-state';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
+const STORAGE_CHANGED_EVENT = 'STORAGE_CHANGED_EVENT';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -18,6 +20,12 @@ export class AppComponent {
     private readonly store$: Store<IRootState>,
     private readonly focusMonitor: FocusMonitor
   ) {}
+
+  private readonly isTestRunner = Boolean(window.localStorage && window.localStorage[STORAGE_CHANGED_EVENT]);
+
+  readonly showStorageDisplay$ = this.breakpoint
+    .observe(Breakpoints.HandsetPortrait)
+    .pipe(map(({ matches }) => !matches && !this.isTestRunner));
 
   readonly isHandsetPortrait$ = this.breakpoint
     .observe(Breakpoints.HandsetPortrait)
