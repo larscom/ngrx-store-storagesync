@@ -1,7 +1,8 @@
+import { createReducer, on } from '@ngrx/store';
 import { v1 as Guid } from 'uuid';
+
 import { ITodo } from '../interfaces/todo';
-import * as fromTodo from './todo.actions';
-import { TodoActionTypes } from './todo.actions';
+import * as todoActions from './todo.actions';
 
 export const initialState: ITodoState = {
   todos: [
@@ -17,19 +18,8 @@ export interface ITodoState {
   readonly completed: string[];
 }
 
-export function reducer(state = initialState, action: fromTodo.Action): ITodoState {
-  switch (action.type) {
-    case TodoActionTypes.ADD_TODO: {
-      const { todo } = action.payload;
-      return {
-        ...state,
-        todos: [...state.todos, { id: Guid(), ...todo }]
-      };
-    }
-    case TodoActionTypes.COMPLETE_TODO: {
-      const { id } = action.payload;
-      return { ...state, completed: [...state.completed, id] };
-    }
-  }
-  return state;
-}
+export const reducer = createReducer(
+  initialState,
+  on(todoActions.addTodo, (state, { todo }) => ({ ...state, todos: [...state.todos, { id: Guid(), ...todo }] })),
+  on(todoActions.completeTodo, (state, { id }) => ({ ...state, completed: [...state.completed, id] }))
+);

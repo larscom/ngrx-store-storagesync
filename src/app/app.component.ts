@@ -14,21 +14,21 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 })
 export class AppComponent {
   constructor(
-    private readonly _breakpoint: BreakpointObserver,
-    private readonly _store$: Store<IRootState>,
-    private readonly _focusMonitor: FocusMonitor
+    private readonly breakpoint: BreakpointObserver,
+    private readonly store$: Store<IRootState>,
+    private readonly focusMonitor: FocusMonitor
   ) {}
 
-  readonly isHandsetPortrait$ = this._breakpoint
+  readonly isHandsetPortrait$ = this.breakpoint
     .observe(Breakpoints.HandsetPortrait)
     .pipe(map(({ matches }) => matches));
 
   onMenuClicked(): void {
-    this._store$.dispatch(new appActions.ToggleDrawer());
+    this.store$.dispatch(appActions.toggleDrawer());
   }
 
   onMenuButtonRendered(menuButton: HTMLButtonElement): void {
-    this._focusMonitor.stopMonitoring(menuButton);
+    this.focusMonitor.stopMonitoring(menuButton);
   }
 
   onResetState(): void {

@@ -11,16 +11,16 @@ import { IRootState } from '../../store/interfaces/root-state';
   styleUrls: ['drawer.component.scss']
 })
 export class DrawerComponent {
-  constructor(private readonly _store$: Store<IRootState>, private readonly _router: Router) {}
+  constructor(private readonly store$: Store<IRootState>, private readonly router: Router) {}
 
-  readonly drawerOpened$ = this._store$.pipe(select(({ app }) => app.drawerOpen));
+  readonly drawerOpened$ = this.store$.pipe(select(({ app }) => app.drawerOpen));
 
   onBackdropClicked(): void {
-    this._store$.dispatch(new appActions.ToggleDrawer());
+    this.store$.dispatch(appActions.toggleDrawer());
   }
 
   onNavigate(path: string): void {
-    this._store$.dispatch(new appActions.ToggleDrawer());
-    this._router.navigate([path]);
+    this.store$.dispatch(appActions.toggleDrawer());
+    this.router.navigate([path]);
   }
 }

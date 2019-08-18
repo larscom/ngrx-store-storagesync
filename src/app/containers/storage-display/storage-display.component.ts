@@ -11,12 +11,12 @@ import { IRootState } from '../../store/interfaces/root-state';
   styleUrls: ['./storage-display.component.scss']
 })
 export class StorageDisplayComponent {
-  constructor(private readonly _store$: Store<IRootState>) {}
+  constructor(private readonly store$: Store<IRootState>) {}
 
-  sessionStorage$ = combineLatest(of(window.sessionStorage), this._store$).pipe(
+  sessionStorage$ = combineLatest(of(window.sessionStorage), this.store$).pipe(
     map(([storage]) => storage)
   );
-  localStorage$ = combineLatest(of(window.localStorage), this._store$).pipe(
+  localStorage$ = combineLatest(of(window.localStorage), this.store$).pipe(
     map(([storage]) => storage)
   );
 }

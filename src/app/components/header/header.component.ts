@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Output,
-  Input
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -23,7 +16,7 @@ export class HeaderComponent implements AfterViewInit {
   @Output()
   menuClicked = new EventEmitter<void>();
   @Output()
-  reset = new EventEmitter<void>();
+  resetState = new EventEmitter<void>();
 
   ngAfterViewInit(): void {
     this.menuButtonRendered.emit(document.querySelector('button'));

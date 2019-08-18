@@ -43,6 +43,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.136",
     "@types/node": "~8.9.4",
+    "@types/uuid": "^3.4.5",
     "codelyzer": "^5.0.0",
     "cpx": "^1.5.0",
     "jasmine-core": "~3.4.0",
