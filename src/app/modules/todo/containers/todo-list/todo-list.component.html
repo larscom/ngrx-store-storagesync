@@ -5,11 +5,13 @@
   <div class="input__container">
     <mat-form-field>
       <input matInput
+        id="add-todo"
         [(ngModel)]="todo"
         placeholder="Add simple todo">
     </mat-form-field>
     <button mat-raised-button
       color="accent"
+      id="add-todo"
       (click)="addTodo()">Add</button>
   </div>
 
@@ -28,7 +30,7 @@
   </ng-template>
 
   <ng-container *ngIf="completedCount$ | async as count">
-    <h2>Completed ({{ count }})</h2>
+    <h2 id="completed-count">Completed ({{ count }})</h2>
     <mat-list>
       <ng-container *ngFor="let todo of completedTodos$ | async">
         <mat-list-item [title]="todo.id">{{ todo.value }}</mat-list-item>

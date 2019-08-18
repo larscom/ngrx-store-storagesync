@@ -27,7 +27,7 @@ export class TodoListComponent {
   todo = String();
 
   onTodoClicked({ id }: ITodo): void {
-    setTimeout(() => this.store$.dispatch(todoActions.completeTodo({ id })), 425);
+    setTimeout(() => this.store$.dispatch(todoActions.completeTodo({ id })), 250);
   }
 
   addTodo(): void {
