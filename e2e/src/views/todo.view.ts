@@ -35,12 +35,10 @@ test('should remember completed todos after page refresh', async controller => {
 test('should keep menu open after page refresh', async controller => {
   const drawer = Selector('.mat-drawer');
 
-  // check for visibility hidden
-  await controller.expect(drawer.withAttribute('style', /(^|[\s])visibility\s*:\s*hidden\s*($|;)/).exists).ok();
+  await controller.expect(drawer.getStyleProperty('visibility')).eql('hidden');
 
   await controller.click(Selector('button#menu'));
   await controller.eval(() => location.reload());
 
-  // check for visibility visible
-  await controller.expect(drawer.withAttribute('style', /(^|[\s])visibility\s*:\s*visible\s*($|;)/).exists).ok();
+  await controller.expect(drawer.getStyleProperty('visibility')).eql('visible');
 });
