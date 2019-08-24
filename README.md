@@ -165,3 +165,91 @@ export interface IFeatureOptions<T> {
   deserialize?: (featureState: string) => Partial<T>;
 }
 ```
+
+## Examples
+
+### Sync to different storage locations
+
+You can sync to different storage locations per feature state.
+
+```ts
+export function storageSyncReducer(reducer: ActionReducer<any>) {
+  return storageSync<IState>({
+    features: [
+      { stateKey: 'feature1', storageForFeature: window.sessionStorage }, // to sessionStorage
+      { stateKey: 'feature2' } // to localStorage
+    ],
+    storage: window.localStorage
+  })(reducer);
+}
+```
+
+### Exclude specific properties on state
+
+Prevent specific properties from being synced to storage.
+
+```ts
+const state = {
+  feature1: {
+    message: 'hello', // excluded
+    loading: false,
+    auth: {
+      loading: false, // excluded
+      loggedIn: false,
+      message: 'hello' // excluded
+    }
+  }
+};
+
+export function storageSyncReducer(reducer: ActionReducer<any>) {
+  return storageSync<IState>({
+    features: [{ stateKey: 'feature1', excludeKeys: ['auth.loading', 'message'] }],
+    storage: window.localStorage
+  })(reducer);
+}
+```
+
+### Sync conditionally
+
+Prevent the state from being synced to storage based on a condition.
+
+```ts
+const state = {
+  checkMe: true, // <---
+  feature1: {
+    rememberMe: false, // <---
+    auth: {
+      loading: false,
+      message: 'hello'
+    }
+  }
+};
+
+export function storageSyncReducer(reducer: ActionReducer<any>) {
+  return storageSync<IState>({
+    features: [
+      {
+        stateKey: 'feature1',
+        shouldSync: (featureState: any, nextState: any) => {
+          return featureState.rememberMe || nextState.checkMe;
+        }
+      }
+    ],
+    storage: window.localStorage
+  })(reducer);
+}
+```
+
+### Serialize key
+
+Override the default storage key serializer.
+
+```ts
+export function storageSyncReducer(reducer: ActionReducer<any>) {
+  return storageSync<IState>({
+    features: [{ stateKey: 'feature1' }],
+    storageKeySerializer: (key: string) => `abc_${key}`,
+    storage: window.localStorage
+  })(reducer);
+}
+```
