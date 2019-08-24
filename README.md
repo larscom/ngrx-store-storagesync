@@ -8,6 +8,7 @@
 
 You can sync only the objects you need, allowing you to `exclude` **deeply nested** keys.  
 You can sync different 'feature' states to different **storage** locations.
+
 For example:
 
 - feature1 to `sessionStorage`
@@ -49,12 +50,11 @@ export const reducers: ActionReducerMap<IState> = {
   feature2: fromFeature2.reducer
 };
 
-export function storageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [
       // save only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
-
       // exclude key 'success' inside 'auth' and all keys 'loading' inside 'feature1'
       { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] }
     ],
@@ -70,13 +70,6 @@ const metaReducers: Array<MetaReducer<any, any>> = [storageSyncReducer];
 })
 export class AppModule {}
 ```
-
-## Deserializing
-
-By default the state gets deserialized and parsed by `JSON.parse` with an ISO date reviver.
-This means that your ISO date objects gets stored as `string`, and restored as `Date`
-
-If you do not want this behaviour, you can implement your own `deserialize` function.
 
 ## Configuration
 
@@ -173,7 +166,7 @@ export interface IFeatureOptions<T> {
 You can sync to different storage locations per feature state.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<any>) {
+export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [
       { stateKey: 'feature1', storageForFeature: window.sessionStorage }, // to sessionStorage
@@ -189,7 +182,7 @@ export function storageSyncReducer(reducer: ActionReducer<any>) {
 Prevent specific properties from being synced to storage.
 
 ```ts
-const state = {
+const state: IState = {
   feature1: {
     message: 'hello', // excluded
     loading: false,
@@ -201,7 +194,7 @@ const state = {
   }
 };
 
-export function storageSyncReducer(reducer: ActionReducer<any>) {
+export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [{ stateKey: 'feature1', excludeKeys: ['auth.loading', 'message'] }],
     storage: window.localStorage
@@ -211,10 +204,10 @@ export function storageSyncReducer(reducer: ActionReducer<any>) {
 
 ### Sync conditionally
 
-Prevent the state from being synced to storage based on a condition.
+Sync state to storage based on a condition.
 
 ```ts
-const state = {
+const state: IState = {
   checkMe: true, // <---
   feature1: {
     rememberMe: false, // <---
@@ -225,12 +218,12 @@ const state = {
   }
 };
 
-export function storageSyncReducer(reducer: ActionReducer<any>) {
+export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [
       {
         stateKey: 'feature1',
-        shouldSync: (featureState: any, nextState: any) => {
+        shouldSync: (featureState: Partial<IState>, nextState: IState) => {
           return featureState.rememberMe || nextState.checkMe;
         }
       }
@@ -240,12 +233,48 @@ export function storageSyncReducer(reducer: ActionReducer<any>) {
 }
 ```
 
-### Serialize key
+### Serialize state
+
+Override the default serializer for the feature state.
+
+```ts
+export function storageSyncReducer(reducer: ActionReducer<IState>) {
+  return storageSync<IState>({
+    features: [
+      {
+        stateKey: 'feature1',
+        serialize: (featureState: Partial<IState>) => JSON.stringify(featureState)
+      }
+    ],
+    storage: window.localStorage
+  })(reducer);
+}
+```
+
+### Deserialize state
+
+Override the default deserializer for the feature state.
+
+```ts
+export function storageSyncReducer(reducer: ActionReducer<IState>) {
+  return storageSync<IState>({
+    features: [
+      {
+        stateKey: 'feature1',
+        deserialize: (featureState: string) => JSON.parse(featureState)
+      }
+    ],
+    storage: window.localStorage
+  })(reducer);
+}
+```
+
+### Serialize storage key
 
 Override the default storage key serializer.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<any>) {
+export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [{ stateKey: 'feature1' }],
     storageKeySerializer: (key: string) => `abc_${key}`,
@@ -253,3 +282,26 @@ export function storageSyncReducer(reducer: ActionReducer<any>) {
   })(reducer);
 }
 ```
+
+### Merge rehydrated state
+
+Override the default rehydrated state merger.
+
+```ts
+export function storageSyncReducer(reducer: ActionReducer<IState>) {
+  return storageSync<IState>({
+    features: [{ stateKey: 'feature1' }],
+    rehydrateStateMerger: (state: IState, rehydratedState: IState) => {
+      return { ...state, ...rehydratedState };
+    },
+    storage: window.localStorage
+  })(reducer);
+}
+```
+
+## Deserializing
+
+By default the state gets deserialized and parsed by `JSON.parse` with an ISO date reviver.
+This means that your ISO date objects gets stored as `string`, and restored as `Date`
+
+If you do not want this behaviour, you can implement your own `deserialize` function.
