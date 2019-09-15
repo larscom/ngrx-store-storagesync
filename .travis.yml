@@ -2,7 +2,8 @@ sudo: required
 dist: trusty
 language: node_js
 addons:
-  chrome: "77.0.3865"
+  chrome: stable
+  firefox: stable
 env:
   - TESTCAFE_URL=http://127.0.0.1
 node_js:
