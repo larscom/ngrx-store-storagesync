@@ -24,8 +24,8 @@ script:
   - npm run test:e2e
 after_script:
   - docker system prune --volumes --all -f
-  - chmod +x .travis/auto-version.sh
-  - .travis/auto-version.sh
+  - chmod +x .travis/update-version.sh
+  - .travis/update-version.sh
 before_deploy:
   - npm run build:lib
   - npm run copy:readme
