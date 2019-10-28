@@ -14,6 +14,8 @@ branches:
     - /^v\d+\.\d+\.\d+$/
 services:
   - docker
+before_install:
+  - if [[ $TRAVIS_COMMIT_MESSAGE == *"[Travis]"* ]]; then travis_terminate 0; fi
 install:
   - npm ci
 before_script:
