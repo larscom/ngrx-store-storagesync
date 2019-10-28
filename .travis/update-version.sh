@@ -1,4 +1,8 @@
-if [ "$TRAVIS_PULL_REQUEST" == false ] && [ "$TRAVIS_BRANCH " == "master" ] && [ -z "$TRAVIS_TAG" ]; then
+echo "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}"
+echo "TRAVIS_BRANCH: ${TRAVIS_BRANCH}"
+echo "TRAVIS_TAG: ${TRAVIS_TAG}"
+
+if [ $TRAVIS_PULL_REQUEST == false ] && [ $TRAVIS_BRANCH == "master" ] && [ -z $TRAVIS_TAG ]; then
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "Travis CI"
 
