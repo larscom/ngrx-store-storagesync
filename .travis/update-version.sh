@@ -1,12 +1,12 @@
-if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH " == "master" ] && [ -z "$TRAVIS_TAG" ]; then
+if [ "$TRAVIS_PULL_REQUEST" == false ] && [ "$TRAVIS_BRANCH " == "master" ] && [ -z "$TRAVIS_TAG" ]; then
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "Travis CI"
 
   echo "1"
   git status
 
-  git stash
   git checkout master
+  git stash
 
   echo "2"
   git status
