@@ -10,6 +10,7 @@ env:
 branches:
   only:
     - master
+    - auto-versioning
     - /^v\d+\.\d+\.\d+$/
 services:
   - docker
@@ -23,6 +24,7 @@ script:
   - npm run test:e2e
 after_script:
   - docker system prune --volumes --all -f
+  - .travis/auto-version.sh
 before_deploy:
   - npm run build:lib
   - npm run copy:readme
