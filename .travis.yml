@@ -1,12 +1,12 @@
 sudo: required
 dist: trusty
 language: node_js
+node_js:
+  - '10'
 addons:
   chrome: stable
 env:
-  - TESTCAFE_URL=http://127.0.0.1
-node_js:
-  - '10'
+  - TESTCAFE_URL='http://127.0.0.1'
 branches:
   only:
     - master
@@ -22,7 +22,7 @@ script:
   - npm run test -- --code-coverage --watch=false
   - npm run test:e2e
 after_script:
-  - docker system prune -f
+  - docker system prune --volumes --all -f
 before_deploy:
   - npm run build:lib
   - npm run copy:readme
