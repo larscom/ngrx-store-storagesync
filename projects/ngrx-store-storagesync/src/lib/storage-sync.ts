@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import merge from 'lodash/merge';
+import { merge } from 'lodash';
 
 import { INIT_ACTION, INIT_ACTION_EFFECTS, UPDATE_ACTION } from './actions';
 import { IStorageSyncOptions } from './interfaces/storage-sync-options';

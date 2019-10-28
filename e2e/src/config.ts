@@ -1,3 +1,3 @@
 export default {
-  url: process.env.TESTCAFE_URL || 'http://localhost:4200'
+  url: process.env.TESTCAFE_URL || 'https://ngrx-store-storagesync.netlify.com'
 };
