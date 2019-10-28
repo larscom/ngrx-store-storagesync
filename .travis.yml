@@ -17,7 +17,7 @@ install:
   - npm ci
 before_script:
   - npm run build:app
-  - docker run -p 80:80 $(docker build -q .)
+  - docker run -p 80:80 -d $(docker build -q .)
 script:
   - npm run test -- --code-coverage --watch=false
   - npm run test:e2e
