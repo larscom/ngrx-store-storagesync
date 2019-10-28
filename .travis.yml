@@ -3,11 +3,10 @@ dist: trusty
 language: node_js
 addons:
   chrome: stable
-  firefox: latest
 env:
   - TESTCAFE_URL=http://127.0.0.1
 node_js:
-  - "10"
+  - '10'
 branches:
   only:
     - master
@@ -18,8 +17,7 @@ install:
   - npm ci
 before_script:
   - npm run build:app
-  - docker build -t ngrx_store_storagesync .
-  - docker run -p 80:80 -d ngrx_store_storagesync
+  - docker run -p 80:80 $(docker build -q .)
 script:
   - npm run test -- --code-coverage --watch=false
   - npm run test:e2e
