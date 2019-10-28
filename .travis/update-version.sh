@@ -2,6 +2,8 @@ if [ $TRAVIS_PULL_REQUEST == false ] && [ $TRAVIS_BRANCH == "master" ]; then
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "Travis CI"
 
+  git checkout master
+
   git add .
   git commit -m "${TRAVIS_COMMIT_MESSAGE}"
 
