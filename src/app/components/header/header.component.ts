@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Output, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-header',

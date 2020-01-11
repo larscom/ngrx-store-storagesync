@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-navigation-menu',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-
 import * as appActions from '../../store/app.actions';
-import { IRootState } from '../../store/interfaces/root-state';
+import { IRootState } from '../../store/models/root-state';
+
 
 @Component({
   selector: 'app-drawer',

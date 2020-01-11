@@ -1,11 +1,11 @@
+import { FocusMonitor } from '@angular/cdk/a11y';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
-
 import * as appActions from './store/app.actions';
-import { IRootState } from './store/interfaces/root-state';
-import { FocusMonitor } from '@angular/cdk/a11y';
+import { IRootState } from './store/models/root-state';
+
 
 const STORAGE_CHANGED_EVENT = 'STORAGE_CHANGED_EVENT';
 

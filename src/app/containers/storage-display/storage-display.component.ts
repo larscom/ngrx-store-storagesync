@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { IRootState } from '../../store/interfaces/root-state';
+import { IRootState } from '../../store/models/root-state';
 
 @Component({
   selector: 'app-storage-display',
@@ -13,10 +12,6 @@ import { IRootState } from '../../store/interfaces/root-state';
 export class StorageDisplayComponent {
   constructor(private readonly store$: Store<IRootState>) {}
 
-  sessionStorage$ = combineLatest(of(window.sessionStorage), this.store$).pipe(
-    map(([storage]) => storage)
-  );
-  localStorage$ = combineLatest(of(window.localStorage), this.store$).pipe(
-    map(([storage]) => storage)
-  );
+  sessionStorage$ = this.store$.pipe(map(() => window.sessionStorage));
+  localStorage$ = this.store$.pipe(map(() => window.localStorage));
 }

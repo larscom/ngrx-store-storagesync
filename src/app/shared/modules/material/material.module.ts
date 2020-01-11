@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
   MatDividerModule,
+  MatIconModule,
+  MatInputModule,
   MatListModule,
   MatSidenavModule,
-  MatToolbarModule,
-  MatIconModule,
-  MatInputModule
+  MatToolbarModule
 } from '@angular/material';
 
 const exports = [

@@ -26,6 +26,35 @@ describe('StateSync', () => {
     expect(excludeKeysFromState(state, ['prop1', 'random', 'prop4.array'])).toEqual(expected);
   });
 
+  it('should not sync if feature state is not present in state', () => {
+    const feature1 = { checkMe: true, prop1: false, prop2: 100, prop3: { check: false } };
+
+    const state = { feature1 };
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      storageKeySerializer: (key: string) => key,
+      features: [
+        {
+          stateKey: 'feature1'
+        },
+        {
+          stateKey: 'feature2'
+        }
+      ]
+    };
+
+    expect(storage.length).toEqual(0);
+
+    // sync to storage
+    stateSync(state, config);
+
+    expect(storage.length).toEqual(1);
+
+    expect(JSON.parse(storage.getItem('feature1'))).toEqual(feature1);
+    expect(storage.getItem('feature2')).toBeNull();
+  });
+
   it('should not sync if shouldSync condition on a feature state returns false', () => {
     const feature1 = { checkMe: true, prop1: false, prop2: 100, prop3: { check: false } };
     const feature2 = { checkMe: false, prop2: 200, prop3: { check: false } };

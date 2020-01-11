@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { v1 as Guid } from 'uuid';
 
-import { ITodo } from '../interfaces/todo';
+import { ITodo } from '../models/todo';
 import * as todoActions from './todo.actions';
 
 export const initialState: ITodoState = {

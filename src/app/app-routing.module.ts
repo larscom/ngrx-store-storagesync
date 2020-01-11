@@ -5,7 +5,12 @@ const routes: Routes = [
   {
     path: 'todo',
     pathMatch: 'full',
-    loadChildren: () => import('./modules/todo/todo.module').then(m => m.TodoModule)
+    loadChildren: () => import('./modules/todo/todo.module').then(({ TodoModule }) => TodoModule)
+  },
+  {
+    path: 'settings',
+    pathMatch: 'full',
+    loadChildren: () => import('./modules/settings/settings.module').then(({ SettingsModule }) => SettingsModule)
   },
   { path: '**', redirectTo: 'todo' }
 ];

@@ -5,4 +5,9 @@
     <span>Todo List</span>
   </a>
   <mat-divider></mat-divider>
+  <a (click)="navigate.emit('settings')"
+    mat-list-item>
+    <mat-icon>settings_applications</mat-icon>
+    <span>Settings</span>
+  </a>
 </mat-nav-list>

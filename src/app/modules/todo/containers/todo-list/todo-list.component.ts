@@ -2,11 +2,11 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, HostListener } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
-
-import { IRootState } from '../../../../store/interfaces/root-state';
-import { ITodo } from '../../interfaces/todo';
+import { IRootState } from '../../../../store/models/root-state';
+import { ITodo } from '../../models/todo';
 import * as todoActions from '../../store/todo.actions';
 import * as todoSelectors from '../../store/todo.selectors';
+
 
 @Component({
   selector: 'app-todo-list',

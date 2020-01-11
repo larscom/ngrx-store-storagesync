@@ -89,6 +89,7 @@ export const stateSync = <T>(
   }
 
   features
+    .filter(({ stateKey }) => !!state[stateKey])
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
       const featureState = cloneDeep<Partial<T>>(state[stateKey]);
