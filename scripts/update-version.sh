@@ -1,4 +1,6 @@
-if [ $TRAVIS_PULL_REQUEST == false ]; then
+#!/bin/bash
+
+if [ "${TRAVIS_PULL_REQUEST}" == false ]; then
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "Travis CI"
 
@@ -11,17 +13,15 @@ if [ $TRAVIS_PULL_REQUEST == false ]; then
   # By default use npm version patch
   version="patch"
 
-  if [ $TRAVIS_COMMIT_MESSAGE == *"[Minor]"* ]; then
+  if [[ $TRAVIS_COMMIT_MESSAGE == *"minor"* ]]; then
     version="minor"
   fi
 
-  if [ $TRAVIS_COMMIT_MESSAGE == *"[Major]"* ]; then
+  if [[ $TRAVIS_COMMIT_MESSAGE == *"major"* ]]; then
     version="major"
   fi
 
-  npm version $version --prefix projects/ngrx-store-storagesync -m "[Travis] - #${TRAVIS_BUILD_NUMBER} - ${TRAVIS_COMMIT_MESSAGE}"
-
-  sleep 1
+  npm version "${version}" --prefix projects/ngrx-store-storagesync -m "[Travis] - #${TRAVIS_BUILD_NUMBER} - ${TRAVIS_COMMIT_MESSAGE}"
 
   git push --follow-tags
 fi

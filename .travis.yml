@@ -18,18 +18,20 @@ before_install:
   - if [[ $TRAVIS_COMMIT_MESSAGE == *"[Travis]"* ]] && [ -z $TRAVIS_TAG ]; then travis_terminate 0; fi
 install:
   - npm ci
+  - chmod +x scripts/update-version.sh
+  - scripts/update-version.sh
 before_script:
+  - npm run build:lib
   - npm run build:app
+  # start container for e2e test
   - docker run -p 80:80 -d $(docker build -q .)
 script:
   - npm run test -- --code-coverage --watch=false
   - npm run test:e2e
 after_script:
   - docker system prune --volumes --all -f
-  - chmod +x .travis/update-version.sh
-  - .travis/update-version.sh
+  - if [[ $TRAVIS_COMMIT_MESSAGE == *"[nopub]"* ]]; then travis_terminate 0; fi
 before_deploy:
-  - npm run build:lib
   - npm run copy:readme
   - cd dist/ngrx-store-storagesync
 deploy:
