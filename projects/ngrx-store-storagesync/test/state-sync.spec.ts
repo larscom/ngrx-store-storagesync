@@ -1,4 +1,4 @@
-import { IStorageSyncOptions } from '../src/lib/interfaces/storage-sync-options';
+import { IStorageSyncOptions } from '../src/lib/models/storage-sync-options';
 import { excludeKeysFromState, stateSync } from '../src/lib/state-sync';
 import { MockStorage } from './mock-storage';
 

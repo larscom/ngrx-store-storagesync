@@ -1,4 +1,4 @@
-import { IStorageSyncOptions } from './interfaces/storage-sync-options';
+import { IStorageSyncOptions } from './models/storage-sync-options';
 
 /**
  * @internal Restores the resolved state from a storage location

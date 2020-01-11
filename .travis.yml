@@ -5,9 +5,8 @@ node_js:
   - '10'
 addons:
   chrome: stable
-  firefox: latest
 env:
-  - TESTCAFE_URL='http://127.0.0.1'
+  - TESTCAFE_URL=http://127.0.0.1
 branches:
   only:
     - master
@@ -15,22 +14,20 @@ branches:
 services:
   - docker
 before_install:
-  - if [[ $TRAVIS_COMMIT_MESSAGE == *"[Travis]"* ]] && [ -z $TRAVIS_TAG ]; then travis_terminate 0; fi
+  - npm install -g testcafe
 install:
   - npm ci
-  - chmod +x scripts/update-version.sh
-  - scripts/update-version.sh
 before_script:
   - npm run build:lib
   - npm run build:app
   # start container for e2e test
-  - docker run -p 80:80 -d $(docker build -q .)
+  - docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
 script:
+  - curl 127.0.0.1
   - npm run test -- --code-coverage --watch=false
   - npm run test:e2e
 after_script:
   - docker system prune --volumes --all -f
-  - if [[ $TRAVIS_COMMIT_MESSAGE == *"[nopub]"* ]]; then travis_terminate 0; fi
 before_deploy:
   - npm run copy:readme
   - cd dist/ngrx-store-storagesync

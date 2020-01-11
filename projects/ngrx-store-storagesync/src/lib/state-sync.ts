@@ -1,6 +1,6 @@
 import { cloneDeep, isPlainObject } from 'lodash';
+import { IStorageSyncOptions } from './models/storage-sync-options';
 
-import { IStorageSyncOptions } from './interfaces/storage-sync-options';
 
 /**
  * @internal Blacklisting

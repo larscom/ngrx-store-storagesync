@@ -1,5 +1,5 @@
 import { MockStorage } from './mock-storage';
-import { IStorageSyncOptions } from '../src/lib/interfaces/storage-sync-options';
+import { IStorageSyncOptions } from '../src/lib/models/storage-sync-options';
 import { rehydrateState } from '../src/lib/rehydrate-state';
 
 describe('RehydrateState', () => {
