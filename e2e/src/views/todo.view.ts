@@ -9,20 +9,19 @@ import config from '../config';
 fixture('Feature: Todo View').beforeEach(async controller => {
   const path = '/todo';
   await controller.navigateTo(`${config.url}/#${path}`);
-
-  const getUrl = ClientFunction(() => window.location.href);
-  await controller.expect(getUrl()).contains(path);
+  await controller.expect(await controller.eval(() => window.location.href)).contains(path);
 });
 
 test('should remember completed todos after page refresh', async controller => {
   await controller.typeText(Selector('input#add-todo'), 'test');
   await controller.click(Selector('button#add-todo'));
 
-  const checkboxes = Selector('.mat-list-option');
+  const checkboxes = Selector('#selectTodos mat-list-option');
   const checkboxCount = await checkboxes.count;
 
   for (let i = 0; i < checkboxCount; i++) {
-    await controller.click(checkboxes.nth(i));
+    const checkBox = checkboxes.nth(i);
+    await controller.click(checkBox);
   }
 
   await controller.wait(300);

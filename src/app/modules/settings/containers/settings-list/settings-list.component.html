@@ -1,6 +1,6 @@
 <div class="settings-list__container">
   <h2>Select theme</h2>
-  <mat-radio-group [formControl]="themeControl">
+  <mat-radio-group id="selectTheme" [formControl]="themeControl">
     <mat-radio-button *ngFor="let theme of themes"
       [value]="theme">
       {{ theme.toLowerCase() }}

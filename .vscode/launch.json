@@ -10,7 +10,7 @@
       "request": "launch",
       "name": "Debug e2e (TestCafe)",
       "program": "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
-      "args": ["chrome", "-L", "${workspaceRoot}/e2e/src/views"],
+      "args": ["chrome:headless", "-L", "${workspaceRoot}/e2e/src/views"],
       "console": "integratedTerminal",
       "cwd": "${workspaceRoot}"
     }
