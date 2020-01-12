@@ -4,6 +4,7 @@ import { ActionReducer, ActionReducerMap, StoreModule as NgRxStoreModule } from 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { environment } from '../../environments/environment';
+import * as fromSettings from '../modules/settings/store/settings.reducer';
 import * as fromApp from './app.reducer';
 import { IRootState } from './models/root-state';
 
@@ -27,6 +28,6 @@ const metaReducers = environment.production ? [storageSyncReducer] : [storageSyn
 @NgModule({
   imports: [NgRxStoreModule.forRoot(ROOT_REDUCER, { metaReducers }), StoreDevtoolsModule.instrument({ maxAge: 30 })],
   exports: [NgRxStoreModule],
-  providers: [{ provide: ROOT_REDUCER, useValue: { app: fromApp.reducer } }]
+  providers: [{ provide: ROOT_REDUCER, useValue: { app: fromApp.reducer, settings: fromSettings.reducer } }]
 })
 export class StoreModule {}

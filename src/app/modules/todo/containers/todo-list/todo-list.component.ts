@@ -7,22 +7,19 @@ import { ITodo } from '../../models/todo';
 import * as todoActions from '../../store/todo.actions';
 import * as todoSelectors from '../../store/todo.selectors';
 
-
 @Component({
   selector: 'app-todo-list',
   templateUrl: 'todo-list.component.html',
   styleUrls: ['todo-list.component.scss']
 })
 export class TodoListComponent {
+  readonly todos$ = this.store$.pipe(select(todoSelectors.getTodos));
+  readonly count$ = this.store$.pipe(select(todoSelectors.getCount));
+  readonly completedTodos$ = this.store$.pipe(select(todoSelectors.getCompletedTodos));
+  readonly completedCount$ = this.store$.pipe(select(todoSelectors.getCompletedCount));
+  readonly isMobile$ = this.breakpoint.observe(Breakpoints.Handset).pipe(map(({ matches }) => matches));
+
   constructor(private readonly store$: Store<IRootState>, private readonly breakpoint: BreakpointObserver) {}
-
-  todos$ = this.store$.pipe(select(todoSelectors.getTodos));
-  count$ = this.store$.pipe(select(todoSelectors.getCount));
-
-  isMobile$ = this.breakpoint.observe(Breakpoints.Handset).pipe(map(({ matches }) => matches));
-
-  completedTodos$ = this.store$.pipe(select(todoSelectors.getCompletedTodos));
-  completedCount$ = this.store$.pipe(select(todoSelectors.getCompletedCount));
 
   todo = String();
 

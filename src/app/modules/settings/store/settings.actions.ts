@@ -1,3 +1,4 @@
 import { createAction, props } from '@ngrx/store';
+import { Theme } from '../models/theme';
 
-export const completeTodo = createAction('[Settings] Complete Todo', props<{ id: string }>());
+export const setTheme = createAction('[Settings] Set Theme', props<{ theme: Theme }>());

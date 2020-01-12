@@ -1,17 +1,16 @@
 import { createReducer, on } from '@ngrx/store';
-import { v1 as Guid } from 'uuid';
-
+import { Theme } from '../models/theme';
 import * as settingsActions from './settings.actions';
 
 export const initialState: ISettingsState = {
-  completed: []
+  theme: Theme.DARK
 };
 
 export interface ISettingsState {
-  readonly completed: string[];
+  readonly theme: Theme;
 }
 
 export const reducer = createReducer(
   initialState,
-  // on(settingsActions.completeTodo, (state, { todo }) => ({ ...state, todos: [...state.todos, { id: Guid(), ...todo }] }))
+  on(settingsActions.setTheme, (state, { theme }) => ({ ...state, theme }))
 );

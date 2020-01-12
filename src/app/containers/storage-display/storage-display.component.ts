@@ -10,8 +10,8 @@ import { IRootState } from '../../store/models/root-state';
   styleUrls: ['./storage-display.component.scss']
 })
 export class StorageDisplayComponent {
-  constructor(private readonly store$: Store<IRootState>) {}
+  readonly sessionStorage$ = this.store$.pipe(map(() => window.sessionStorage));
+  readonly localStorage$ = this.store$.pipe(map(() => window.localStorage));
 
-  sessionStorage$ = this.store$.pipe(map(() => window.sessionStorage));
-  localStorage$ = this.store$.pipe(map(() => window.localStorage));
+  constructor(private readonly store$: Store<IRootState>) {}
 }
