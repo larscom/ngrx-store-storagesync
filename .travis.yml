@@ -38,3 +38,6 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+after_success:
+  - chmod +x scripts/netlify.sh
+  - scripts/netlify.sh
