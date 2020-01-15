@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as appActions from './app.actions';
 
-
 export const initialState: IAppState = {
   drawerOpen: false
 };
@@ -12,5 +11,5 @@ export interface IAppState {
 
 export const reducer = createReducer(
   initialState,
-  on(appActions.toggleDrawer, state => ({ ...state, drawerOpen: !state.drawerOpen }))
+  on(appActions.toggleDrawer, (state, { open: drawerOpen }) => ({ ...state, drawerOpen }))
 );

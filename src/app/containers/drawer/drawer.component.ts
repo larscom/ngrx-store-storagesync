@@ -15,11 +15,11 @@ export class DrawerComponent {
   constructor(private readonly store$: Store<IRootState>, private readonly router: Router) {}
 
   onBackdropClicked(): void {
-    this.store$.dispatch(appActions.toggleDrawer());
+    this.store$.dispatch(appActions.toggleDrawer({ open: false }));
   }
 
   onNavigate(path: string): void {
-    this.store$.dispatch(appActions.toggleDrawer());
+    this.store$.dispatch(appActions.toggleDrawer({ open: false }));
     this.router.navigate([path]);
   }
 }

@@ -34,7 +34,7 @@ export class AppComponent {
   private readonly isTestRunner = Boolean(window.localStorage && window.localStorage[STORAGE_CHANGED_EVENT]);
 
   onMenuClicked(): void {
-    this.store$.dispatch(appActions.toggleDrawer());
+    this.store$.dispatch(appActions.toggleDrawer({ open: true }));
   }
 
   onMenuButtonRendered(menuButton: HTMLButtonElement): void {
