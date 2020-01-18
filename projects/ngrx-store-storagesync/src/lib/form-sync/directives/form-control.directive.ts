@@ -1,7 +1,6 @@
 import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
-import { FormSyncService } from '../providers/form-sync.service';
+import { FormSyncService } from '../services/form-sync.service';
 
 @Directive({
   selector: '[formControl]'

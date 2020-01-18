@@ -3,10 +3,9 @@ import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter, first, map, withLatestFrom } from 'rxjs/operators';
-
 import { IFormSyncConfig } from '../models/form-sync-config';
 import { FORM_SYNC_CONFIG } from '../providers/form-sync.providers';
-import { FormSyncService } from '../providers/form-sync.service';
+import { FormSyncService } from '../services/form-sync.service';
 import { patchForm } from '../store/form.actions';
 import { getFormSyncValue } from '../store/form.selectors';
 import { FormControlDirective } from './form-control.directive';
@@ -82,10 +81,7 @@ export class FormGroupDirective implements OnInit, OnDestroy {
 
   @HostListener('submit')
   async onSubmit(): Promise<void> {
-    if (!this.formGroupId) {
-      return;
-    }
-    if (!this.formGroupSync) {
+    if (!this.formGroupId || !this.formGroupSync) {
       return;
     }
 
@@ -94,13 +90,14 @@ export class FormGroupDirective implements OnInit, OnDestroy {
     if (!syncOnSubmit) {
       return;
     }
+
     if (syncValidOnly && !this.formGroup.valid) {
       return;
     }
 
     const directives = await this.formControlDirectives$.pipe(first()).toPromise();
-    const initialValues = new Map<FormControl, string>();
 
+    const initialValues = new Map<FormControl, string>();
     this.deleteValues(directives, initialValues);
 
     const value = syncRawValue ? this.formGroup.getRawValue() : this.formGroup.value;
@@ -120,19 +117,19 @@ export class FormGroupDirective implements OnInit, OnDestroy {
     directives.forEach(({ formControl }) => formControl.setValue(initialValues.get(formControl), { emitEvent: false }));
   }
 
-  private includesControl(controls: { [key: string]: AbstractControl }, subject: FormControl): boolean {
+  private includesControl(controls: { [key: string]: AbstractControl }, targetControl: FormControl): boolean {
     return Object.keys(controls).some(key => {
       if (!controls.hasOwnProperty(key)) {
         return;
       }
 
-      if (controls[key] === subject) {
+      if (controls[key] === targetControl) {
         return true;
       }
 
       const formGroup = controls[key] as FormGroup;
       if (formGroup.controls) {
-        this.includesControl(formGroup.controls, subject);
+        this.includesControl(formGroup.controls, targetControl);
       }
     });
   }
