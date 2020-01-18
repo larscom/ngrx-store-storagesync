@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { cloneDeep, isArray, isPlainObject, merge, omit } from 'lodash';
-
-import { patchForm, resetForm, setForm, deleteForm } from './form.actions';
+import { deleteForm, patchForm, resetForm, setForm } from './form.actions';
 
 export interface IFormSyncState {
   [formGroupId: string]: any;
@@ -24,7 +23,7 @@ export const formSyncReducer = createReducer(
         if (isPlainObject(slice[property])) {
           reset(slice[property]);
         } else if (isArray(slice[property])) {
-          Array(slice[property]).forEach(e => reset(e));
+          Array(slice[property]).forEach(p => reset(p));
         } else {
           slice[property] = null;
         }

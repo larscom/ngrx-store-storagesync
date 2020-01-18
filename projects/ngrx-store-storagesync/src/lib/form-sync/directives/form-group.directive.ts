@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { filter, first, map, withLatestFrom } from 'rxjs/operators';
 
 import { IFormSyncConfig } from '../models/form-sync-config';
-import { FORM_SYNC_CONFIG } from '../providers/form-sync-config.provider';
+import { FORM_SYNC_CONFIG } from '../providers/form-sync.providers';
 import { FormSyncService } from '../providers/form-sync.service';
 import { patchForm } from '../store/form.actions';
 import { getFormSyncValue } from '../store/form.selectors';
@@ -125,9 +125,11 @@ export class FormGroupDirective implements OnInit, OnDestroy {
       if (!controls.hasOwnProperty(key)) {
         return;
       }
+
       if (controls[key] === subject) {
         return true;
       }
+
       const formGroup = controls[key] as FormGroup;
       if (formGroup.controls) {
         this.includesControl(formGroup.controls, subject);

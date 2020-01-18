@@ -12,6 +12,11 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule)
   },
+  {
+    path: 'forms',
+    pathMatch: 'full',
+    loadChildren: () => import('./modules/forms/forms.module').then(m => m.FormsModule)
+  },
   { path: '**', redirectTo: 'todo' }
 ];
 
