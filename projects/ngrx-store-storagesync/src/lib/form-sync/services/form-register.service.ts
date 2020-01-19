@@ -3,7 +3,7 @@ import { FormControlDirective } from '../directives/form-control.directive';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class FormSyncService {
+export class FormRegisterService {
   private readonly formControlDirectives = new BehaviorSubject<FormControlDirective[]>([]);
 
   formControlDirectives$ = this.formControlDirectives.asObservable();
