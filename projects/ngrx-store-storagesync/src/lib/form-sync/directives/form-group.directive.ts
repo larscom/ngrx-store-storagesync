@@ -48,7 +48,7 @@ export class FormGroupDirective implements OnInit, OnDestroy {
           filter(() => !syncOnSubmit),
           withLatestFrom(this.formControlDirectives$)
         )
-        .subscribe(([, directives]) => this.dispatchFormGroup(directives, syncRawValue))
+        .subscribe(([, directives]) => this.dispatchForm(directives, syncRawValue))
     );
 
     this.subscriptions.add(
@@ -83,10 +83,10 @@ export class FormGroupDirective implements OnInit, OnDestroy {
     }
 
     const directives = await this.formControlDirectives$.pipe(first()).toPromise();
-    this.dispatchFormGroup(directives, syncRawValue);
+    this.dispatchForm(directives, syncRawValue);
   }
 
-  private dispatchFormGroup(directives: FormControlDirective[], syncRawValue: boolean): void {
+  private dispatchForm(directives: FormControlDirective[], syncRawValue: boolean): void {
     const initialValues = new Map<FormControl, string>();
     this.deleteValues(directives, initialValues);
 
