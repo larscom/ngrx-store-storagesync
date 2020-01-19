@@ -51,15 +51,7 @@ export class FormGroupDirective implements OnInit, OnDestroy {
           filter(() => !syncOnSubmit),
           withLatestFrom(this.formControlDirectives$)
         )
-        .subscribe(([, directives]) => {
-          const initialValues = new Map<FormControl, string>();
-          this.deleteValues(directives, initialValues);
-
-          const value = syncRawValue ? this.formGroup.getRawValue() : this.formGroup.value;
-          this.store.dispatch(patchForm({ id: this.formGroupId, value }));
-
-          this.restoreValues(directives, initialValues);
-        })
+        .subscribe(([, directives]) => this.patchFormGroup(directives, syncRawValue))
     );
 
     this.subscriptions.add(
@@ -69,9 +61,7 @@ export class FormGroupDirective implements OnInit, OnDestroy {
           select(getFormSyncValue, { id: this.formGroupId }),
           filter(value => value != null)
         )
-        .subscribe(value => {
-          this.formGroup.patchValue(value, { emitEvent: false });
-        })
+        .subscribe(value => this.formGroup.patchValue(value, { emitEvent: false }))
     );
   }
 
@@ -96,7 +86,10 @@ export class FormGroupDirective implements OnInit, OnDestroy {
     }
 
     const directives = await this.formControlDirectives$.pipe(first()).toPromise();
+    this.patchFormGroup(directives, syncRawValue);
+  }
 
+  private patchFormGroup(directives: FormControlDirective[], syncRawValue: boolean): void {
     const initialValues = new Map<FormControl, string>();
     this.deleteValues(directives, initialValues);
 

@@ -1,17 +1,36 @@
 <div class="form-sync__container">
-  <form [formGroup]="formGroup1"
-    [formGroupSync]="true"
-    formGroupId="formGroup1">
+
+  <form formGroupId="formGroup1"
+    [formGroup]="formGroup1"
+    [formGroupSync]="true">
     <div>
-      <input [formControl]="formGroup1.get('firstName')"
-        [formControlSync]="false"
-        placeholder="first name" />
-      <input [formControl]="formGroup1.get('middleName')"
-        placeholder="middleName" />
-      <input [formControl]="formGroup1.get('lastName')"
-        placeholder="last name" />
+      <mat-form-field>
+        <input matInput
+          [formControlSync]="true"
+          [formControl]="formGroup1.get('firstName')"
+          placeholder="First name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+          [formControl]="formGroup1.get('lastName')"
+          placeholder="Last name">
+      </mat-form-field>
+
     </div>
 
-    <button type="submit">Submit 1</button>
+    <!-- <mat-form-field>
+        <input matInput
+          placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field> -->
+
+    <button mat-flat-button
+      color="primary"
+      (click)="onSubmit()">
+      Submit
+    </button>
+
   </form>
 </div>

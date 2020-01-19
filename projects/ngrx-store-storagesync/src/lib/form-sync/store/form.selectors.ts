@@ -1,5 +1,4 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-
 import { IFormSyncState } from './form.reducer';
 
 export const getFormSyncState = createFeatureSelector<IFormSyncState>('form');

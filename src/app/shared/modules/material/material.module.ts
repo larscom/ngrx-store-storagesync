@@ -7,7 +7,9 @@ import {
   MatListModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatRadioModule
+  MatRadioModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 
 const exports = [
@@ -18,7 +20,9 @@ const exports = [
   MatSidenavModule,
   MatIconModule,
   MatInputModule,
-  MatRadioModule
+  MatRadioModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 ];
 
 @NgModule({ exports })

@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { cloneDeep, isArray, isPlainObject, merge, omit } from 'lodash';
 import { deleteForm, patchForm, resetForm, setForm } from './form.actions';
+import { state } from '@angular/animations';
 
 export interface IFormSyncState {
   [formGroupId: string]: any;
@@ -9,6 +10,7 @@ export interface IFormSyncState {
 /**
  * The form sync reducer for @ngrx/store.
  */
+// tslint:disable: no-shadowed-variable
 export const formSyncReducer = createReducer(
   Object(),
   on(setForm, (state, { id, value }) => ({ ...state, [id]: value })),
@@ -35,5 +37,5 @@ export const formSyncReducer = createReducer(
 
     return { ...state, [id]: value };
   }),
-  on(deleteForm, (state, { id }) => omit({ ...state }, [id]))
+  on(deleteForm, (state, { id }) => ({ ...state, [id]: undefined }))
 );
