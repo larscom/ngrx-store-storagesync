@@ -15,7 +15,7 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionRe
       { stateKey: 'app', storageForFeature: window.sessionStorage },
       { stateKey: 'todo' },
       { stateKey: 'settings' },
-      { stateKey: 'form', storageForFeature: window.sessionStorage }
+      { stateKey: 'formSync', storageForFeature: window.sessionStorage }
     ],
     storageError: console.error,
     storage: window.localStorage

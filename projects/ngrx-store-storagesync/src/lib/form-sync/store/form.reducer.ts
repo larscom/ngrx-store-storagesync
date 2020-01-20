@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { cloneDeep, isArray, isPlainObject, merge, omit } from 'lodash';
+import { cloneDeep, isArray, isPlainObject, merge } from 'lodash';
 import { deleteForm, patchForm, resetForm, setForm } from './form.actions';
-import { state } from '@angular/animations';
 
 export interface IFormSyncState {
   [formGroupId: string]: any;

@@ -15,7 +15,7 @@ import { FormsRoutingModule } from './forms-routing.module';
     MaterialModule,
     NgFormsModule,
     ReactiveFormsModule,
-    StoreModule.forFeature('form', FORM_SYNC_REDUCER),
+    StoreModule.forFeature('formSync', FORM_SYNC_REDUCER),
     FormSyncModule.forFeature()
   ]
 })

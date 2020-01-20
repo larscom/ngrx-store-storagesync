@@ -1,9 +1,11 @@
 <div class="form-sync__container">
-
+  <div style="margin-bottom:10px">
+    <mat-slide-toggle color="primary">Sync</mat-slide-toggle>
+  </div>
   <form formGroupId="formGroup1"
     [formGroup]="formGroup1"
     [formGroupSync]="true">
-    <div>
+    <div style="display: flex; flex-direction: column;">
       <mat-form-field>
         <input matInput
           [formControlSync]="true"
