@@ -1,5 +1,5 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { storageSync } from '@larscom/ngrx-store-storagesync';
+import { storageSync, FormSyncModule } from '@larscom/ngrx-store-storagesync';
 import { ActionReducer, ActionReducerMap, StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import * as fromSettings from '../modules/settings/store/settings.reducer';
@@ -34,7 +34,8 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionRe
       },
       metaReducers: [storageSyncReducer]
     }),
-    StoreDevtoolsModule.instrument({ maxAge: 30 })
+    StoreDevtoolsModule.instrument({ maxAge: 30 }),
+    FormSyncModule.forRoot()
   ],
   exports: [NgRxStoreModule],
   providers: [{ provide: ROOT_REDUCER, useValue: { app: fromApp.reducer, settings: fromSettings.reducer } }]
