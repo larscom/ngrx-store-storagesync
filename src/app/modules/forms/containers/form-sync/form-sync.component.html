@@ -1,38 +1,33 @@
 <div class="form-sync__container">
-  <div style="margin-bottom:10px">
-    <mat-slide-toggle color="primary">Sync</mat-slide-toggle>
+
+  <div class="form-sync__settings">
+    <mat-slide-toggle color="primary"
+      [checked]="syncEnabled$ | async"
+      (change)="onSyncChange($event)">Sync Form
+    </mat-slide-toggle>
   </div>
-  <form formGroupId="formGroup1"
-    [formGroup]="formGroup1"
-    [formGroupSync]="true">
-    <div style="display: flex; flex-direction: column;">
+
+  <form [formGroupId]="formGroupId"
+    [formGroup]="formGroup"
+    [formGroupSync]="syncEnabled$ | async">
+    <div class="form-sync__fields">
       <mat-form-field>
         <input matInput
-          [formControlSync]="true"
-          [formControl]="formGroup1.get('firstName')"
+          [formControl]="formGroup.get('firstName')"
           placeholder="First name">
       </mat-form-field>
 
       <mat-form-field>
         <input matInput
-          [formControl]="formGroup1.get('lastName')"
+          [formControl]="formGroup.get('lastName')"
           placeholder="Last name">
       </mat-form-field>
-
     </div>
-
-    <!-- <mat-form-field>
-        <input matInput
-          placeholder="Choose a date">
-        <mat-datepicker-toggle matSuffix></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field> -->
 
     <button mat-flat-button
       color="primary"
       (click)="onSubmit()">
       Submit
     </button>
-
   </form>
 </div>

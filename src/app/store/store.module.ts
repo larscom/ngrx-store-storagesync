@@ -1,5 +1,5 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { storageSync, FormSyncModule } from '@larscom/ngrx-store-storagesync';
+import { FormSyncModule, FORM_SYNC_STORE_KEY, storageSync } from '@larscom/ngrx-store-storagesync';
 import { ActionReducer, ActionReducerMap, StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import * as fromSettings from '../modules/settings/store/settings.reducer';
@@ -15,7 +15,8 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionRe
       { stateKey: 'app', storageForFeature: window.sessionStorage },
       { stateKey: 'todo' },
       { stateKey: 'settings' },
-      { stateKey: 'formSync', storageForFeature: window.sessionStorage }
+      { stateKey: 'forms' },
+      { stateKey: FORM_SYNC_STORE_KEY, storageForFeature: window.sessionStorage }
     ],
     storageError: console.error,
     storage: window.localStorage

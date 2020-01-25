@@ -1,4 +1,3 @@
-// import { createAction, props } from '@ngrx/store';
-// import { Theme } from '../models/theme';
+import { createAction, props } from '@ngrx/store';
 
-// export const setTheme = createAction('[Settings] Set Theme', props<{ theme: Theme }>());
+export const setSync = createAction('[Forms] Set Sync', props<{ enabled: boolean }>());

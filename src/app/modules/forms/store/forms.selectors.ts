@@ -1,8 +1,6 @@
-// import { createFeatureSelector, createSelector } from '@ngrx/store';
-// import { ISettingsState } from './settings.reducer';
-// import { Theme } from '../models/theme';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { IFormsState } from './forms.reducer';
 
-// export const getSettingsState = createFeatureSelector<ISettingsState>('settings');
+export const getFormsState = createFeatureSelector<IFormsState>('forms');
 
-// export const getTheme = createSelector(getSettingsState, ({ theme }) => theme);
-// export const isDarkTheme = createSelector(getTheme, theme => theme === Theme.DARK);
+export const getSyncEnabled = createSelector(getFormsState, ({ enableSync }) => enableSync);

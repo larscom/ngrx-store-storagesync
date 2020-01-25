@@ -1,1 +1,1 @@
-export const FEATURE_STORE_KEY = 'formSync';
+export const FORM_SYNC_STORE_KEY = 'formSync';

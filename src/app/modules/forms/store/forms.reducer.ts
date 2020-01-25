@@ -1,16 +1,15 @@
-// import { createReducer, on } from '@ngrx/store';
-// import { Theme } from '../models/theme';
-// import * as formsActions from './forms.actions';
+import { createReducer, on } from '@ngrx/store';
+import * as formsActions from './forms.actions';
 
-// export const initialState: ISettingsState = {
-//   theme: Theme.DARK
-// };
+export const initialState: IFormsState = {
+  enableSync: true
+};
 
-// export interface ISettingsState {
-//   readonly theme: Theme;
-// }
+export interface IFormsState {
+  readonly enableSync: boolean;
+}
 
-// export const reducer = createReducer(
-//   initialState,
-//   on(settingsActions.setTheme, (state, { theme }) => ({ ...state, theme }))
-// );
+export const reducer = createReducer(
+  initialState,
+  on(formsActions.setSync, (state, { enabled: enableSync }) => ({ ...state, enableSync }))
+);
