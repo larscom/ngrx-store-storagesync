@@ -12,8 +12,8 @@ import { formSyncReducer } from './store/form.reducer';
 })
 export class FormSyncModule {
   /**
-   * Import FormSyncModule.forRoot() only once.
-   * For feature modules use: FormSyncModule
+   * Import 'FormSyncModule.forRoot()' only once.
+   * Use 'FormSyncModule' for additional imports.
    */
   static forRoot(): ModuleWithProviders<FormSyncModule> {
     return {

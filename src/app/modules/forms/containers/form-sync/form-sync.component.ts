@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatCheckboxChange, MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange } from '@angular/material';
 import { patchForm } from '@larscom/ngrx-store-storagesync';
 import { select, Store } from '@ngrx/store';
-import { map } from 'rxjs/operators';
 import { IRootState } from 'src/app/store/models/root-state';
-import { setFormControlSync, setFormGroupSync } from '../../store/forms.actions';
+import { setFormGroupSync } from '../../store/forms.actions';
 import * as formsSelectors from '../../store/forms.selectors';
 
 @Component({
