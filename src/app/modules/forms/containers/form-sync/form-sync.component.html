@@ -1,9 +1,8 @@
 <div class="form-sync__container">
-
   <div class="form-sync__settings">
     <mat-slide-toggle color="primary"
       [checked]="syncEnabled$ | async"
-      (change)="onSyncChange($event)">Sync Form
+      (change)="onFormGroupSyncChange($event)">Sync Form
     </mat-slide-toggle>
   </div>
 

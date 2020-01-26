@@ -2,13 +2,11 @@ import { Directive, HostListener, Inject, Input, OnDestroy, OnInit } from '@angu
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { filter, first, map, withLatestFrom } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { IFormSyncConfig } from '../models/form-sync-config';
 import { FORM_SYNC_CONFIG } from '../providers/form-sync.providers';
-import { FormRegisterService } from '../services/form-register.service';
 import { patchForm } from '../store/form.actions';
 import { getFormSyncValue } from '../store/form.selectors';
-import { FormControlDirective } from './form-control.directive';
 
 @Directive({
   selector: '[formGroup]'
@@ -18,20 +16,9 @@ export class FormGroupDirective implements OnInit, OnDestroy {
   @Input() formGroupId: string;
   @Input() formGroupSync = true;
 
-  constructor(
-    @Inject(FORM_SYNC_CONFIG) private readonly config: IFormSyncConfig,
-    private readonly store: Store<any>,
-    private readonly formRegister: FormRegisterService
-  ) {}
+  constructor(@Inject(FORM_SYNC_CONFIG) private readonly config: IFormSyncConfig, private readonly store: Store<any>) {}
 
   private readonly subscriptions = new Subscription();
-  private readonly formControlDirectives$ = this.formRegister.formControlDirectives$.pipe(
-    map(directives => {
-      return directives
-        .filter(({ formControlSync }) => !formControlSync)
-        .filter(({ formControl }) => this.includesControl(this.formGroup.controls, formControl));
-    })
-  );
 
   ngOnInit(): void {
     if (!this.formGroupId) {
@@ -39,16 +26,14 @@ export class FormGroupDirective implements OnInit, OnDestroy {
     }
 
     const { syncOnSubmit, syncValidOnly, syncRawValue } = this.config;
-
     this.subscriptions.add(
       this.formGroup.valueChanges
         .pipe(
           filter(() => this.formGroupSync),
           filter(() => !(syncValidOnly && !this.formGroup.valid)),
-          filter(() => !syncOnSubmit),
-          withLatestFrom(this.formControlDirectives$)
+          filter(() => !syncOnSubmit)
         )
-        .subscribe(([, directives]) => this.dispatchForm(directives, syncRawValue))
+        .subscribe(() => this.dispatch(syncRawValue))
     );
 
     this.subscriptions.add(
@@ -67,7 +52,7 @@ export class FormGroupDirective implements OnInit, OnDestroy {
   }
 
   @HostListener('submit')
-  async onSubmit(): Promise<void> {
+  onSubmit(): void {
     if (!this.formGroupId || !this.formGroupSync) {
       return;
     }
@@ -82,45 +67,11 @@ export class FormGroupDirective implements OnInit, OnDestroy {
       return;
     }
 
-    const directives = await this.formControlDirectives$.pipe(first()).toPromise();
-    this.dispatchForm(directives, syncRawValue);
+    this.dispatch(syncRawValue);
   }
 
-  private dispatchForm(directives: FormControlDirective[], syncRawValue: boolean): void {
-    const initialValues = new Map<FormControl, string>();
-    this.deleteValues(directives, initialValues);
-
+  private dispatch(syncRawValue: boolean): void {
     const value = syncRawValue ? this.formGroup.getRawValue() : this.formGroup.value;
     this.store.dispatch(patchForm({ id: this.formGroupId, value }));
-
-    this.restoreValues(directives, initialValues);
-  }
-
-  private deleteValues(directives: FormControlDirective[], initialValues: Map<FormControl, string>): void {
-    directives.forEach(({ formControl }) => {
-      initialValues.set(formControl, formControl.value);
-      formControl.setValue(null, { emitEvent: false });
-    });
-  }
-
-  private restoreValues(directives: FormControlDirective[], initialValues: Map<FormControl, string>): void {
-    directives.forEach(({ formControl }) => formControl.setValue(initialValues.get(formControl), { emitEvent: false }));
-  }
-
-  private includesControl(controls: { [key: string]: AbstractControl }, targetControl: FormControl): boolean {
-    return Object.keys(controls).some(key => {
-      if (!controls.hasOwnProperty(key)) {
-        return;
-      }
-
-      if (controls[key] === targetControl) {
-        return true;
-      }
-
-      const formGroup = controls[key] as FormGroup;
-      if (formGroup.controls) {
-        this.includesControl(formGroup.controls, targetControl);
-      }
-    });
   }
 }

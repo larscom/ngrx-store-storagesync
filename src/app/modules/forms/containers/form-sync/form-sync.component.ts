@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material';
-import { deleteForm, resetForm } from '@larscom/ngrx-store-storagesync';
+import { MatCheckboxChange, MatSlideToggleChange } from '@angular/material';
+import { patchForm } from '@larscom/ngrx-store-storagesync';
 import { select, Store } from '@ngrx/store';
-import { first } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { IRootState } from 'src/app/store/models/root-state';
-import { setSync } from '../../store/forms.actions';
+import { setFormControlSync, setFormGroupSync } from '../../store/forms.actions';
 import * as formsSelectors from '../../store/forms.selectors';
 
 @Component({
@@ -24,17 +24,14 @@ export class FormSyncComponent {
 
   constructor(private readonly formBuilder: FormBuilder, private readonly store$: Store<IRootState>) {}
 
-  async onSubmit(): Promise<void> {
-    const syncEnabled = await this.syncEnabled$.pipe(first()).toPromise();
-    if (syncEnabled) {
-      this.store$.dispatch(resetForm({ id: this.formGroupId }));
-    } else {
-      this.formGroup.reset();
-    }
+  onSubmit(): void {
+    this.formGroup.reset();
   }
 
-  onSyncChange({ checked: enabled }: MatSlideToggleChange): void {
-    this.store$.dispatch(setSync({ enabled }));
-    this.store$.dispatch(deleteForm({ id: this.formGroupId }));
+  onFormGroupSyncChange({ checked: enabled }: MatSlideToggleChange): void {
+    this.store$.dispatch(setFormGroupSync({ enabled }));
+    if (enabled) {
+      this.store$.dispatch(patchForm({ id: this.formGroupId, value: this.formGroup.value }));
+    }
   }
 }

@@ -2,14 +2,20 @@ import { createReducer, on } from '@ngrx/store';
 import * as formsActions from './forms.actions';
 
 export const initialState: IFormsState = {
-  enableSync: true
+  syncEnabled: true,
+  disableFormControl: Object()
 };
 
 export interface IFormsState {
-  readonly enableSync: boolean;
+  readonly syncEnabled: boolean;
+  readonly disableFormControl: { [name: string]: boolean };
 }
 
 export const reducer = createReducer(
   initialState,
-  on(formsActions.setSync, (state, { enabled: enableSync }) => ({ ...state, enableSync }))
+  on(formsActions.setFormGroupSync, (state, { enabled: syncEnabled }) => ({ ...state, syncEnabled })),
+  on(formsActions.setFormControlSync, (state, { name, disabled }) => ({
+    ...state,
+    disableFormControl: { ...state.disableFormControl, [name]: disabled }
+  }))
 );
