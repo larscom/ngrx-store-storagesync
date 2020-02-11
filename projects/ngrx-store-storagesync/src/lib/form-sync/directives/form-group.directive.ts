@@ -2,7 +2,7 @@ import { Directive, HostListener, Inject, Input, OnDestroy, OnInit } from '@angu
 import { FormGroup } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { IFormSyncConfig } from '../models/form-sync-config';
 import { FORM_SYNC_CONFIG } from '../providers/form-sync.providers';
 import { patchForm } from '../store/form.actions';

@@ -42,11 +42,10 @@ export class AppComponent {
   }
 
   onResetState(): void {
-    if (!confirm('Reset state and reload?')) {
-      return;
+    if (confirm('Reset state and reload?')) {
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      window.location.reload();
     }
-    window.localStorage.clear();
-    window.sessionStorage.clear();
-    window.location.reload();
   }
 }
