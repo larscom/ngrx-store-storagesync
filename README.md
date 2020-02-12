@@ -397,7 +397,7 @@ import { Store, select } from '@ngrx/store';
 export class MyComponent {
   constructor(private store: Store<any>) {}
 
-  myFormValue$ = this.store.pipe(select(getFormSyncValue, { id: 'myFormGroup' }));
+  myFormValue$ = this.store.pipe(select(getFormSyncValue, { id: 'myFormGroupId' }));
 }
 ```
 
@@ -422,7 +422,7 @@ export class MyComponent {
       firstName: 'Jan',
       //lastName: 'Jansen'
     };
-    this.store.dispatch(patchForm({ id: 'myFormGroup', value }));
+    this.store.dispatch(patchForm({ id: 'myFormGroupId', value }));
   }
 
   /* sets the initial form value */
@@ -431,17 +431,17 @@ export class MyComponent {
       firstName: 'Jan',
       lastName: 'Jansen'
     };
-    this.store.dispatch(setForm({ id: 'myFormGroup', value }));
+    this.store.dispatch(setForm({ id: 'myFormGroupId', value }));
   }
 
   /* reset form value (sets every property to null)  */
   resetValue(): void {
-    this.store.dispatch(resetForm({ id: 'myFormGroup' }));
+    this.store.dispatch(resetForm({ id: 'myFormGroupId' }));
   }
 
     /* remove form value from store  */
   deleteValue(): void {
-    this.store.dispatch(deleteForm({ id: 'myFormGroup' }));
+    this.store.dispatch(deleteForm({ id: 'myFormGroupId' }));
   }
 }
 ```
