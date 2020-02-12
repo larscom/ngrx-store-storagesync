@@ -83,6 +83,16 @@ describe('FormGroupDirective', () => {
     expect(dispatchSpy).toHaveBeenCalledWith(expected);
   });
 
+  it('should not dispatch on submit with invalid form', () => {
+    createDirective({ syncOnSubmit: true, syncValidOnly: true });
+
+    field1.setValue('test');
+
+    directive.onSubmit();
+
+    expect(dispatchSpy).not.toHaveBeenCalled();
+  });
+
   it('should dispatch raw value on submit and valid form only', () => {
     createDirective({ syncRawValue: true, syncOnSubmit: true, syncValidOnly: true });
 
