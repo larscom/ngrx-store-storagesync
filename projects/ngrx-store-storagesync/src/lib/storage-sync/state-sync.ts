@@ -4,7 +4,7 @@ import { IStorageSyncOptions } from './models/storage-sync-options';
 
 /**
  * @internal Blacklisting
- * @returns returns the filtered state
+ * @returns the filtered state
  */
 export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[]): Partial<T> => {
   if (!excludeKeys) {
@@ -48,7 +48,7 @@ export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[
 
 /**
  * @internal Remove empty objects from state
- * @returns returns the cleaned state
+ * @returns the cleaned state
  */
 export const cleanState = <T>(state: Partial<T>): Partial<T> => {
   for (const key in state) {
@@ -69,7 +69,7 @@ export const cleanState = <T>(state: Partial<T>): Partial<T> => {
  * @internal Sync state with storage
  * @param state the next state
  * @param options the configurable options
- * @returns returns the next state
+ * @returns the next state
  */
 export const stateSync = <T>(
   state: T,

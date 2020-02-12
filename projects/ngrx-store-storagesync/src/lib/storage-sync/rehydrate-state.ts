@@ -3,7 +3,7 @@ import { IStorageSyncOptions } from './models/storage-sync-options';
 /**
  * @internal Restores the resolved state from a storage location
  * @param options the configurable options
- * @returns returns the restored state from the provided storage
+ * @returns the restored state from the provided storage
  */
 export const rehydrateState = <T>({
   storage,
