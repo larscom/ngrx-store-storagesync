@@ -36,7 +36,7 @@ npm i --save @larscom/ngrx-store-storagesync
 
 **1. Include `storageSyncReducer` in your meta-reducers array in `StoreModule.forRoot`**
 
-**2. (optional) import 'FormSyncModule.forRoot()' once, to enable reactive forms sync**
+**2. (optional) import `FormSyncModule.forRoot` once, to enable reactive forms sync**
 
 ```ts
 import { NgModule } from '@angular/core';
