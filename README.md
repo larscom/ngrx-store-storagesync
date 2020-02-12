@@ -192,7 +192,7 @@ You can override the default configuration on component level
 
 ```ts
 import { Component } from '@angular/core';
-import { IFormSyncConfig, FORM_SYNC_CONFIG } from '@larscom/ngrx-form-sync';
+import { IFormSyncConfig, FORM_SYNC_CONFIG } from '@larscom/ngrx-store-storagesync';
 
 const formSyncConfig: IFormSyncConfig = {
   /* Only sync to the store when submitting the form. */
@@ -381,7 +381,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 
 ```ts
 import { Component } from '@angular/core';
-import { getFormSyncValue } from '@larscom/ngrx-form-sync';
+import { getFormSyncValue } from '@larscom/ngrx-store-storagesync';
 import { Store, select } from '@ngrx/store';
 
 @Component({
@@ -405,7 +405,7 @@ export class MyComponent {
 
 ```ts
 import { Component } from '@angular/core';
-import { setForm, patchForm, resetForm, deleteForm } from '@larscom/ngrx-form-sync';
+import { setForm, patchForm, resetForm, deleteForm } from '@larscom/ngrx-store-storagesync';
 import { Store, select } from '@ngrx/store';
 
 @Component({
