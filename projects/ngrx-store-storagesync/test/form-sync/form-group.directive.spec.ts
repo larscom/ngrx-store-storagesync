@@ -4,7 +4,7 @@ import { FormGroupDirective } from 'projects/ngrx-store-storagesync/src/lib/form
 import { FORM_SYNC_STORE_KEY } from 'projects/ngrx-store-storagesync/src/lib/form-sync/form-sync.constants';
 import { IFormSyncConfig } from 'projects/ngrx-store-storagesync/src/lib/form-sync/models/form-sync-config';
 import * as formActions from 'projects/ngrx-store-storagesync/src/lib/form-sync/store/form.actions';
-import { of, defer, Observable } from 'rxjs';
+import { defer, Observable, of } from 'rxjs';
 import { MockStore } from '../mock-store';
 
 describe('FormGroupDirective', () => {
