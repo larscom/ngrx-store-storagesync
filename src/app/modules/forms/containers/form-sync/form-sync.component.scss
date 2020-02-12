@@ -1,0 +1,19 @@
+.form-sync__container {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.form-sync__settings {
+  margin-bottom: 15px;
+}
+
+.form-sync__fields {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  margin-left: 10px;
+}

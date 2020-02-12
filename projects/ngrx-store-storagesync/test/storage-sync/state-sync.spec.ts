@@ -1,6 +1,6 @@
-import { IStorageSyncOptions } from '../src/lib/models/storage-sync-options';
-import { excludeKeysFromState, stateSync } from '../src/lib/state-sync';
-import { MockStorage } from './mock-storage';
+import { IStorageSyncOptions } from '../../src/lib/storage-sync/models/storage-sync-options';
+import { excludeKeysFromState, stateSync } from '../../src/lib/storage-sync/state-sync';
+import { MockStorage } from '../mock-storage';
 
 describe('StateSync', () => {
   let storage: Storage;

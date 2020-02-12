@@ -10,7 +10,7 @@
         placeholder="Add simple todo">
     </mat-form-field>
     <button mat-raised-button
-      color="accent"
+      color="primary"
       id="add-todo"
       (click)="addTodo()">Add</button>
   </div>
@@ -19,7 +19,7 @@
     <h2>Todo ({{ count }})</h2>
     <mat-selection-list id="selectTodos">
       <ng-container *ngFor="let todo of todos$ | async">
-        <mat-list-option [title]="todo.id"
+        <mat-list-option color="primary" [title]="todo.id"
           (click)="onTodoClicked(todo)">{{ todo.value }}</mat-list-option>
         <mat-divider></mat-divider>
       </ng-container>

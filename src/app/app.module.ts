@@ -10,15 +10,8 @@ import { StorageDisplayComponent } from './containers/storage-display/storage-di
 import { MaterialModule } from './shared/modules/material/material.module';
 import { StoreModule } from './store/store.module';
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    DrawerComponent,
-    NavigationMenuComponent,
-    StorageDisplayComponent
-  ],
+  declarations: [AppComponent, HeaderComponent, DrawerComponent, NavigationMenuComponent, StorageDisplayComponent],
   imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, MaterialModule, StoreModule],
   bootstrap: [AppComponent]
 })

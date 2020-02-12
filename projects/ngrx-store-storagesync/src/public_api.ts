@@ -1,4 +1,2 @@
-export { IFeatureOptions } from './lib/models/feature-options';
-export { IStorageSyncOptions } from './lib/models/storage-sync-options';
-export { storageSync } from './lib/storage-sync';
-
+export * from './lib/storage-sync/public_api';
+export * from './lib/form-sync/public_api';
