@@ -1,8 +1,8 @@
 import { browser, by, element, promise } from 'protractor';
 
 export class TodoPage {
-  navigateTo(url?: string): promise.Promise<string> {
-    return browser.get(url || browser.baseUrl);
+  navigateTo(): promise.Promise<string> {
+    return browser.get(browser.baseUrl);
   }
 
   getTitleText(): promise.Promise<string> {

@@ -9,7 +9,8 @@ describe('Todo Tests', () => {
   });
 
   it('first test case', () => {
-    page.navigateTo('https://ngrx-store-storagesync.netlify.com/#/todo');
+    page.navigateTo();
+    // page.navigateTo('https://ngrx-store-storagesync.netlify.com/#/todo');
     expect(page.getTitleText()).toEqual('Add Todo');
   });
 
