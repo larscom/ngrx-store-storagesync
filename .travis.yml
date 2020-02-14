@@ -3,6 +3,8 @@ dist: trusty
 language: node_js
 node_js:
   - '10'
+addons:
+  chrome: stable
 services:
   - docker
 install:
