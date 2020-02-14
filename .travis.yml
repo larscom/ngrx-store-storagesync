@@ -3,18 +3,8 @@ dist: trusty
 language: node_js
 node_js:
   - '10'
-addons:
-  chrome: stable
-env:
-  - TESTCAFE_URL=http://127.0.0.1
-branches:
-  only:
-    - master
-    - /^v\d+\.\d+\.\d+$/
 services:
   - docker
-before_install:
-  - npm install -g testcafe
 install:
   - npm ci
 before_script:
@@ -25,7 +15,7 @@ before_script:
 script:
   - curl 127.0.0.1
   - npm run test -- --code-coverage --watch=false
-  - npm run test:e2e
+  - npm run e2e -- --serve false --base-href=http://127.0.0.1
 after_script:
   - docker system prune --volumes --all -f
 before_deploy:
@@ -40,5 +30,4 @@ deploy:
   on:
     tags: true
 after_success:
-  - chmod +x scripts/netlify.sh
-  - scripts/netlify.sh
+  - if [ "${TRAVIS_BRANCH}" = "master" ]; then chmod +x scripts/netlify.sh && scripts/netlify.sh; fi
