@@ -15,7 +15,6 @@ before_script:
   # start container for e2e test
   - docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
 script:
-  - curl 127.0.0.1
   - npm run test -- --code-coverage --watch=false
   - npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
 after_script:

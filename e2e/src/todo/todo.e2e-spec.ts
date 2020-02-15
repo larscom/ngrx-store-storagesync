@@ -1,17 +1,11 @@
-import { TodoPage } from './todo.po';
 import { browser, logging } from 'protractor';
+import { TodoPage } from './todo.po';
 
-describe('Todo Tests', () => {
+describe('Todo', () => {
   let page: TodoPage;
 
   beforeEach(() => {
     page = new TodoPage();
-  });
-
-  it('first test case', () => {
-    page.navigateTo();
-    // page.navigateTo('https://ngrx-store-storagesync.netlify.com/#/todo');
-    expect(page.getTitleText()).toEqual('Add Todo');
   });
 
   afterEach(async () => {
@@ -25,5 +19,17 @@ describe('Todo Tests', () => {
     } as logging.Entry;
 
     expect(logs).not.toContain(jasmine.objectContaining(logEntry));
+  });
+
+  it('should remember completed todos after page refresh', async () => {
+    page.navigateTo();
+
+    page.addTodo('test');
+
+    page.clickAllTodos();
+
+    page.refresh();
+
+    expect(page.getCompletedTodosTitle()).toContain(4);
   });
 });

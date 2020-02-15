@@ -11,7 +11,7 @@ exports.config = {
     chromeOptions: { args: ['--no-sandbox', '--headless', '--disable-gpu'] }
   },
   directConnect: true,
-  baseUrl: 'http://localhost:4200/',
+  baseUrl: 'http://localhost:4200',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
