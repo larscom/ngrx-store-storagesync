@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { patchForm, IFormSyncConfig, FORM_SYNC_CONFIG } from '@larscom/ngrx-store-storagesync';
 import { select, Store } from '@ngrx/store';
 import { IRootState } from 'src/app/store/models/root-state';

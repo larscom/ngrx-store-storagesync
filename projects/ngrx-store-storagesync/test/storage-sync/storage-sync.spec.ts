@@ -3,7 +3,6 @@ import { INIT_ACTION } from '../../src/lib/storage-sync/actions';
 import { storageSync } from '../../src/lib/storage-sync/storage-sync';
 import { MockStorage } from '../mock-storage';
 
-
 describe('StorageSync', () => {
   let storage: Storage;
 
@@ -23,7 +22,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const metaReducer = storageSync({
+    const metaReducer = storageSync<any>({
       version: 2,
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
       storage
@@ -45,7 +44,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const metaReducer = storageSync({
+    const metaReducer = storageSync<any>({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
       storage
     });
@@ -73,7 +72,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const metaReducer = storageSync({
+    const metaReducer = storageSync<any>({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2', storageForFeature }],
       storage
     });
@@ -99,7 +98,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const metaReducer = storageSync({
+    const metaReducer = storageSync<any>({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
       storage,
       rehydrate: false
@@ -120,7 +119,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const metaReducer = storageSync({
+    const metaReducer = storageSync<any>({
       features: [],
       storage
     });
@@ -140,7 +139,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const metaReducer = storageSync({
+    const metaReducer = storageSync<any>({
       features: [
         {
           stateKey: 'feature1'
@@ -170,7 +169,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const metaReducer = storageSync({
+    const metaReducer = storageSync<any>({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
       storage,
       rehydrateStateMerger: (state, rehydratedState) => {

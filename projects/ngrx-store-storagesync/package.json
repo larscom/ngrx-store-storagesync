@@ -13,7 +13,11 @@
     "store",
     "state",
     "storage",
-    "rxjs"
+    "rxjs",
+    "forms",
+    "localstorage",
+    "sessionstorage",
+    "reactiveforms"
   ],
   "author": "Lars Kniep",
   "license": "MIT",
