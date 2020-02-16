@@ -1,12 +1,8 @@
 import { browser, by, element, promise } from 'protractor';
+import { Page } from '../page.po';
 
 // mat-pseudo-checkbox
-export class TodoPage {
-  navigateTo(): promise.Promise<string> {
-    const url = `${browser.baseUrl}/#/todo`;
-    return browser.get(url);
-  }
-
+export class TodoPage extends Page {
   addTodo(value: string): void {
     element(by.css('input#add-todo')).sendKeys(value);
     element(by.css('button#add-todo')).click();
@@ -21,8 +17,7 @@ export class TodoPage {
     return element(by.css('h2#completed-count')).getText();
   }
 
-  refresh(): void {
-    browser.sleep(250);
-    browser.refresh();
+  getDrawerStyleVisibility(): promise.Promise<string> {
+    return element(by.css('.mat-drawer')).getCssValue('visibility');
   }
 }
