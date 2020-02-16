@@ -1,7 +1,6 @@
-import { browser, by, element, promise } from 'protractor';
+import { by, element, promise } from 'protractor';
 import { Page } from '../page.po';
 
-// mat-pseudo-checkbox
 export class TodoPage extends Page {
   addTodo(value: string): void {
     element(by.css('input#add-todo')).sendKeys(value);

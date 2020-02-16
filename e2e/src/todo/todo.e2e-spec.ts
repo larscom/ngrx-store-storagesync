@@ -1,7 +1,7 @@
 import { browser, logging } from 'protractor';
 import { TodoPage } from './todo.po';
 
-describe('Todo', () => {
+describe('Todo Page', () => {
   let page: TodoPage;
 
   beforeEach(() => {

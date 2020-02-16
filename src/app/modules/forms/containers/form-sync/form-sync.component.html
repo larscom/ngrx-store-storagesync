@@ -1,6 +1,7 @@
 <div class="form-sync__container">
   <div class="form-sync__settings">
-    <mat-slide-toggle color="primary"
+    <mat-slide-toggle id="sync-switch"
+      color="primary"
       [checked]="syncEnabled$ | async"
       (change)="onFormGroupSyncChange($event)">Sync Form
     </mat-slide-toggle>
@@ -11,13 +12,15 @@
     [formGroupSync]="syncEnabled$ | async">
     <div class="form-sync__fields">
       <mat-form-field>
-        <input matInput
+        <input id="firstName"
+          matInput
           [formControl]="formGroup.get('firstName')"
           placeholder="First name">
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput
+        <input id="lastName"
+          matInput
           [formControl]="formGroup.get('lastName')"
           placeholder="Last name">
       </mat-form-field>
