@@ -54,7 +54,7 @@ export const reducers: ActionReducerMap<IState> = {
 export function storageSyncReducer(reducer: ActionReducer<IState>) {
   // define all feature states within the features array
   // features which are not defined, do not get synced
-  const storageSync = storageSync<IState>({
+  const sync = storageSync<IState>({
     features: [
       // save only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
@@ -69,7 +69,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     storage: window.localStorage
   });
 
-  return storageSync(reducer);
+  return sync(reducer);
 }
 
 @NgModule({
