@@ -6,11 +6,11 @@
     "e2e": "ng e2e",
     "start": "npm run start:app",
     "start:app": "ng serve",
-    "start:app-prerender": "ng run ngrx-store-storagesync-app:prerender",
     "start:ssr": "ng run ngrx-store-storagesync-app:serve-ssr",
     "build:lib": "ng build ngrx-store-storagesync",
     "build:app": "ng build --prod",
     "build:app-ssr": "ng build --prod && ng run ngrx-store-storagesync-app:server:production",
+    "build:app-prerender": "ng run ngrx-store-storagesync-app:prerender",
     "serve:ssr": "node dist/ngrx-store-storagesync-app/server/main.js",
     "copy:readme": "cpx README.md dist/ngrx-store-storagesync"
   },
