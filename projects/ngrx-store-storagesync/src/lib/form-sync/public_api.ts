@@ -5,3 +5,4 @@ export { FORM_SYNC_CONFIG, FORM_SYNC_REDUCER } from './providers/form-sync.provi
 export { deleteForm, patchForm, resetForm, setForm } from './store/form.actions';
 export { formSyncReducer, IFormSyncState } from './store/form.reducer';
 export { getFormSyncValue } from './store/form.selectors';
+export { FormGroupDirective } from './directives/form-group.directive';
