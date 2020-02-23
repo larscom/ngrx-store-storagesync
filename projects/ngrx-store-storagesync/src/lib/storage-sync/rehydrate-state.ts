@@ -1,5 +1,7 @@
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
+const dateMatcher = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
+
 /**
  * @internal Restores the resolved state from a storage location
  * @param options the configurable options
@@ -27,42 +29,34 @@ export const rehydrateState = <T>({
       }
     }
   }
-  const state = features.reduce<T>(
-    (acc, curr) => {
-      const { storageKeySerializerForFeature, stateKey, deserialize, storageForFeature } = curr;
+  const state = features.reduce<T>((acc, curr) => {
+    const { storageKeySerializerForFeature, stateKey, deserialize, storageForFeature } = curr;
 
-      const key = storageKeySerializerForFeature
-        ? storageKeySerializerForFeature(stateKey)
-        : storageKeySerializer(stateKey);
+    const key = storageKeySerializerForFeature
+      ? storageKeySerializerForFeature(stateKey)
+      : storageKeySerializer(stateKey);
 
-      try {
-        const featureState = storageForFeature
-          ? storageForFeature.getItem(key)
-          : storage.getItem(key);
-        return featureState
-          ? {
-              ...acc,
-              ...{
-                [stateKey]: deserialize
-                  ? deserialize(featureState)
-                  : JSON.parse(featureState, (_: string, value: string) => {
-                      // parse ISO date strings
-                      return /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.test(String(value))
-                        ? new Date(value)
-                        : value;
-                    })
-              }
+    try {
+      const featureState = storageForFeature ? storageForFeature.getItem(key) : storage.getItem(key);
+      return featureState
+        ? {
+            ...acc,
+            ...{
+              [stateKey]: deserialize
+                ? deserialize(featureState)
+                : JSON.parse(featureState, (_: string, value: string) =>
+                    dateMatcher.test(String(value)) ? new Date(value) : value
+                  )
             }
-          : acc;
-      } catch (e) {
-        if (storageError) {
-          storageError(e);
-        } else {
-          throw e;
-        }
+          }
+        : acc;
+    } catch (e) {
+      if (storageError) {
+        storageError(e);
+      } else {
+        throw e;
       }
-    },
-    {} as T
-  );
+    }
+  }, {} as T);
   return Object.keys(state).length ? state : null;
 };

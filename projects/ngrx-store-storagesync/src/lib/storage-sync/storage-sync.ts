@@ -6,12 +6,6 @@ import { rehydrateState } from './rehydrate-state';
 import { stateSync } from './state-sync';
 
 /**
- * @internal Check to see if not inside a browser (for SSR)
- * @returns returns true if not in a browser
- */
-export const isNotBrowser = typeof window === 'undefined';
-
-/**
  * The StorageSync Meta Reducer for @ngrx/store.
  *
  * @param options The configuration for the meta reducer
@@ -24,12 +18,6 @@ export const isNotBrowser = typeof window === 'undefined';
 export const storageSync = <T>(options: IStorageSyncOptions<T>) => (
   reducer: (state: T, action: Action) => T
 ): ((state: T, action: Action) => T) => {
-  if (isNotBrowser) {
-    return (state: T, action: Action): T => {
-      return [INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type) ? reducer(state, action) : { ...state };
-    };
-  }
-
   const config: IStorageSyncOptions<T> = {
     rehydrate: true,
     storageKeySerializer: (key: string) => key,

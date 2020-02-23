@@ -11,7 +11,7 @@ install:
   - npm ci
 before_script:
   - npm run build:lib
-  - npm run build:app
+  - npm run build:app-ssr
   # start container for e2e test
   - docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
 script:

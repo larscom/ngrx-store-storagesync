@@ -8,6 +8,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input,
 })
 export class HeaderComponent implements AfterViewInit {
   @Input() isMobile: boolean;
+  @Input() isPlatformBrowser: boolean;
 
   @Output()
   menuButtonRendered = new EventEmitter<HTMLButtonElement>();
@@ -19,6 +20,8 @@ export class HeaderComponent implements AfterViewInit {
   resetState = new EventEmitter<void>();
 
   ngAfterViewInit(): void {
-    this.menuButtonRendered.emit(document.querySelector('button'));
+    if (this.isPlatformBrowser) {
+      this.menuButtonRendered.emit(document.querySelector('button'));
+    }
   }
 }

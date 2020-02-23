@@ -9,17 +9,17 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-const exports = [
-  MatButtonModule,
-  MatListModule,
-  MatDividerModule,
-  MatToolbarModule,
-  MatSidenavModule,
-  MatIconModule,
-  MatInputModule,
-  MatRadioModule,
-  MatSlideToggleModule
-];
-
-@NgModule({ exports })
+@NgModule({
+  exports: [
+    MatButtonModule,
+    MatListModule,
+    MatDividerModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSlideToggleModule
+  ]
+})
 export class MaterialModule {}

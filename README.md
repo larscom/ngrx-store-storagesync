@@ -4,19 +4,17 @@
 [![travis build](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)](https://travis-ci.com/larscom/ngrx-store-storagesync/builds)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
-**Highly configurable** state syncing between the @ngrx/store and localstorage/sessionstorage.
+**Highly configurable** state syncing between the `@ngrx/store` and `localstorage` / `sessionstorage`
 
-You can sync only the objects you need, allowing you to `exclude` **deeply nested** keys.  
-You can sync different 'feature' states to different **storage** locations.
+## Supports
 
-For example:
+- &#10003; Excluding **deeply** nested keys/objects
+- &#10003; `Storage` location per feature state (e.g: feature1 to `sessionStorage`, feature2 to `localStorage`)
+- &#10003; Server Side Rendering (SSR with `@nguniversal/express-engine`)
+- &#10003; Reactive forms syncing with minimal configuration
 
-- feature1 to `sessionStorage`
-- feature2 to `localStorage`
 
-You can even sync **reactive forms** to the store with minimal configuration.
-
-## Demo
+## Demo (SSR enabled)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/1e765095-6821-4dea-93b2-fffdfed0bf54/deploy-status)](https://ngrx-store-storagesync.netlify.com)
 
@@ -52,8 +50,8 @@ export const reducers: ActionReducerMap<IState> = {
 };
 
 export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  // define all feature states within the features array
-  // features which are not defined, do not get synced
+  // provide all feature states within the features array
+  // features which are not provided, do not get synced
   const sync = storageSync<IState>({
     features: [
       // save only router state to sessionStorage
@@ -62,7 +60,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
       // exclude key 'success' inside 'auth' and all keys 'loading' inside 'feature1'
       { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] },
 
-      // if the form sync module is imported and you want to save to a storage location
+      // if the form sync module is imported and you want to save to sessionStorage
       { stateKey: FORM_SYNC_STORE_KEY, storageForFeature: window.sessionStorage }
     ],
     // defaults to localStorage
@@ -76,8 +74,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
   imports: [
     BrowserModule,
     StoreModule.forRoot(reducers, { metaReducers: [storageSyncReducer] }),
-    // import 'FormSyncModule.forRoot()' once, to enable reactive forms sync
-    // import 'FormSyncModule' for every other feature module
+    // import 'FormSyncModule.forRoot()' once to enable reactive forms sync
     FormSyncModule.forRoot()
   ]
 })
