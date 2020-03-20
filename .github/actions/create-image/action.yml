@@ -2,4 +2,4 @@ name: '@larscom/ngrx-store-storagesync'
 description: 'Create docker image from source'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: './Dockerfile'
