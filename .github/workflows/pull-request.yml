@@ -12,13 +12,15 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 10
-      - name: build & test
+      - name: install
+        run: npm ci
+      - name: build
         run: |
-          npm ci
           npm run build:lib
           npm run build:app-prerender
-          npm run test -- --code-coverage --watch=false
-      - name: build docker
-        run: docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
-      - name: run e2e against docker
-        run: npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
+      - name: unit test
+        run: npm run test -- --code-coverage --watch=false
+      - name: e2e test
+        run: |
+          docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
+          npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
