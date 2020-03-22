@@ -2,7 +2,14 @@ name: '@larscom/ngrx-store-storagesync'
 
 on:
   pull_request:
-    branches: [master]
+    branches:
+      - master
+  # release:
+  #   branches:
+  #     - master
+  # push:
+  #   branches:
+  #     - '*'
 
 jobs:
   ci:
@@ -24,3 +31,28 @@ jobs:
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
           npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
+      - name: upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: dist
+  # cd:
+  #   needs: ci
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 10
+  #     - name: install
+  #       run: npm ci
+  #     - name: build
+  #       run: |
+  #         npm run build:lib
+  #         npm run build:app-prerender
+  #     - name: unit test
+  #       run: npm run test -- --code-coverage --watch=false
+  #     - name: e2e test
+  #       run: |
+  #         docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
+  #         npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
