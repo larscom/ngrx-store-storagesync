@@ -1,7 +1,7 @@
 # @larscom/ngrx-store-storagesync
 
-[![npm-release](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg?label=npm%20release)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
-[![travis build](https://img.shields.io/travis/com/larscom/ngrx-store-storagesync/master.svg?label=build%20%28master%29)](https://travis-ci.com/larscom/ngrx-store-storagesync/builds)
+[![npm-version](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg?label=npm%20version)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
+![@larscom/ngrx-store-storagesync](https://github.com/larscom/ngrx-store-storagesync/workflows/@larscom/ngrx-store-storagesync/badge.svg?branch=github-actions&event=push)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
 **Highly configurable** state syncing between the `@ngrx/store` and `localstorage` / `sessionstorage`
@@ -14,11 +14,9 @@
 - &#10003; Reactive forms syncing with minimal configuration
 
 
-## Demo (SSR enabled)
+## Demo (with SSR)
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/1e765095-6821-4dea-93b2-fffdfed0bf54/deploy-status)](https://ngrx-store-storagesync.netlify.com)
-
-You can play arround at https://ngrx-store-storagesync.netlify.com
+You can play arround at https://ngrx-store-storagesync.firebaseapp.com
 
 ## Dependencies
 

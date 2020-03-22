@@ -1,0 +1,81 @@
+name: '@larscom/ngrx-store-storagesync'
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - '*'
+  release:
+    types:
+      - published
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: setup node 10 environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: install
+        run: npm ci
+      - name: build
+        run: |
+          npm run build:lib
+          npm run build:app-prerender
+      - name: unit test
+        run: npm run test -- --code-coverage --watch=false
+      - name: e2e test
+        run: |
+          docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
+          npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
+      - if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        name: upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+  npm:
+    needs: ci
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: setup node 12 environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+      - name: npm publish
+        run: |
+          cd dist/ngrx-store-storagesync
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+  firebase:
+    needs: ci
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+      - name: firebase deploy
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

@@ -7,12 +7,15 @@
     "start": "npm run start:app",
     "start:app": "ng serve",
     "start:ssr": "ng run ngrx-store-storagesync-app:serve-ssr",
-    "build:lib": "ng build ngrx-store-storagesync",
+    "build:lib": "ng build ngrx-store-storagesync && npm run copy:readme",
     "build:app": "ng build --prod",
     "build:app-ssr": "ng build --prod && ng run ngrx-store-storagesync-app:server:production",
     "build:app-prerender": "ng run ngrx-store-storagesync-app:prerender",
     "serve:ssr": "node dist/ngrx-store-storagesync-app/server/main.js",
-    "copy:readme": "cpx README.md dist/ngrx-store-storagesync"
+    "copy:readme": "cpx README.md dist/ngrx-store-storagesync",
+    "postinstall": "mkdir -p projects/ngrx-store-storagesync/.git",
+    "postversion": "git push --follow-tags",
+    "preversion": "npm test"
   },
   "private": true,
   "dependencies": {
@@ -43,6 +46,7 @@
     "@angular/cli": "^9.0.2",
     "@angular/compiler-cli": "^9.0.1",
     "@angular/language-service": "^9.0.1",
+    "@larscom/cpx": "^2.0.1",
     "@nguniversal/builders": "^9.0.0",
     "@types/express": "^4.17.0",
     "@types/jasmine": "^3.5.4",
@@ -51,7 +55,6 @@
     "@types/node": "^13.7.1",
     "@types/uuid": "^3.4.7",
     "codelyzer": "^5.2.1",
-    "cpx": "^1.5.0",
     "jasmine-core": "^3.5.0",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^4.4.1",
