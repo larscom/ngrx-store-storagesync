@@ -5,15 +5,31 @@ on:
     branches: [master]
 
 jobs:
-  build_and_test:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 10
-      - run: npm ci
-      - run: npm run build:lib
-      - run: npm run build:app-prerender
-      - run: npm run test -- --code-coverage --watch=false
-      - uses: ./.github/actions/docker
+      - name: install & test
+        run: |
+          npm ci
+          npm run test -- --code-coverage --watch=false
+
+  cd:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: build & pre-render
+        run: |
+          npm run build:lib
+          npm run build:app-prerender
+      - name: run docker
+        run: docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
+      - name: e2e test
+        run: npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1

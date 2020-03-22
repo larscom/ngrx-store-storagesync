@@ -1,5 +1,0 @@
-name: '@larscom/ngrx-store-storagesync'
-description: 'Create docker image'
-runs:
-  using: 'docker'
-  image: '../../../Dockerfile'
