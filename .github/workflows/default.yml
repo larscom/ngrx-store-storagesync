@@ -10,8 +10,10 @@ on:
   release:
     types:
       - published
+
 jobs:
   ci:
+    # triggers on: pull_request,release, push (any branch)
     runs-on: ubuntu-latest
     steps:
       - name: checkout source
@@ -38,11 +40,12 @@ jobs:
         with:
           name: dist
           path: dist
+
   npm:
+    # triggers on: release
     needs: ci
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
-
     steps:
       - name: checkout source
         uses: actions/checkout@v2
@@ -61,11 +64,12 @@ jobs:
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+
   firebase:
+    # triggers on: push (master branch)
     needs: ci
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
-
     steps:
       - name: checkout source
         uses: actions/checkout@v2
