@@ -15,8 +15,10 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: setup node 10 environment
+        uses: actions/setup-node@v1
         with:
           node-version: 10
       - name: install
@@ -31,28 +33,19 @@ jobs:
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
           npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
-      - name: upload artifact
+      - name: upload artifact (dist-build)
         uses: actions/upload-artifact@v1
         with:
-          name: dist
+          name: dist-build
           path: dist
-  # cd:
-  #   needs: ci
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 10
-  #     - name: install
-  #       run: npm ci
-  #     - name: build
-  #       run: |
-  #         npm run build:lib
-  #         npm run build:app-prerender
-  #     - name: unit test
-  #       run: npm run test -- --code-coverage --watch=false
-  #     - name: e2e test
-  #       run: |
-  #         docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
-  #         npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
+  cd:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: download artifact (dist-build)
+        uses: actions/download-artifact@v1
+        with:
+          name: dist-build
+          path: dist
+      - name: output folder
+        run: ls dist
