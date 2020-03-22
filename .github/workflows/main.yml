@@ -1,15 +1,15 @@
 name: '@larscom/ngrx-store-storagesync'
 
 on:
-  pull_request:
-    branches:
-      - master
+  # pull_request:
+  #   branches:
+  #     - master
   # release:
   #   branches:
   #     - master
-  # push:
-  #   branches:
-  #     - '*'
+  push:
+    branches:
+      - 'github-actions'
 
 jobs:
   ci:
