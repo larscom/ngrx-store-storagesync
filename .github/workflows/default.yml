@@ -7,15 +7,29 @@ on:
   push:
     branches:
       - '*'
-  release:
-    types:
-      - published
+    tags:
+      - 'v*.*.*'
 
 jobs:
   ci:
     # triggers on: pull_request,release, push (any branch)
     runs-on: ubuntu-latest
     steps:
+      - name: set branch context
+        id: branch_context
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+      - name: output branch context
+        run: |
+          echo SOURCE_NAME: $SOURCE_NAME
+          echo SOURCE_BRANCH: $SOURCE_BRANCH
+          echo SOURCE_TAG: $SOURCE_TAG
+        env:
+          SOURCE_NAME: ${{ steps.branch_context.outputs.SOURCE_NAME }}
+          SOURCE_BRANCH: ${{ steps.branch_context.outputs.SOURCE_BRANCH }}
+          SOURCE_TAG: ${{ steps.branch_context.outputs.SOURCE_TAG }}
       - name: checkout source
         uses: actions/checkout@v2
       - name: setup node 10 environment
@@ -34,7 +48,7 @@ jobs:
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
           npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
-      - if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+      - if: $SOURCE_BRANCH == 'master'
         name: upload artifact
         uses: actions/upload-artifact@master
         with:
@@ -69,7 +83,7 @@ jobs:
     # triggers on: push (master branch)
     needs: ci
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: $SOURCE_BRANCH == 'master'
     steps:
       - name: checkout source
         uses: actions/checkout@v2
