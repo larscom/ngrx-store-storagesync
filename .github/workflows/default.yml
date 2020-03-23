@@ -12,7 +12,7 @@ on:
 
 jobs:
   ci:
-    # triggers on: pull_request,release, push (any branch)
+    # triggers on: pull_request, push (any branch or tag)
     runs-on: ubuntu-latest
     steps:
       - name: set branch context
@@ -48,7 +48,7 @@ jobs:
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
           npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
-      - if: ${{ steps.branch_context.outputs.SOURCE_BRANCH == 'master' }}
+      - if: ${{ SOURCE_BRANCH == 'master' }}
         name: upload artifact
         uses: actions/upload-artifact@master
         with:
@@ -58,7 +58,7 @@ jobs:
           SOURCE_BRANCH: ${{ steps.branch_context.outputs.SOURCE_BRANCH }}
 
   npm:
-    # triggers on: release
+    # triggers on: tag
     needs: ci
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
@@ -82,9 +82,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
 
   firebase:
-    # triggers on: push (master branch)
+    # triggers on: push (master)
     needs: ci
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: checkout source
         uses: actions/checkout@v2
