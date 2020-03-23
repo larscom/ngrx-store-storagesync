@@ -54,6 +54,8 @@ jobs:
         with:
           name: dist
           path: dist
+        env:
+          SOURCE_BRANCH: ${{ steps.branch_context.outputs.SOURCE_BRANCH }}
 
   npm:
     # triggers on: release
