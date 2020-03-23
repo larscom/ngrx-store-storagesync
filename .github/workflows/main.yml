@@ -56,7 +56,6 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
-
     steps:
       - name: checkout source
         uses: actions/checkout@v2
@@ -79,7 +78,6 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
-
     steps:
       - name: checkout source
         uses: actions/checkout@v2
