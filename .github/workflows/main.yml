@@ -1,0 +1,95 @@
+name: '@larscom/ngrx-store-storagesync'
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - '*'
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: set branch context
+        id: branch_context
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+        env:
+          SOURCE_NAME: ${{ steps.branch_context.outputs.SOURCE_NAME }}
+          SOURCE_BRANCH: ${{ steps.branch_context.outputs.SOURCE_BRANCH }}
+          SOURCE_TAG: ${{ steps.branch_context.outputs.SOURCE_TAG }}
+      - name: checkout source
+        uses: actions/checkout@v2
+        run: |
+          echo SOURCE_NAME: $SOURCE_NAME
+          echo SOURCE_BRANCH: $SOURCE_BRANCH
+          echo SOURCE_TAG: $SOURCE_TAG
+      - name: setup node 10 environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: install
+        run: npm ci
+      - name: build
+        run: |
+          npm run build:lib
+          npm run build:app-prerender
+      - name: unit test
+        run: npm run test -- --code-coverage --watch=false
+      - name: e2e test
+        run: |
+          docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
+          npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
+      - if: $SOURCE_BRANCH == 'master'
+        name: upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+  npm:
+    needs: ci
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: setup node 12 environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+      - name: npm publish
+        run: |
+          cd dist/ngrx-store-storagesync
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+  firebase:
+    needs: ci
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+      - name: firebase deploy
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
