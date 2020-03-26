@@ -1,5 +1,4 @@
-name: '[D] @larscom/ngrx-store-storagesync'
-
+name: '@larscom/ngrx-store-storagesync'
 on:
   push:
     branches:

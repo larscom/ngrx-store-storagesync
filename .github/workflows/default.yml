@@ -1,5 +1,4 @@
-name: '[M] @larscom/ngrx-store-storagesync'
-
+name: '@larscom/ngrx-store-storagesync'
 on:
   pull_request:
     branches:
