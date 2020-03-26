@@ -1,0 +1,46 @@
+name: '[Main] - @larscom/ngrx-store-storagesync'
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - '*'
+      - '!master'
+      - '!v*.'
+      - '!*.*.*'
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: setup node 10 environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: install
+        run: npm ci
+      - name: start unit test
+        run: npm run test -- --code-coverage --watch=false
+  e2e-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: setup node 10 environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: install
+        run: npm ci
+      - name: build lib & app
+        run: |
+          npm run build:lib
+          npm run build:app-prerender
+      - name: start e2e test
+        run: |
+          docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
+          npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
