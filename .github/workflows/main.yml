@@ -1,4 +1,4 @@
-name: '[Main] - @larscom/ngrx-store-storagesync'
+name: '[M] @larscom/ngrx-store-storagesync'
 
 on:
   pull_request:
@@ -10,7 +10,6 @@ on:
       - '!master'
       - '!v*.'
       - '!*.*.*'
-
 jobs:
   unit-test:
     runs-on: ubuntu-latest
