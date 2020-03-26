@@ -13,9 +13,7 @@
     "build:app-prerender": "ng run ngrx-store-storagesync-app:prerender",
     "serve:ssr": "node dist/ngrx-store-storagesync-app/server/main.js",
     "copy:readme": "cpx README.md dist/ngrx-store-storagesync",
-    "postinstall": "mkdir -p projects/ngrx-store-storagesync/.git",
-    "postversion": "git push --follow-tags",
-    "preversion": "npm test"
+    "postinstall": "mkdir -p projects/ngrx-store-storagesync/.git"
   },
   "private": true,
   "dependencies": {
