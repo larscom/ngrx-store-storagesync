@@ -1,7 +1,7 @@
 # @larscom/ngrx-store-storagesync
 
-[![npm-version](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg?label=npm%20version)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
-[![@larscom/ngrx-store-storagesync](https://github.com/larscom/ngrx-store-storagesync/workflows/%5BD%5D%20@larscom/ngrx-store-storagesync/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync)
+[![npm-version](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg?label=npm)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
+[![@larscom/ngrx-store-storagesync](https://github.com/larscom/ngrx-store-storagesync/workflows/@larscom/ngrx-store-storagesync/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
 **Highly configurable** state syncing between the `@ngrx/store` and `localstorage` / `sessionstorage`
