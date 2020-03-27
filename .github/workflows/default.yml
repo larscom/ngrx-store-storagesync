@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: 10
       - name: install
-        run: npm ci
+        run: npm ci --ignore-scripts
       - name: build lib & app
         run: |
           npm run build:lib
