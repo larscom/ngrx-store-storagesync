@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 10
       - name: install
-        run: npm ci
+        run: npm ci --ignore-scripts
       - name: start unit test
         run: npm run test -- --code-coverage --watch=false
   e2e-test:
