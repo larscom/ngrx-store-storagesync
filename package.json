@@ -4,6 +4,7 @@
     "ng": "ng",
     "test": "ng test ngrx-store-storagesync",
     "e2e": "ng e2e",
+    "e2e:ci" : "npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1 --webdriver-update=false",
     "start": "npm run start:app",
     "start:app": "ng serve",
     "start:ssr": "ng run ngrx-store-storagesync-app:serve-ssr",

@@ -43,4 +43,4 @@ jobs:
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
           npx webdriver-manager update --versions.chrome="$(google-chrome --product-version)"
-          npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1 --webdriver-update=false
+          npm run e2e:ci
