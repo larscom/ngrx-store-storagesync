@@ -23,6 +23,7 @@ jobs:
         run: npm ci --ignore-scripts
       - name: start unit test
         run: npm run test -- --code-coverage --watch=false
+
   e2e-test:
     runs-on: ubuntu-latest
     steps:
@@ -41,4 +42,5 @@ jobs:
       - name: start e2e test
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
+          npx webdriver-manager update --versions.chrome="$(google-chrome --product-version)"
           npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
