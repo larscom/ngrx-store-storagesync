@@ -26,7 +26,7 @@ jobs:
       - name: e2e test
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
-          npx webdriver-manager update
+          webdriver-manager update --versions.chrome=$(google-chrome --product-version)
           npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1
       - name: upload artifact
         uses: actions/upload-artifact@master
