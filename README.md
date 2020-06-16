@@ -25,7 +25,7 @@ You can play arround at https://ngrx-store-storagesync.firebaseapp.com
 ## Installation
 
 ```bash
-npm i --save @larscom/ngrx-store-storagesync
+npm i --save @larscom/ngrx-store-storagesync 
 ```
 
 ## Usage
