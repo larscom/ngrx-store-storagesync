@@ -22,7 +22,7 @@ jobs:
           npm run build:lib
           npm run build:app-prerender
       - name: upload artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
           name: dist
           path: dist
@@ -38,11 +38,13 @@ jobs:
         with:
           node-version: 10
       - name: download artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v2
         with:
           name: dist
       - name: install
-        run: npm ci --ignore-scripts
+        run: |
+          ls -R
+          npm ci --ignore-scripts
       - name: start e2e test
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
@@ -78,11 +80,12 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - name: download artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v2
         with:
           name: dist
       - name: npm publish
         run: |
+          ls -R
           cd dist/ngrx-store-storagesync
           npm publish
         env:
@@ -98,9 +101,11 @@ jobs:
       - name: checkout source
         uses: actions/checkout@v2
       - name: download artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v2
         with:
           name: dist
+      - name: Display download artifact
+        run: ls -R
       - name: firebase deploy
         uses: w9jds/firebase-action@master
         with:
