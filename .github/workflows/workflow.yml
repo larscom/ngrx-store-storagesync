@@ -41,10 +41,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: dist
+          path: dist
       - name: install
-        run: |
-          ls -R
-          npm ci --ignore-scripts
+        run: npm ci --ignore-scripts
       - name: start e2e test
         run: |
           docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
@@ -83,9 +82,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: dist
+          path: dist
       - name: npm publish
         run: |
-          ls -R
           cd dist/ngrx-store-storagesync
           npm publish
         env:
@@ -104,10 +103,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: dist
-      - name: Display download artifact
-        run: ls -R
+          path: dist
       - name: firebase deploy
-        uses: w9jds/firebase-action@master
+        uses: w9jds/firebase-action@v1.5.0
         with:
           args: deploy --only hosting
         env:
