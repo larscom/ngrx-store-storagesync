@@ -21,7 +21,7 @@ describe('RehydrateState', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       features: [],
-      storageKeySerializer: (key: string) => key
+      storageKeySerializer: (key: string) => key,
     };
 
     expect(storage.length).toEqual(3);
@@ -43,7 +43,7 @@ describe('RehydrateState', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
-      storageKeySerializer: (key: string) => key
+      storageKeySerializer: (key: string) => key,
     };
 
     expect(storage.length).toEqual(3);
@@ -62,7 +62,7 @@ describe('RehydrateState', () => {
       date: new Date(),
       prop1: false,
       prop2: 100,
-      prop3: { check: false, random: 1337 }
+      prop3: { check: false, random: 1337 },
     };
 
     storage.setItem(storageKeySerializerForFeature('feature1'), JSON.stringify(feature1));
@@ -72,7 +72,7 @@ describe('RehydrateState', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       features: [{ stateKey: 'feature1', storageKeySerializerForFeature }],
-      storageKeySerializer: (key: string) => key
+      storageKeySerializer: (key: string) => key,
     };
 
     const rehydratedState = rehydrateState(config);
@@ -102,9 +102,9 @@ describe('RehydrateState', () => {
         { stateKey: 'feature2' },
         { stateKey: 'feature3' },
         { stateKey: 'feature4' },
-        { stateKey: 'feature5' }
+        { stateKey: 'feature5' },
       ],
-      storageKeySerializer: (key: string) => key
+      storageKeySerializer: (key: string) => key,
     };
 
     const rehydratedState = rehydrateState(config);
@@ -113,7 +113,7 @@ describe('RehydrateState', () => {
       feature1,
       feature2,
       feature3,
-      feature5
+      feature5,
     });
   });
 });

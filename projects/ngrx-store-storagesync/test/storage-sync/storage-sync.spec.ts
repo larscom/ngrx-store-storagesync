@@ -25,7 +25,7 @@ describe('StorageSync', () => {
     const metaReducer = storageSync<any>({
       version: 2,
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
-      storage
+      storage,
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
@@ -46,14 +46,14 @@ describe('StorageSync', () => {
 
     const metaReducer = storageSync<any>({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
-      storage
+      storage,
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
 
     const expected = {
       feature1: { prop1: true, prop2: 100, prop3: { check: false } },
-      feature2: { prop1: true, prop2: 200, prop3: { check: true } }
+      feature2: { prop1: true, prop2: 200, prop3: { check: true } },
     };
 
     expect(finalState).toEqual(expected);
@@ -74,14 +74,14 @@ describe('StorageSync', () => {
 
     const metaReducer = storageSync<any>({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2', storageForFeature }],
-      storage
+      storage,
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
 
     const expected = {
       feature1: { prop1: true, prop2: 100, prop3: { check: false } },
-      feature2: { prop1: true, prop2: 200, prop3: { check: true } }
+      feature2: { prop1: true, prop2: 200, prop3: { check: true } },
     };
 
     expect(finalState).toEqual(expected);
@@ -101,7 +101,7 @@ describe('StorageSync', () => {
     const metaReducer = storageSync<any>({
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
       storage,
-      rehydrate: false
+      rehydrate: false,
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
@@ -121,7 +121,7 @@ describe('StorageSync', () => {
 
     const metaReducer = storageSync<any>({
       features: [],
-      storage
+      storage,
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
@@ -142,13 +142,13 @@ describe('StorageSync', () => {
     const metaReducer = storageSync<any>({
       features: [
         {
-          stateKey: 'feature1'
+          stateKey: 'feature1',
         },
         {
-          stateKey: 'feature2'
-        }
+          stateKey: 'feature2',
+        },
       ],
-      storage
+      storage,
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
@@ -174,12 +174,35 @@ describe('StorageSync', () => {
       storage,
       rehydrateStateMerger: (state, rehydratedState) => {
         return { ...state, ...rehydratedState };
-      }
+      },
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
 
     const expected = { feature1: { prop1: true }, feature2: { prop1: true } };
+
+    expect(finalState).toEqual(expected);
+  });
+
+  it('should merge the initialState and rehydrated state including initial values from the initial state', () => {
+    const feature1 = { prop1: true, prop2: true };
+
+    const initialState = { feature1 };
+
+    storage.setItem('feature1', JSON.stringify({ prop2: false }));
+
+    const reducer = (state = initialState, action: Action) => state;
+
+    const metaReducer = storageSync<any>({
+      features: [{ stateKey: 'feature1', excludeKeys: ['prop1'] }],
+      storage,
+    });
+
+    const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
+
+    const expected = {
+      feature1: { prop1: true, prop2: false },
+    };
 
     expect(finalState).toEqual(expected);
   });
