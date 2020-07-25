@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { v1 as Guid } from 'uuid';
+import uuid from 'uuid';
 
 import { ITodo } from '../models/todo';
 import * as todoActions from './todo.actions';
@@ -20,6 +20,6 @@ export interface ITodoState {
 
 export const reducer = createReducer(
   initialState,
-  on(todoActions.addTodo, (state, { todo }) => ({ ...state, todos: [...state.todos, { id: Guid(), ...todo }] })),
+  on(todoActions.addTodo, (state, { todo }) => ({ ...state, todos: [...state.todos, { id: uuid(), ...todo }] })),
   on(todoActions.completeTodo, (state, { id }) => ({ ...state, completed: [...state.completed, id] }))
 );
