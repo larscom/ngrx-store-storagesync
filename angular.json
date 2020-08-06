@@ -26,7 +26,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
             "scripts": [],
-            "allowedCommonJsDependencies": ["lodash", "uuid"]
+            "allowedCommonJsDependencies": ["uuid"]
           },
           "configurations": {
             "production": {

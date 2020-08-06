@@ -29,7 +29,7 @@
     "@ngrx/store": ">=8.0.0",
     "@angular/common": ">=7.0.0",
     "@angular/core": ">=7.0.0",
-    "lodash": ">=4.0.0"
+    "lodash-es": ">=4.0.0"
   },
   "publishConfig": {
     "access": "public"
