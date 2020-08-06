@@ -1,4 +1,5 @@
-import { cloneDeep, isPlainObject } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isPlainObject from 'lodash-es/isPlainObject';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
 

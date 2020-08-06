@@ -1,5 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
-import { cloneDeep, isArray, isPlainObject, merge } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isArray from 'lodash-es/isArray';
+import isPlainObject from 'lodash-es/isPlainObject';
+import merge from 'lodash-es/merge';
+
 import { deleteForm, patchForm, resetForm, setForm } from './form.actions';
 
 export interface IFormSyncState {
