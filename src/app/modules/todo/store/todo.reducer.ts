@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { ITodo } from '../models/todo';
 import * as todoActions from './todo.actions';
