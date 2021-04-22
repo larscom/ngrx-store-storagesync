@@ -1,6 +1,6 @@
-import { IStorageSyncOptions } from '../../src/lib/storage-sync/models/storage-sync-options';
-import { excludeKeysFromState, stateSync } from '../../src/lib/storage-sync/state-sync';
-import { MockStorage } from '../mock-storage';
+import { IStorageSyncOptions } from '../lib/storage-sync/models/storage-sync-options';
+import { excludeKeysFromState, stateSync } from '../lib/storage-sync/state-sync';
+import { MockStorage } from './mock/mock-storage';
 
 describe('StateSync', () => {
   let storage: Storage;
@@ -14,13 +14,13 @@ describe('StateSync', () => {
       prop1: false,
       prop2: 100,
       prop3: { check: false, random: 1337 },
-      prop4: { check: false, random: 1337, array: [1, 2, 3] }
+      prop4: { check: false, random: 1337, array: [1, 2, 3] },
     };
 
     const expected = {
       prop2: 100,
       prop3: { check: false },
-      prop4: { check: false }
+      prop4: { check: false },
     };
 
     expect(excludeKeysFromState(state, ['prop1', 'random', 'prop4.array'])).toEqual(expected);
@@ -43,30 +43,30 @@ describe('StateSync', () => {
       storageKeySerializer: (key: string) => key,
       features: [
         {
-          stateKey: 'feature1'
+          stateKey: 'feature1',
         },
         {
-          stateKey: 'feature2'
+          stateKey: 'feature2',
         },
         {
-          stateKey: 'feature3'
+          stateKey: 'feature3',
         },
         {
-          stateKey: 'feature4'
+          stateKey: 'feature4',
         },
         {
-          stateKey: 'feature5'
+          stateKey: 'feature5',
         },
         {
-          stateKey: 'feature6'
+          stateKey: 'feature6',
         },
         {
-          stateKey: 'feature7'
+          stateKey: 'feature7',
         },
         {
-          stateKey: 'feature8'
-        }
-      ]
+          stateKey: 'feature8',
+        },
+      ],
     };
 
     expect(storage.length).toEqual(0);
@@ -96,12 +96,12 @@ describe('StateSync', () => {
       storageKeySerializer: (key: string) => key,
       features: [
         {
-          stateKey: 'feature1'
+          stateKey: 'feature1',
         },
         {
-          stateKey: 'feature2'
-        }
-      ]
+          stateKey: 'feature2',
+        },
+      ],
     };
 
     expect(storage.length).toEqual(0);
@@ -129,15 +129,15 @@ describe('StateSync', () => {
           stateKey: 'feature1',
           shouldSync: (featureState: any, nextState: any) => {
             return featureState.checkMe && nextState.feature1.checkMe;
-          }
+          },
         },
         {
           stateKey: 'feature2',
           shouldSync: (featureState: any, nextState: any) => {
             return featureState.checkMe && nextState.feature2.checkMe;
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
 
     expect(storage.length).toEqual(0);
@@ -159,9 +159,9 @@ describe('StateSync', () => {
       prop3: {
         check: false,
         random: 1337,
-        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } }
+        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } },
       },
-      prop4: { check: false, random: 1337 }
+      prop4: { check: false, random: 1337 },
     };
 
     const feature2 = {
@@ -171,9 +171,9 @@ describe('StateSync', () => {
       prop3: {
         check: false,
         random: 1337,
-        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } }
+        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } },
       },
-      prop4: { check: false, random: 1337 }
+      prop4: { check: false, random: 1337 },
     };
 
     const state = { feature1, feature2 };
@@ -183,8 +183,8 @@ describe('StateSync', () => {
       storageKeySerializer: (key: string) => key,
       features: [
         { stateKey: 'feature1', excludeKeys: ['prop5.check', 'prop6.check', 'prop1'] },
-        { stateKey: 'feature2', excludeKeys: ['prop5.check', 'prop6.check', 'prop1'] }
-      ]
+        { stateKey: 'feature2', excludeKeys: ['prop5.check', 'prop6.check', 'prop1'] },
+      ],
     };
 
     expect(storage.length).toEqual(0);
@@ -200,9 +200,9 @@ describe('StateSync', () => {
       prop3: {
         check: false,
         random: 1337,
-        prop5: { value: 100, prop6: { value: 200 } }
+        prop5: { value: 100, prop6: { value: 200 } },
       },
-      prop4: { check: false, random: 1337 }
+      prop4: { check: false, random: 1337 },
     });
 
     expect(JSON.parse(storage.getItem('feature2'))).toEqual({
@@ -211,9 +211,9 @@ describe('StateSync', () => {
       prop3: {
         check: false,
         random: 1337,
-        prop5: { value: 100, prop6: { value: 200 } }
+        prop5: { value: 100, prop6: { value: 200 } },
       },
-      prop4: { check: false, random: 1337 }
+      prop4: { check: false, random: 1337 },
     });
   });
 
@@ -227,8 +227,8 @@ describe('StateSync', () => {
       storageKeySerializer: (key: string) => key,
       features: [
         { stateKey: 'feature1', excludeKeys: ['prop1', 'check', 'array'] },
-        { stateKey: 'feature2', excludeKeys: ['check'] }
-      ]
+        { stateKey: 'feature2', excludeKeys: ['check'] },
+      ],
     };
 
     expect(storage.length).toEqual(0);
@@ -251,7 +251,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }]
+      features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
     };
 
     expect(storage.length).toEqual(0);
@@ -274,7 +274,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1' }]
+      features: [{ stateKey: 'feature1' }],
     };
 
     expect(storage.length).toEqual(0);
@@ -293,7 +293,7 @@ describe('StateSync', () => {
       prop1: false,
       array: ['check'],
       prop2: 100,
-      prop3: { check: false, random: 1337 }
+      prop3: { check: false, random: 1337 },
     };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
 
@@ -302,7 +302,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1', excludeKeys: ['prop1', 'check'] }]
+      features: [{ stateKey: 'feature1', excludeKeys: ['prop1', 'check'] }],
     };
 
     expect(storage.length).toEqual(0);
@@ -315,7 +315,7 @@ describe('StateSync', () => {
     const expected = {
       array: ['check'],
       prop2: 100,
-      prop3: { random: 1337 }
+      prop3: { random: 1337 },
     };
 
     expect(JSON.parse(storage.getItem('feature1'))).toEqual(expected);
@@ -335,7 +335,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1', storageKeySerializerForFeature }, { stateKey: 'feature2' }]
+      features: [{ stateKey: 'feature1', storageKeySerializerForFeature }, { stateKey: 'feature2' }],
     };
 
     expect(storage.length).toEqual(0);
@@ -364,7 +364,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1', storageKeySerializerForFeature, storageForFeature }, { stateKey: 'feature2' }]
+      features: [{ stateKey: 'feature1', storageKeySerializerForFeature, storageForFeature }, { stateKey: 'feature2' }],
     };
 
     expect(storage.length).toEqual(0);

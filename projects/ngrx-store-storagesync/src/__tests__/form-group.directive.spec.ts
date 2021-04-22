@@ -1,11 +1,11 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { FormGroupDirective } from 'projects/ngrx-store-storagesync/src/lib/form-sync/directives/form-group.directive';
-import { FORM_SYNC_STORE_KEY } from 'projects/ngrx-store-storagesync/src/lib/form-sync/form-sync.constants';
-import { IFormSyncConfig } from 'projects/ngrx-store-storagesync/src/lib/form-sync/models/form-sync-config';
-import * as formActions from 'projects/ngrx-store-storagesync/src/lib/form-sync/store/form.actions';
 import { defer, Observable, of } from 'rxjs';
-import { MockStore } from '../mock-store';
+import { FormGroupDirective } from '../lib/form-sync/directives/form-group.directive';
+import { FORM_SYNC_STORE_KEY } from '../lib/form-sync/form-sync.constants';
+import { IFormSyncConfig } from '../lib/form-sync/models/form-sync-config';
+import * as formActions from '../lib/form-sync/store/form.actions';
+import { MockStore } from './mock/mock-store';
 
 describe('FormGroupDirective', () => {
   let store: MockStore<any>;
