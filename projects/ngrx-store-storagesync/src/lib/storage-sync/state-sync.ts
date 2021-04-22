@@ -1,68 +1,70 @@
 import { cloneDeep, isPlainObject } from 'lodash-es';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 
-
 /**
  * @internal Blacklisting
- * @returns the filtered state
+ * @returns the filtered featureState
  */
-export const excludeKeysFromState = <T>(state: Partial<T>, excludeKeys?: string[]): Partial<T> => {
+export const excludeKeysFromState = (featureState: any, excludeKeys?: string[]): any => {
   if (!excludeKeys) {
-    return state;
+    return featureState;
   }
 
-  const keyPairs = excludeKeys.map(key => ({
-    rootKey: key.split('.')[0],
-    nestedKey: key.split('.')[1]
+  const keyPairs = excludeKeys.map((key) => ({
+    leftKey: key.split('.')[0],
+    rightKey: key.split('.')[1],
   }));
 
-  for (const key in state) {
-    if (state.hasOwnProperty(key)) {
-      const keyPair = keyPairs.find(pair => pair.rootKey === key);
-      const rootKey = keyPair ? keyPair.rootKey : null;
-      const nestedKey = keyPair ? keyPair.nestedKey : null;
+  for (const key in featureState) {
+    if (featureState.hasOwnProperty(key)) {
+      const keyPair = keyPairs.find((pair) => pair.leftKey === key);
 
-      switch (typeof state[key]) {
+      const leftKey = keyPair?.leftKey;
+      const rightKey = keyPair?.rightKey;
+
+      switch (typeof featureState[key]) {
         case 'object': {
-          if (rootKey && !state[key]) {
-            delete state[key];
-          } else if (rootKey && nestedKey) {
-            excludeKeysFromState<T>(state[key], [...excludeKeys, nestedKey]);
-          } else if (rootKey) {
-            delete state[key];
+          if (leftKey && !featureState[key]) {
+            delete featureState[key];
+          } else if (leftKey && rightKey) {
+            excludeKeysFromState(featureState[key], [...excludeKeys, rightKey]);
+          } else if (leftKey) {
+            delete featureState[key];
           } else {
-            excludeKeysFromState<T>(state[key], excludeKeys);
+            excludeKeysFromState(featureState[key], excludeKeys);
           }
           break;
         }
         default: {
-          if (rootKey) {
-            delete state[key];
+          if (leftKey) {
+            delete featureState[key];
           }
         }
       }
     }
   }
-  return state;
+
+  return featureState;
 };
 
 /**
- * @internal Remove empty objects from state
- * @returns the cleaned state
+ * @internal Remove empty objects from featureState
+ * @returns the cleaned featureState
  */
-export const cleanState = <T>(state: Partial<T>): Partial<T> => {
-  for (const key in state) {
-    if (!isPlainObject(state[key])) {
+export const cleanState = (featureState: any): any => {
+  for (const key in featureState) {
+    if (!isPlainObject(featureState[key])) {
       continue;
     }
 
-    cleanState<T>(state[key]);
+    cleanState(featureState[key]);
 
-    if (!Object.keys(state[key]).length) {
-      delete state[key];
+    if (!Object.keys(featureState[key]).length) {
+      delete featureState[key];
     }
   }
-  return state;
+
+  return featureState;
 };
 
 /**
@@ -92,10 +94,10 @@ export const stateSync = <T>(
     .filter(({ stateKey }) => state[stateKey] !== undefined)
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
-      const featureState = cloneDeep<Partial<T>>(state[stateKey]);
-      const filteredState = cleanState<T>(excludeKeysFromState<T>(featureState, excludeKeys));
+      const featureState = cloneDeep(state[stateKey]);
+      const cleanedState = cleanState(excludeKeysFromState(featureState, excludeKeys));
 
-      if (isPlainObject(filteredState) && !Object.keys(filteredState).length) {
+      if (isPlainObject(cleanedState) && !Object.keys(cleanedState).length) {
         return;
       }
 
@@ -103,7 +105,7 @@ export const stateSync = <T>(
         ? storageKeySerializerForFeature(stateKey)
         : storageKeySerializer(stateKey);
 
-      const value = serialize ? serialize(filteredState) : JSON.stringify(filteredState);
+      const value = serialize ? serialize(cleanedState) : JSON.stringify(cleanedState);
 
       try {
         if (storageForFeature) {

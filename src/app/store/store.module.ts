@@ -8,21 +8,25 @@ import { metaReducers } from './build-specifics/meta-reducers';
 import { IRootState } from './models/root-state';
 
 export const ROOT_REDUCER = new InjectionToken<ActionReducerMap<IRootState>>('ROOT_REDUCER');
+const strictStore = true;
 
 @NgModule({
   imports: [
     NgRxStoreModule.forRoot(ROOT_REDUCER, {
       metaReducers,
       runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true,
-        strictStateSerializability: true
-      }
+        strictStateSerializability: strictStore,
+        strictActionSerializability: strictStore,
+        strictStateImmutability: strictStore,
+        strictActionImmutability: strictStore,
+        strictActionWithinNgZone: strictStore,
+        strictActionTypeUniqueness: strictStore,
+      },
     }),
     StoreDevtoolsModule.instrument({ maxAge: 30 }),
-    FormSyncModule.forRoot()
+    FormSyncModule.forRoot(),
   ],
   exports: [NgRxStoreModule],
-  providers: [{ provide: ROOT_REDUCER, useValue: { app: fromApp.reducer, settings: fromSettings.reducer } }]
+  providers: [{ provide: ROOT_REDUCER, useValue: { app: fromApp.reducer, settings: fromSettings.reducer } }],
 })
 export class StoreModule {}
