@@ -298,8 +298,8 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     features: [
       {
         stateKey: 'feature1',
-        shouldSync: (featureState: Partial<IState>, nextState: IState) => {
-          return featureState.rememberMe || nextState.checkMe;
+        shouldSync: (featureState: unknown, state: IState) => {
+          return featureState.rememberMe || state.checkMe;
         }
       }
     ],
@@ -318,7 +318,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     features: [
       {
         stateKey: 'feature1',
-        serialize: (featureState: Partial<IState>) => JSON.stringify(featureState)
+        serialize: (featureState: unknown) => JSON.stringify(featureState)
       }
     ],
     storage: window.localStorage
@@ -392,7 +392,7 @@ import { Store, select } from '@ngrx/store';
   styleUrls: ['my-component.component.scss']
 })
 export class MyComponent {
-  constructor(private store: Store<any>) {}
+  constructor(private store: Store<IState>) {}
 
   myFormValue$ = this.store.pipe(select(getFormSyncValue, { id: 'myFormGroupId' }));
 }
@@ -411,7 +411,7 @@ import { Store, select } from '@ngrx/store';
   styleUrls: ['my-component.component.scss']
 })
 export class MyComponent {
-  constructor(private store: Store<any>) {}
+  constructor(private store: Store<IState>) {}
 
   /* patch form value, lastName can be omitted */
   patchValue(): void {
