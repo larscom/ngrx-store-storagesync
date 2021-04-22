@@ -22,11 +22,11 @@ export const storageSync = <T>(options: IStorageSyncOptions<T>) => (
     rehydrate: true,
     storageKeySerializer: (key: string) => key,
     rehydrateStateMerger: (nextState, rehydratedState) => merge({}, nextState, rehydratedState),
-    ...options
+    ...options,
   };
 
   const { rehydrate, rehydrateStateMerger } = config;
-  const revivedState = rehydrate ? rehydrateState<T>(config) : null;
+  const revivedState = rehydrate ? rehydrateState(config) : null;
 
   return (state: T, action: Action): T => {
     const nextState = action.type === INIT_ACTION ? reducer(state, action) : { ...state };

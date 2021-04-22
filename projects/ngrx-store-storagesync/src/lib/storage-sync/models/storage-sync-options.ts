@@ -4,7 +4,7 @@ export interface IStorageSyncOptions<T> {
   /**
    * By default, states are not synced, provide the feature states you want to sync.
    */
-  features: Array<IFeatureOptions<T>>;
+  features: IFeatureOptions<T>[];
   /**
    * Provide the storage type to sync the state to, it can be any storage which implements the 'Storage' interface.
    */
