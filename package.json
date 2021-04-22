@@ -29,10 +29,10 @@
     "@angular/platform-browser-dynamic": "^10.0.5",
     "@angular/platform-server": "^10.0.5",
     "@angular/router": "^10.0.5",
-    "@ngrx/store": "^8.6.0",
-    "@ngrx/store-devtools": "^8.6.0",
-    "@nguniversal/express-engine": "^10.0.1",
-    "express": "^4.15.2",
+    "@ngrx/store": "^11.1.1",
+    "@ngrx/store-devtools": "^11.1.1",
+    "@nguniversal/express-engine": "^11.2.1",
+    "express": "^4.17.1",
     "lodash-es": "^4.14.149",
     "rxjs": "^6.5.5",
     "tslib": "^2.0.0",
@@ -41,7 +41,7 @@
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.1000.4",
+    "@angular-devkit/build-angular": "^0.1102.10",
     "@angular-devkit/build-ng-packagr": "^0.1000.4",
     "@angular/cli": "^10.0.4",
     "@angular/compiler-cli": "^10.0.5",
