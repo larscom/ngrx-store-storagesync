@@ -1,4 +1,4 @@
-import { by, element, ElementFinder, promise } from 'protractor';
+import { by, element, ElementFinder } from 'protractor';
 import { Page } from '../page.po';
 
 export class SettingsPage extends Page {

@@ -13,6 +13,7 @@
     <div class="form-sync__fields">
       <mat-form-field>
         <input id="firstName"
+          [attr.value]="formGroup.get('firstName').value"
           matInput
           [formControl]="formGroup.get('firstName')"
           placeholder="First name">
@@ -20,6 +21,7 @@
 
       <mat-form-field>
         <input id="lastName"
+          [attr.value]="formGroup.get('lastName').value"
           matInput
           [formControl]="formGroup.get('lastName')"
           placeholder="Last name">

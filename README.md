@@ -5,7 +5,6 @@
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 [![@larscom/ngrx-store-storagesync](https://github.com/larscom/ngrx-store-storagesync/workflows/@larscom/ngrx-store-storagesync/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync)
 
-
 **Highly configurable** state syncing between the `@ngrx/store` and `localstorage` / `sessionstorage`
 
 ## Supports
@@ -14,7 +13,6 @@
 - &#10003; `Storage` location per feature state (e.g: feature1 to `sessionStorage`, feature2 to `localStorage`)
 - &#10003; Server Side Rendering (SSR with `@nguniversal/express-engine`)
 - &#10003; Reactive forms syncing with minimal configuration
-
 
 ## Demo (with SSR)
 
@@ -27,7 +25,7 @@ You can play arround at https://ngrx-store-storagesync.firebaseapp.com
 ## Installation
 
 ```bash
-npm i --save @larscom/ngrx-store-storagesync 
+npm i --save @larscom/ngrx-store-storagesync
 ```
 
 ## Usage
@@ -46,7 +44,7 @@ import * as fromFeature1 from './feature/reducer';
 
 export const reducers: ActionReducerMap<IState> = {
   router: routerReducer,
-  feature1: fromFeature1.reducer
+  feature1: fromFeature1.reducer,
 };
 
 export function storageSyncReducer(reducer: ActionReducer<IState>) {
@@ -61,10 +59,10 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
       { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] },
 
       // if the form sync module is imported and you want to save to sessionStorage
-      { stateKey: FORM_SYNC_STORE_KEY, storageForFeature: window.sessionStorage }
+      { stateKey: FORM_SYNC_STORE_KEY, storageForFeature: window.sessionStorage },
     ],
     // defaults to localStorage
-    storage: window.localStorage
+    storage: window.localStorage,
   });
 
   return metaReducer(reducer);
@@ -75,8 +73,8 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     BrowserModule,
     StoreModule.forRoot(reducers, { metaReducers: [storageSyncReducer] }),
     // optionally import 'FormSyncModule.forRoot()' once to enable reactive forms sync
-    FormSyncModule.forRoot()
-  ]
+    FormSyncModule.forRoot(),
+  ],
 })
 export class AppModule {}
 ```
@@ -86,7 +84,7 @@ export class AppModule {}
 ```ts
 export interface IStorageSyncOptions<T> {
   /**
-   * By default, states are not synced, provide the feature states you want to sync.
+   * By default, feature states are not synced, provide the feature states you want to sync.
    */
   features: IFeatureOptions<T>[];
   /**
@@ -193,7 +191,7 @@ import { IFormSyncConfig, FORM_SYNC_CONFIG } from '@larscom/ngrx-store-storagesy
 
 const formSyncConfig: IFormSyncConfig = {
   /* Only sync to the store when submitting the form. */
-  syncOnSubmit: true
+  syncOnSubmit: true,
 };
 
 @Component({
@@ -203,9 +201,9 @@ const formSyncConfig: IFormSyncConfig = {
   providers: [
     {
       provide: FORM_SYNC_CONFIG,
-      useValue: formSyncConfig
-    }
-  ]
+      useValue: formSyncConfig,
+    },
+  ],
 })
 export class MyComponent {}
 ```
@@ -245,9 +243,9 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [
       { stateKey: 'feature1', storageForFeature: window.sessionStorage }, // to sessionStorage
-      { stateKey: 'feature2' } // to localStorage
+      { stateKey: 'feature2' }, // to localStorage
     ],
-    storage: window.localStorage
+    storage: window.localStorage,
   })(reducer);
 }
 ```
@@ -264,15 +262,15 @@ const state: IState = {
     auth: {
       loading: false, // excluded
       loggedIn: false,
-      message: 'hello' // excluded
-    }
-  }
+      message: 'hello', // excluded
+    },
+  },
 };
 
 export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [{ stateKey: 'feature1', excludeKeys: ['auth.loading', 'message'] }],
-    storage: window.localStorage
+    storage: window.localStorage,
   })(reducer);
 }
 ```
@@ -285,12 +283,12 @@ Sync state to storage based on a condition.
 const state: IState = {
   checkMe: true, // <---
   feature1: {
-    rememberMe: false, // <---
+    rememberMe: false, // <--- 
     auth: {
       loading: false,
-      message: 'hello'
-    }
-  }
+      message: 'hello',
+    },
+  },
 };
 
 export function storageSyncReducer(reducer: ActionReducer<IState>) {
@@ -298,12 +296,12 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     features: [
       {
         stateKey: 'feature1',
-        shouldSync: (featureState: unknown, state: IState) => {
-          return featureState.rememberMe || state.checkMe;
-        }
-      }
+        shouldSync: (feature1: unknown, state: IState) => {
+          return feature1.rememberMe || state.checkMe;
+        },
+      },
     ],
-    storage: window.localStorage
+    storage: window.localStorage,
   })(reducer);
 }
 ```
@@ -318,10 +316,10 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     features: [
       {
         stateKey: 'feature1',
-        serialize: (featureState: unknown) => JSON.stringify(featureState)
-      }
+        serialize: (feature1: unknown) => JSON.stringify(feature1),
+      },
     ],
-    storage: window.localStorage
+    storage: window.localStorage,
   })(reducer);
 }
 ```
@@ -336,10 +334,10 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     features: [
       {
         stateKey: 'feature1',
-        deserialize: (featureState: string) => JSON.parse(featureState)
-      }
+        deserialize: (feature1: string) => JSON.parse(feature1),
+      },
     ],
-    storage: window.localStorage
+    storage: window.localStorage,
   })(reducer);
 }
 ```
@@ -353,7 +351,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [{ stateKey: 'feature1' }],
     storageKeySerializer: (key: string) => `abc_${key}`,
-    storage: window.localStorage
+    storage: window.localStorage,
   })(reducer);
 }
 ```
@@ -369,7 +367,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     rehydrateStateMerger: (state: IState, rehydratedState: IState) => {
       return { ...state, ...rehydratedState };
     },
-    storage: window.localStorage
+    storage: window.localStorage,
   })(reducer);
 }
 ```
@@ -389,7 +387,7 @@ import { Store, select } from '@ngrx/store';
       {{ myFormValue$ | async | json }}
     </div>
   `,
-  styleUrls: ['my-component.component.scss']
+  styleUrls: ['my-component.component.scss'],
 })
 export class MyComponent {
   constructor(private store: Store<IState>) {}
