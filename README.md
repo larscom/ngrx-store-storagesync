@@ -62,7 +62,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
       { stateKey: FORM_SYNC_STORE_KEY, storageForFeature: window.sessionStorage },
     ],
     // defaults to localStorage
-    storage: window.localStorage,
+    storage: window.localStorage
   });
 
   return metaReducer(reducer);
@@ -73,7 +73,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     BrowserModule,
     StoreModule.forRoot(reducers, { metaReducers: [storageSyncReducer] }),
     // optionally import 'FormSyncModule.forRoot()' once to enable reactive forms sync
-    FormSyncModule.forRoot(),
+    FormSyncModule.forRoot()
   ],
 })
 export class AppModule {}
@@ -201,7 +201,7 @@ const formSyncConfig: IFormSyncConfig = {
   providers: [
     {
       provide: FORM_SYNC_CONFIG,
-      useValue: formSyncConfig,
+      useValue: formSyncConfig
     },
   ],
 })
@@ -245,7 +245,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
       { stateKey: 'feature1', storageForFeature: window.sessionStorage }, // to sessionStorage
       { stateKey: 'feature2' }, // to localStorage
     ],
-    storage: window.localStorage,
+    storage: window.localStorage
   })(reducer);
 }
 ```
@@ -270,7 +270,7 @@ const state: IState = {
 export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [{ stateKey: 'feature1', excludeKeys: ['auth.loading', 'message'] }],
-    storage: window.localStorage,
+    storage: window.localStorage
   })(reducer);
 }
 ```
@@ -286,7 +286,7 @@ const state: IState = {
     rememberMe: false, // <--- 
     auth: {
       loading: false,
-      message: 'hello',
+      message: 'hello'
     },
   },
 };
@@ -301,7 +301,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
         },
       },
     ],
-    storage: window.localStorage,
+    storage: window.localStorage
   })(reducer);
 }
 ```
@@ -319,7 +319,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
         serialize: (feature1: unknown) => JSON.stringify(feature1),
       },
     ],
-    storage: window.localStorage,
+    storage: window.localStorage
   })(reducer);
 }
 ```
@@ -337,7 +337,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
         deserialize: (feature1: string) => JSON.parse(feature1),
       },
     ],
-    storage: window.localStorage,
+    storage: window.localStorage
   })(reducer);
 }
 ```
@@ -351,7 +351,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [{ stateKey: 'feature1' }],
     storageKeySerializer: (key: string) => `abc_${key}`,
-    storage: window.localStorage,
+    storage: window.localStorage
   })(reducer);
 }
 ```
@@ -367,7 +367,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     rehydrateStateMerger: (state: IState, rehydratedState: IState) => {
       return { ...state, ...rehydratedState };
     },
-    storage: window.localStorage,
+    storage: window.localStorage
   })(reducer);
 }
 ```
@@ -414,7 +414,7 @@ export class MyComponent {
   /* patch form value, lastName can be omitted */
   patchValue(): void {
     const value = {
-      firstName: 'Jan',
+      firstName: 'Jan'
       //lastName: 'Jansen'
     };
     this.store.dispatch(patchForm({ id: 'myFormGroupId', value }));

@@ -22,7 +22,7 @@ describe('Forms Page', () => {
     expect(logs).not.toContain(jasmine.objectContaining(logEntry));
   });
 
-  fit('should remember form input values after page refresh', async () => {
+  fit('should remember form input values after page refresh', () => {
     expect(page.getSyncSwitch().getAttribute('class')).toContain('mat-checked');
 
     page.getFirstName().sendKeys('jan');
