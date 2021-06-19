@@ -1,4 +1,4 @@
-name: 'Default workflow'
+name: 'Master'
 on:
   push:
     branches:

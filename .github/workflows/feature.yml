@@ -1,4 +1,4 @@
-name: 'Feature workflow'
+name: 'Feature'
 on:
   pull_request:
     branches:
