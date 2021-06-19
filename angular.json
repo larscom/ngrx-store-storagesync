@@ -77,18 +77,6 @@
             "browserTarget": "ngrx-store-storagesync-app:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
-            "scripts": []
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -181,14 +169,6 @@
           "options": {
             "tsConfig": "projects/ngrx-store-storagesync/tsconfig.lib.json",
             "project": "projects/ngrx-store-storagesync/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngrx-store-storagesync/test/test.ts",
-            "tsConfig": "projects/ngrx-store-storagesync/tsconfig.spec.json",
-            "karmaConfig": "projects/ngrx-store-storagesync/karma.conf.js"
           }
         },
         "lint": {
