@@ -1,4 +1,4 @@
-name: '@larscom/ngrx-store-storagesync'
+name: 'Feature workflow'
 on:
   pull_request:
     branches:
@@ -15,10 +15,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 10 environment
+      - name: setup node 14 environment
         uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
       - name: install
         run: npm ci --ignore-scripts
       - name: start unit test
@@ -29,10 +29,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 10 environment
+      - name: setup node 14 environment
         uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
       - name: install
         run: npm ci --ignore-scripts
       - name: build lib & app

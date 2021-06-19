@@ -1,18 +1,18 @@
-@import '~@angular/material/theming';
-@include mat-core();
+@use '~@angular/material' as mat;
+@include mat.core();
 .dark-theme {
-  $custom-theme-primary: mat-palette($mat-amber);
-  $custom-theme-accent: mat-palette($mat-grey);
-  $custom-theme-warn: mat-palette($mat-red);
-  $custom-theme: mat-dark-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
-  @include angular-material-theme($custom-theme);
+  $custom-theme-primary: mat.define-palette(mat.$amber-palette);
+  $custom-theme-accent: mat.define-palette(mat.$grey-palette);
+  $custom-theme-warn: mat.define-palette(mat.$red-palette);
+  $custom-theme: mat.define-dark-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
+  @include mat.all-component-themes($custom-theme);
 }
 
-$custom-theme-primary: mat-palette($mat-amber);
-$custom-theme-accent: mat-palette($mat-grey);
-$custom-theme-warn: mat-palette($mat-red);
-$custom-theme: mat-light-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
-@include angular-material-theme($custom-theme);
+$custom-theme-primary: mat.define-palette(mat.$amber-palette);
+$custom-theme-accent: mat.define-palette(mat.$grey-palette);
+$custom-theme-warn: mat.define-palette(mat.$red-palette);
+$custom-theme: mat.define-light-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
+@include mat.all-component-themes($custom-theme);
 
 body {
   margin: 0;

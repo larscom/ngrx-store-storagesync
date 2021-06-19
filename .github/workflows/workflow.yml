@@ -1,4 +1,4 @@
-name: '@larscom/ngrx-store-storagesync'
+name: 'Default workflow'
 on:
   push:
     branches:
@@ -11,10 +11,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 10 environment
+      - name: setup node 14 environment
         uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
       - name: install
         run: npm ci --ignore-scripts
       - name: build lib & app
@@ -33,10 +33,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 10 environment
+      - name: setup node 14 environment
         uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
       - name: download artifact
         uses: actions/download-artifact@v2
         with:
@@ -55,10 +55,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 10 environment
+      - name: setup node 14 environment
         uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
       - name: install
         run: npm ci --ignore-scripts
       - name: start unit test
@@ -73,10 +73,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 12 environment
+      - name: setup node 14 environment
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
           registry-url: https://registry.npmjs.org/
       - name: download artifact
         uses: actions/download-artifact@v2
