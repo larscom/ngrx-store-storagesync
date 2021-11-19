@@ -1,5 +1,4 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { FormSyncModule } from '@larscom/ngrx-store-storagesync';
 import { ActionReducerMap, StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import * as fromSettings from '../modules/settings/store/settings.reducer';
@@ -24,7 +23,6 @@ const strictStore = true;
       },
     }),
     StoreDevtoolsModule.instrument({ maxAge: 30 }),
-    FormSyncModule.forRoot(),
   ],
   exports: [NgRxStoreModule],
   providers: [{ provide: ROOT_REDUCER, useValue: { app: fromApp.reducer, settings: fromSettings.reducer } }],

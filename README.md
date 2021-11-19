@@ -9,10 +9,10 @@
 
 ## Supports
 
-- &#10003; Excluding **deeply** nested keys/objects
+- &#10003; Exclude **deeply** nested properties
 - &#10003; `Storage` location per feature state (e.g: feature1 to `sessionStorage`, feature2 to `localStorage`)
 - &#10003; Server Side Rendering (SSR with `@nguniversal/express-engine`)
-- &#10003; Reactive forms syncing with minimal configuration
+- &#10003; Exported as native Ivy library
 
 ## Demo (with SSR)
 
@@ -30,9 +30,8 @@ npm i --save @larscom/ngrx-store-storagesync
 
 ## Usage
 
-**1. Include `storageSyncReducer` in your meta-reducers array in `StoreModule.forRoot`**
+ Include `storageSyncReducer` in your meta-reducers array in `StoreModule.forRoot`
 
-**2. (optional) import `FormSyncModule.forRoot` once, to enable reactive forms sync**
 
 ```ts
 import { NgModule } from '@angular/core';
@@ -56,10 +55,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
       { stateKey: 'router', storageForFeature: window.sessionStorage },
 
       // exclude key 'success' inside 'auth' and all keys 'loading' inside 'feature1'
-      { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] },
-
-      // if the form sync module is imported and you want to save to sessionStorage
-      { stateKey: FORM_SYNC_STORE_KEY, storageForFeature: window.sessionStorage },
+      { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
     storage: window.localStorage
@@ -71,9 +67,9 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 @NgModule({
   imports: [
     BrowserModule,
-    StoreModule.forRoot(reducers, { metaReducers: [storageSyncReducer] }),
-    // optionally import 'FormSyncModule.forRoot()' once to enable reactive forms sync
-    FormSyncModule.forRoot()
+    StoreModule.forRoot(reducers,
+     { metaReducers: [storageSyncReducer] }
+    )
   ],
 })
 export class AppModule {}
@@ -167,71 +163,6 @@ export interface IFeatureOptions<T> {
 }
 ```
 
-## Using Reactive Forms Sync
-
-Add `formGroupId` to the element where `formGroup` is present. Without `formGroupId`, the form doesn't get synced.
-
-```html
-<form [formGroup]="myFormGroup" [formGroupId]="'myFormGroupId'">
-  <div>
-    <input formControlName="firstName" />
-    <input formControlName="lastName" />
-  </div>
-  <button type="submit">Submit</button>
-</form>
-```
-
-## Configuration
-
-You can override the default configuration on component level
-
-```ts
-import { Component } from '@angular/core';
-import { IFormSyncConfig, FORM_SYNC_CONFIG } from '@larscom/ngrx-store-storagesync';
-
-const formSyncConfig: IFormSyncConfig = {
-  /* Only sync to the store when submitting the form. */
-  syncOnSubmit: true,
-};
-
-@Component({
-  selector: 'app-my-component',
-  templateUrl: 'my-component.component.html',
-  styleUrls: ['my-component.component.scss'],
-  providers: [
-    {
-      provide: FORM_SYNC_CONFIG,
-      useValue: formSyncConfig
-    },
-  ],
-})
-export class MyComponent {}
-```
-
-```ts
-export interface IFormSyncConfig {
-  /**
-   * Only sync to the store when submitting the form.
-   */
-  syncOnSubmit?: boolean;
-  /**
-   * Only sync to the store when the form status is valid.
-   */
-  syncValidOnly?: boolean;
-  /**
-   * Sync the raw form value to the store (this will include disabled form controls)
-   */
-  syncRawValue?: boolean;
-}
-```
-
-### FormGroup Directive API
-
-| Attribute       | Type    | Default | Required | Description                                                  |
-| --------------- | ------- | ------- | -------- | ------------------------------------------------------------ |
-| `formGroupId`   | string  | null    | yes      | The unique ID for the form group.                            |
-| `formGroupSync` | boolean | true    | no       | Whether the form group value should sync to the @ngrx/store. |
-
 ## Examples
 
 ### Sync to different storage locations
@@ -243,9 +174,9 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
   return storageSync<IState>({
     features: [
       { stateKey: 'feature1', storageForFeature: window.sessionStorage }, // to sessionStorage
-      { stateKey: 'feature2' }, // to localStorage
+      { stateKey: 'feature2' }, // to localStorage because of 'default' which is set below.
     ],
-    storage: window.localStorage
+    storage: window.localStorage // default
   })(reducer);
 }
 ```
@@ -369,75 +300,6 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     },
     storage: window.localStorage
   })(reducer);
-}
-```
-
-### Get the form value anywhere in your app
-
-```ts
-import { Component } from '@angular/core';
-import { getFormSyncValue } from '@larscom/ngrx-store-storagesync';
-import { Store, select } from '@ngrx/store';
-
-@Component({
-  selector: 'app-my-component',
-  template: `
-    <div>
-      <h1>My Form Value</h1>
-      {{ myFormValue$ | async | json }}
-    </div>
-  `,
-  styleUrls: ['my-component.component.scss'],
-})
-export class MyComponent {
-  constructor(private store: Store<IState>) {}
-
-  myFormValue$ = this.store.pipe(select(getFormSyncValue, { id: 'myFormGroupId' }));
-}
-```
-
-### Update the form via the action dispatcher
-
-```ts
-import { Component } from '@angular/core';
-import { setForm, patchForm, resetForm, deleteForm } from '@larscom/ngrx-store-storagesync';
-import { Store, select } from '@ngrx/store';
-
-@Component({
-  selector: 'app-my-component',
-  templateUrl: 'my-component.component.html'
-  styleUrls: ['my-component.component.scss']
-})
-export class MyComponent {
-  constructor(private store: Store<IState>) {}
-
-  /* patch form value, lastName can be omitted */
-  patchValue(): void {
-    const value = {
-      firstName: 'Jan'
-      //lastName: 'Jansen'
-    };
-    this.store.dispatch(patchForm({ id: 'myFormGroupId', value }));
-  }
-
-  /* sets the initial form value */
-  setValue(): void {
-    const value = {
-      firstName: 'Jan',
-      lastName: 'Jansen'
-    };
-    this.store.dispatch(setForm({ id: 'myFormGroupId', value }));
-  }
-
-  /* reset form value (sets every property to null)  */
-  resetValue(): void {
-    this.store.dispatch(resetForm({ id: 'myFormGroupId' }));
-  }
-
-    /* remove form value from store  */
-  deleteValue(): void {
-    this.store.dispatch(deleteForm({ id: 'myFormGroupId' }));
-  }
 }
 ```
 

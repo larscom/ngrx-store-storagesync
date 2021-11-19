@@ -1,7 +1,7 @@
 module.exports = {
   reporters: ['default'],
   preset: 'jest-preset-angular',
-  roots: ['<rootDir>/projects/ngrx-store-storagesync/src/'],
+  roots: ['<rootDir>/projects/ngrx-store-storagesync'],
   testMatch: ['**/+(*.)+(spec).+(ts)'],
   transform: {
     '^.+\\.js$': 'babel-jest',

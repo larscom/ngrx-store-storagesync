@@ -77,13 +77,6 @@
             "browserTarget": "ngrx-store-storagesync-app:build"
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json", "e2e/tsconfig.json"],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
@@ -169,16 +162,6 @@
           "options": {
             "tsConfig": "projects/ngrx-store-storagesync/tsconfig.lib.json",
             "project": "projects/ngrx-store-storagesync/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngrx-store-storagesync/tsconfig.lib.json",
-              "projects/ngrx-store-storagesync/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
