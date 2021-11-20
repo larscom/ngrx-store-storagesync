@@ -39,7 +39,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store';
 import { routerReducer } from '@ngrx/router-store';
-import { FormSyncModule, FORM_SYNC_STORE_KEY, storageSync } from '@larscom/ngrx-store-storagesync';
+import { storageSync } from '@larscom/ngrx-store-storagesync';
 import * as fromFeature1 from './feature/reducer';
 
 export const reducers: ActionReducerMap<IRootState> = {
