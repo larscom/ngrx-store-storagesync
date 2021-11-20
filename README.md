@@ -11,10 +11,9 @@
 
 - &#10003; Exclude **deeply** nested properties
 - &#10003; `Storage` location per feature state (e.g: feature1 to `sessionStorage`, feature2 to `localStorage`)
-- &#10003; Server Side Rendering (SSR with `@nguniversal/express-engine`)
 - &#10003; Exported as native Ivy library
 
-## Demo (with SSR)
+## Demo
 
 You can play arround at https://ngrx-store-storagesync.firebaseapp.com
 
@@ -23,6 +22,7 @@ You can play arround at https://ngrx-store-storagesync.firebaseapp.com
 `@larscom/ngrx-store-storagesync` depends on [@ngrx/store 8+](https://github.com/ngrx/store) and [Angular 7+](https://github.com/angular/angular).
 
 ## Installation
+
 
 ```bash
 npm i --save @larscom/ngrx-store-storagesync
@@ -227,7 +227,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     features: [
       {
         stateKey: 'feature1',
-        shouldSync: (feature1: unknown, state: IState) => {
+        shouldSync: (feature1: any, state: IState) => {
           return feature1.rememberMe || state.checkMe;
         },
       },
@@ -247,7 +247,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
     features: [
       {
         stateKey: 'feature1',
-        serialize: (feature1: unknown) => JSON.stringify(feature1),
+        serialize: (feature1: any) => JSON.stringify(feature1),
       },
     ],
     storage: window.localStorage

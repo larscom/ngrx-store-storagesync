@@ -4,10 +4,11 @@ module.exports = {
   roots: ['<rootDir>/projects/ngrx-store-storagesync'],
   testMatch: ['**/+(*.)+(spec).+(ts)'],
   transform: {
-    '^.+\\.js$': 'babel-jest',
+    '^.+\\.js$': 'babel-jest'
   },
   moduleNameMapper: {
-    '^lodash-es$': 'lodash',
+    '^lodash-es$': 'lodash'
   },
   setupFilesAfterEnv: ['<rootDir>/projects/ngrx-store-storagesync/test.ts'],
+  coveragePathIgnorePatterns: ['mock']
 };

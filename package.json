@@ -2,9 +2,9 @@
   "name": "ngrx-store-storagesync-app",
   "scripts": {
     "ng": "ng",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --coverage",
     "test:ci": "jest --runInBand --detectOpenHandles --coverage",
-    "test:watch": "jest --detectOpenHandles --watch",
+    "test:watch": "jest --detectOpenHandles --watch --coverage",
     "test:coverage": "jest --detectOpenHandles --coverage",
     "e2e": "ng e2e",
     "e2e:ci": "npm run e2e -- --devServerTarget= --baseUrl=http://127.0.0.1 --webdriver-update=false",
