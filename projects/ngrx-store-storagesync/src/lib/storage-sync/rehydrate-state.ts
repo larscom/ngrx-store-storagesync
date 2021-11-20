@@ -11,31 +11,14 @@ export const rehydrateState = <T>({
   storage,
   storageKeySerializer,
   features,
-  storageError,
-  version: currentVersion,
-}: IStorageSyncOptions<T>): T => {
-  if (currentVersion) {
-    try {
-      const key = storageKeySerializer('version');
-      const version = +storage.getItem(key);
-      if (version < currentVersion) {
-        return null;
-      }
-    } catch (e) {
-      if (storageError) {
-        storageError(e);
-      } else {
-        throw e;
-      }
-    }
-  }
-
-  const state = features.reduce((acc, curr) => {
+  storageError
+}: IStorageSyncOptions<T>): T | undefined => {
+  const rehydratedState = features.reduce((acc, curr) => {
     const { storageKeySerializerForFeature, stateKey, deserialize, storageForFeature } = curr;
 
     const key = storageKeySerializerForFeature
       ? storageKeySerializerForFeature(stateKey)
-      : storageKeySerializer(stateKey);
+      : storageKeySerializer!(stateKey);
 
     try {
       const featureState = storageForFeature ? storageForFeature.getItem(key) : storage.getItem(key);
@@ -47,8 +30,8 @@ export const rehydrateState = <T>({
                 ? deserialize(featureState)
                 : JSON.parse(featureState, (_: string, value: string) =>
                     dateMatcher.test(String(value)) ? new Date(value) : value
-                  ),
-            },
+                  )
+            }
           }
         : acc;
     } catch (e) {
@@ -60,5 +43,5 @@ export const rehydrateState = <T>({
     }
   }, Object());
 
-  return Object.keys(state).length ? state : null;
+  return Object.keys(rehydratedState || {}).length ? (rehydratedState as T) : undefined;
 };

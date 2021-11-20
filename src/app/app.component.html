@@ -1,6 +1,6 @@
 <div class="container"
   [ngClass]="{ 'dark-theme' : isDarkTheme$ | async }">
-  <app-header [isMobile]="isHandsetPortrait$ | async"
+  <app-header [isMobile]="(isHandsetPortrait$ | async)!"
     [isPlatformBrowser]="isPlatformBrowser"
     (menuClicked)="onMenuClicked()"
     (resetState)="onResetState()"

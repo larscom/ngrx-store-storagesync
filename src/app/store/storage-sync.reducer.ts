@@ -1,4 +1,4 @@
-import { FORM_SYNC_STORE_KEY, storageSync } from '@larscom/ngrx-store-storagesync';
+import { storageSync } from '@larscom/ngrx-store-storagesync';
 import { ActionReducer } from '@ngrx/store';
 import { IRootState } from './models/root-state';
 
@@ -8,12 +8,10 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionRe
     features: [
       { stateKey: 'app', storageForFeature: window.sessionStorage },
       { stateKey: 'todo' },
-      { stateKey: 'settings' },
-      { stateKey: 'forms' },
-      { stateKey: FORM_SYNC_STORE_KEY, storageForFeature: window.sessionStorage },
+      { stateKey: 'settings' }
     ],
     storageError: console.error,
-    storage: window.localStorage,
+    storage: window.localStorage
   });
 
   return metaReducer(reducer);

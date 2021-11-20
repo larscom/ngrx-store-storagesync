@@ -42,7 +42,8 @@ export class AppComponent {
     this.store$.dispatch(appActions.toggleDrawer({ open: true }));
   }
 
-  onMenuButtonRendered(menuButton: HTMLButtonElement): void {
+  onMenuButtonRendered(menuButton: HTMLButtonElement | null): void {
+    if (!menuButton) return;
     this.focusMonitor.stopMonitoring(menuButton);
   }
 

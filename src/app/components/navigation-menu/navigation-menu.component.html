@@ -4,11 +4,6 @@
     <mat-icon>list_alt</mat-icon>
     <span>Todo List</span>
   </a>
-  <a (click)="navigate.emit('forms')"
-    mat-list-item>
-    <mat-icon>post_add</mat-icon>
-    <span>Forms</span>
-  </a>
   <mat-divider></mat-divider>
   <a (click)="navigate.emit('settings')"
     mat-list-item>
@@ -16,3 +11,5 @@
     <span>Settings</span>
   </a>
 </mat-nav-list>
+
+<p>Try to do a page refresh while this menu is open, state is persisted through sessionStorage.</p>

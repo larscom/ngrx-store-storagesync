@@ -5,14 +5,14 @@ import { IStorageSyncOptions } from './models/storage-sync-options';
  * @internal Blacklisting
  * @returns the filtered featureState
  */
-export const excludeKeysFromState = (featureState: any, excludeKeys?: string[]): any => {
+const excludeKeysFromState = <T>(featureState: Partial<T>, excludeKeys?: string[]): Partial<T> => {
   if (!excludeKeys) {
     return featureState;
   }
 
   const keyPairs = excludeKeys.map((key) => ({
     leftKey: key.split('.')[0],
-    rightKey: key.split('.')[1],
+    rightKey: key.split('.')[1]
   }));
 
   for (const key in featureState) {
@@ -27,11 +27,11 @@ export const excludeKeysFromState = (featureState: any, excludeKeys?: string[]):
           if (leftKey && !featureState[key]) {
             delete featureState[key];
           } else if (leftKey && rightKey) {
-            excludeKeysFromState(featureState[key], [...excludeKeys, rightKey]);
+            excludeKeysFromState(Object(featureState)[key], [...excludeKeys, rightKey]);
           } else if (leftKey) {
             delete featureState[key];
           } else {
-            excludeKeysFromState(featureState[key], excludeKeys);
+            excludeKeysFromState(Object(featureState)[key], excludeKeys);
           }
           break;
         }
@@ -51,15 +51,15 @@ export const excludeKeysFromState = (featureState: any, excludeKeys?: string[]):
  * @internal Remove empty objects from featureState
  * @returns the cleaned featureState
  */
-export const cleanState = (featureState: any): any => {
+const cleanState = <T>(featureState: Partial<T>): Partial<T> => {
   for (const key in featureState) {
     if (!isPlainObject(featureState[key])) {
       continue;
     }
 
-    cleanState(featureState[key]);
+    cleanState(Object(featureState)[key]);
 
-    if (!Object.keys(featureState[key]).length) {
+    if (!Object.keys(Object(featureState)[key]).length) {
       delete featureState[key];
     }
   }
@@ -75,26 +75,13 @@ export const cleanState = (featureState: any): any => {
  */
 export const stateSync = <T>(
   state: T,
-  { features, storage, storageKeySerializer, storageError, version: currentVersion }: IStorageSyncOptions<T>
+  { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions<T>
 ): T => {
-  if (currentVersion) {
-    try {
-      const key = storageKeySerializer('version');
-      storage.setItem(key, String(currentVersion));
-    } catch (e) {
-      if (storageError) {
-        storageError(e);
-      } else {
-        throw e;
-      }
-    }
-  }
-
   features
-    .filter(({ stateKey }) => state[stateKey] !== undefined)
-    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
+    .filter(({ stateKey }) => Object(state)[stateKey] !== undefined)
+    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(Object(state)[stateKey], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
-      const featureState = cloneDeep(state[stateKey]);
+      const featureState = cloneDeep(Object(state)[stateKey] as Partial<T>);
       const cleanedState = cleanState(excludeKeysFromState(featureState, excludeKeys));
 
       if (isPlainObject(cleanedState) && !Object.keys(cleanedState).length) {
@@ -103,7 +90,7 @@ export const stateSync = <T>(
 
       const key = storageKeySerializerForFeature
         ? storageKeySerializerForFeature(stateKey)
-        : storageKeySerializer(stateKey);
+        : storageKeySerializer!(stateKey);
 
       const value = serialize ? serialize(cleanedState) : JSON.stringify(cleanedState);
 

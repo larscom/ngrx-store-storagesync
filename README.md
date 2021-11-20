@@ -5,16 +5,18 @@
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 [![@larscom/ngrx-store-storagesync](https://github.com/larscom/ngrx-store-storagesync/workflows/@larscom/ngrx-store-storagesync/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync)
 
-**Highly configurable** state syncing between the `@ngrx/store` and `localstorage` / `sessionstorage`
+**Highly configurable** state syncing between the `@ngrx/store` and any implementation of the `Storage` interface.
+
+For example `localstorage` or `sessionstorage`.
 
 ## Supports
 
-- &#10003; Excluding **deeply** nested keys/objects
-- &#10003; `Storage` location per feature state (e.g: feature1 to `sessionStorage`, feature2 to `localStorage`)
-- &#10003; Server Side Rendering (SSR with `@nguniversal/express-engine`)
-- &#10003; Reactive forms syncing with minimal configuration
+- &#10003; Exclude **deeply** nested properties
+- &#10003; **Storage** location per feature state, for example:
+  - feature1 to `sessionStorage`
+  - feature2 to `localStorage`
 
-## Demo (with SSR)
+## Demo
 
 You can play arround at https://ngrx-store-storagesync.firebaseapp.com
 
@@ -30,36 +32,31 @@ npm i --save @larscom/ngrx-store-storagesync
 
 ## Usage
 
-**1. Include `storageSyncReducer` in your meta-reducers array in `StoreModule.forRoot`**
-
-**2. (optional) import `FormSyncModule.forRoot` once, to enable reactive forms sync**
+Include `storageSyncReducer` in your meta-reducers array in `StoreModule.forRoot`
 
 ```ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store';
 import { routerReducer } from '@ngrx/router-store';
-import { FormSyncModule, FORM_SYNC_STORE_KEY, storageSync } from '@larscom/ngrx-store-storagesync';
+import { storageSync } from '@larscom/ngrx-store-storagesync';
 import * as fromFeature1 from './feature/reducer';
 
-export const reducers: ActionReducerMap<IState> = {
+export const reducers: ActionReducerMap<IRootState> = {
   router: routerReducer,
-  feature1: fromFeature1.reducer,
+  feature1: fromFeature1.reducer
 };
 
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
+export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionReducer<IRootState> {
   // provide all feature states within the features array
   // features which are not provided, do not get synced
-  const metaReducer = storageSync<IState>({
+  const metaReducer = storageSync<IRootState>({
     features: [
       // save only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
 
       // exclude key 'success' inside 'auth' and all keys 'loading' inside 'feature1'
-      { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] },
-
-      // if the form sync module is imported and you want to save to sessionStorage
-      { stateKey: FORM_SYNC_STORE_KEY, storageForFeature: window.sessionStorage },
+      { stateKey: 'feature1', excludeKeys: ['auth.success', 'loading'] }
     ],
     // defaults to localStorage
     storage: window.localStorage
@@ -69,12 +66,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 }
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    StoreModule.forRoot(reducers, { metaReducers: [storageSyncReducer] }),
-    // optionally import 'FormSyncModule.forRoot()' once to enable reactive forms sync
-    FormSyncModule.forRoot()
-  ],
+  imports: [BrowserModule, StoreModule.forRoot(reducers, { metaReducers: [storageSyncReducer] })]
 })
 export class AppModule {}
 ```
@@ -84,7 +76,7 @@ export class AppModule {}
 ```ts
 export interface IStorageSyncOptions<T> {
   /**
-   * By default, feature states are not synced, provide the feature states you want to sync.
+   * By default, states are not synced, provide the feature states you want to sync.
    */
   features: IFeatureOptions<T>[];
   /**
@@ -92,9 +84,16 @@ export interface IStorageSyncOptions<T> {
    */
   storage: Storage;
   /**
-   * Give the state a version number. Version number will be checked on rehydration.
+   * Give the state a version. Version will be checked before rehydration.
    *
-   * Skips rehydration if version from storage < version
+   * @examples
+   *  Storage.version = 1 and Config.version = 2 --> Skip hydration
+   *
+   *  Storage.version = undefined and Config.version = 1 --> Skip hydration
+   *
+   *  Storage.version = 1 and Config.version = undefined --> Hydrate
+   *
+   *  Storage.version = 1 and Config.version = 1 --> Hydrate
    */
   version?: number;
   /**
@@ -167,71 +166,6 @@ export interface IFeatureOptions<T> {
 }
 ```
 
-## Using Reactive Forms Sync
-
-Add `formGroupId` to the element where `formGroup` is present. Without `formGroupId`, the form doesn't get synced.
-
-```html
-<form [formGroup]="myFormGroup" [formGroupId]="'myFormGroupId'">
-  <div>
-    <input formControlName="firstName" />
-    <input formControlName="lastName" />
-  </div>
-  <button type="submit">Submit</button>
-</form>
-```
-
-## Configuration
-
-You can override the default configuration on component level
-
-```ts
-import { Component } from '@angular/core';
-import { IFormSyncConfig, FORM_SYNC_CONFIG } from '@larscom/ngrx-store-storagesync';
-
-const formSyncConfig: IFormSyncConfig = {
-  /* Only sync to the store when submitting the form. */
-  syncOnSubmit: true,
-};
-
-@Component({
-  selector: 'app-my-component',
-  templateUrl: 'my-component.component.html',
-  styleUrls: ['my-component.component.scss'],
-  providers: [
-    {
-      provide: FORM_SYNC_CONFIG,
-      useValue: formSyncConfig
-    },
-  ],
-})
-export class MyComponent {}
-```
-
-```ts
-export interface IFormSyncConfig {
-  /**
-   * Only sync to the store when submitting the form.
-   */
-  syncOnSubmit?: boolean;
-  /**
-   * Only sync to the store when the form status is valid.
-   */
-  syncValidOnly?: boolean;
-  /**
-   * Sync the raw form value to the store (this will include disabled form controls)
-   */
-  syncRawValue?: boolean;
-}
-```
-
-### FormGroup Directive API
-
-| Attribute       | Type    | Default | Required | Description                                                  |
-| --------------- | ------- | ------- | -------- | ------------------------------------------------------------ |
-| `formGroupId`   | string  | null    | yes      | The unique ID for the form group.                            |
-| `formGroupSync` | boolean | true    | no       | Whether the form group value should sync to the @ngrx/store. |
-
 ## Examples
 
 ### Sync to different storage locations
@@ -239,13 +173,13 @@ export interface IFormSyncConfig {
 You can sync to different storage locations per feature state.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [
       { stateKey: 'feature1', storageForFeature: window.sessionStorage }, // to sessionStorage
-      { stateKey: 'feature2' }, // to localStorage
+      { stateKey: 'feature2' } // to localStorage because of 'default' which is set below.
     ],
-    storage: window.localStorage
+    storage: window.localStorage // default
   })(reducer);
 }
 ```
@@ -255,20 +189,20 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Prevent specific properties from being synced to storage.
 
 ```ts
-const state: IState = {
+const state: IRootState = {
   feature1: {
     message: 'hello', // excluded
     loading: false,
     auth: {
       loading: false, // excluded
       loggedIn: false,
-      message: 'hello', // excluded
-    },
-  },
+      message: 'hello' // excluded
+    }
+  }
 };
 
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [{ stateKey: 'feature1', excludeKeys: ['auth.loading', 'message'] }],
     storage: window.localStorage
   })(reducer);
@@ -280,26 +214,26 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Sync state to storage based on a condition.
 
 ```ts
-const state: IState = {
+const state: IRootState = {
   checkMe: true, // <---
   feature1: {
-    rememberMe: false, // <--- 
+    rememberMe: false, // <---
     auth: {
       loading: false,
       message: 'hello'
-    },
-  },
+    }
+  }
 };
 
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [
       {
         stateKey: 'feature1',
-        shouldSync: (feature1: unknown, state: IState) => {
+        shouldSync: (feature1: any, state: IRootState) => {
           return feature1.rememberMe || state.checkMe;
-        },
-      },
+        }
+      }
     ],
     storage: window.localStorage
   })(reducer);
@@ -311,13 +245,13 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Override the default serializer for the feature state.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [
       {
         stateKey: 'feature1',
-        serialize: (feature1: unknown) => JSON.stringify(feature1),
-      },
+        serialize: (feature1: any) => JSON.stringify(feature1)
+      }
     ],
     storage: window.localStorage
   })(reducer);
@@ -329,13 +263,13 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Override the default deserializer for the feature state.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [
       {
         stateKey: 'feature1',
-        deserialize: (feature1: string) => JSON.parse(feature1),
-      },
+        deserialize: (feature1: string) => JSON.parse(feature1)
+      }
     ],
     storage: window.localStorage
   })(reducer);
@@ -347,8 +281,8 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Override the default storage key serializer.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [{ stateKey: 'feature1' }],
     storageKeySerializer: (key: string) => `abc_${key}`,
     storage: window.localStorage
@@ -361,83 +295,14 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Override the default rehydrated state merger.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [{ stateKey: 'feature1' }],
-    rehydrateStateMerger: (state: IState, rehydratedState: IState) => {
+    rehydrateStateMerger: (state: IRootState, rehydratedState: IRootState) => {
       return { ...state, ...rehydratedState };
     },
     storage: window.localStorage
   })(reducer);
-}
-```
-
-### Get the form value anywhere in your app
-
-```ts
-import { Component } from '@angular/core';
-import { getFormSyncValue } from '@larscom/ngrx-store-storagesync';
-import { Store, select } from '@ngrx/store';
-
-@Component({
-  selector: 'app-my-component',
-  template: `
-    <div>
-      <h1>My Form Value</h1>
-      {{ myFormValue$ | async | json }}
-    </div>
-  `,
-  styleUrls: ['my-component.component.scss'],
-})
-export class MyComponent {
-  constructor(private store: Store<IState>) {}
-
-  myFormValue$ = this.store.pipe(select(getFormSyncValue, { id: 'myFormGroupId' }));
-}
-```
-
-### Update the form via the action dispatcher
-
-```ts
-import { Component } from '@angular/core';
-import { setForm, patchForm, resetForm, deleteForm } from '@larscom/ngrx-store-storagesync';
-import { Store, select } from '@ngrx/store';
-
-@Component({
-  selector: 'app-my-component',
-  templateUrl: 'my-component.component.html'
-  styleUrls: ['my-component.component.scss']
-})
-export class MyComponent {
-  constructor(private store: Store<IState>) {}
-
-  /* patch form value, lastName can be omitted */
-  patchValue(): void {
-    const value = {
-      firstName: 'Jan'
-      //lastName: 'Jansen'
-    };
-    this.store.dispatch(patchForm({ id: 'myFormGroupId', value }));
-  }
-
-  /* sets the initial form value */
-  setValue(): void {
-    const value = {
-      firstName: 'Jan',
-      lastName: 'Jansen'
-    };
-    this.store.dispatch(setForm({ id: 'myFormGroupId', value }));
-  }
-
-  /* reset form value (sets every property to null)  */
-  resetValue(): void {
-    this.store.dispatch(resetForm({ id: 'myFormGroupId' }));
-  }
-
-    /* remove form value from store  */
-  deleteValue(): void {
-    this.store.dispatch(deleteForm({ id: 'myFormGroupId' }));
-  }
 }
 ```
 

@@ -1,5 +1,8 @@
 <div class="settings-list__container">
-  <h2>Select theme</h2>
+  <h1>Select theme</h1>
+
+  <p>Try to do a page refresh after, you'll see the data will persist through localStorage.</p>
+
   <mat-radio-group id="selectTheme"
     [formControl]="themeControl">
     <mat-radio-button *ngFor="let theme of themes; let i = index"
