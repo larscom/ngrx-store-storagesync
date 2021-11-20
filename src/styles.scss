@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @include mat.core();
+
 .dark-theme {
   $custom-theme-primary: mat.define-palette(mat.$amber-palette);
   $custom-theme-accent: mat.define-palette(mat.$grey-palette);

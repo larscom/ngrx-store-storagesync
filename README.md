@@ -5,13 +5,16 @@
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 [![@larscom/ngrx-store-storagesync](https://github.com/larscom/ngrx-store-storagesync/workflows/@larscom/ngrx-store-storagesync/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync)
 
-**Highly configurable** state syncing between the `@ngrx/store` and `localstorage` / `sessionstorage`
+**Highly configurable** state syncing between the `@ngrx/store` and any implementation of the `Storage` interface.
+
+For example `localstorage` or `sessionstorage`.
 
 ## Supports
 
 - &#10003; Exclude **deeply** nested properties
-- &#10003; `Storage` location per feature state (e.g: feature1 to `sessionStorage`, feature2 to `localStorage`)
-- &#10003; Exported as native Ivy library
+- &#10003; **Storage** location per feature state, for example:
+  - feature1 to `sessionStorage`
+  - feature2 to `localStorage`
 
 ## Demo
 
@@ -23,15 +26,13 @@ You can play arround at https://ngrx-store-storagesync.firebaseapp.com
 
 ## Installation
 
-
 ```bash
 npm i --save @larscom/ngrx-store-storagesync
 ```
 
 ## Usage
 
- Include `storageSyncReducer` in your meta-reducers array in `StoreModule.forRoot`
-
+Include `storageSyncReducer` in your meta-reducers array in `StoreModule.forRoot`
 
 ```ts
 import { NgModule } from '@angular/core';
@@ -43,7 +44,7 @@ import * as fromFeature1 from './feature/reducer';
 
 export const reducers: ActionReducerMap<IRootState> = {
   router: routerReducer,
-  feature1: fromFeature1.reducer,
+  feature1: fromFeature1.reducer
 };
 
 export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionReducer<IRootState> {
@@ -65,12 +66,7 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionRe
 }
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    StoreModule.forRoot(reducers,
-     { metaReducers: [storageSyncReducer] }
-    )
-  ],
+  imports: [BrowserModule, StoreModule.forRoot(reducers, { metaReducers: [storageSyncReducer] })]
 })
 export class AppModule {}
 ```
@@ -80,7 +76,7 @@ export class AppModule {}
 ```ts
 export interface IStorageSyncOptions<T> {
   /**
-   * By default, feature states are not synced, provide the feature states you want to sync.
+   * By default, states are not synced, provide the feature states you want to sync.
    */
   features: IFeatureOptions<T>[];
   /**
@@ -88,9 +84,16 @@ export interface IStorageSyncOptions<T> {
    */
   storage: Storage;
   /**
-   * Give the state a version number. Version number will be checked on rehydration.
+   * Give the state a version. Version will be checked before rehydration.
    *
-   * Skips rehydration if version from storage < version
+   * @examples
+   *  Storage.version = 1 and Config.version = 2 --> Skip hydration
+   *
+   *  Storage.version = undefined and Config.version = 1 --> Skip hydration
+   *
+   *  Storage.version = 1 and Config.version = undefined --> Hydrate
+   *
+   *  Storage.version = 1 and Config.version = 1 --> Hydrate
    */
   version?: number;
   /**
@@ -174,7 +177,7 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
   return storageSync<IRootState>({
     features: [
       { stateKey: 'feature1', storageForFeature: window.sessionStorage }, // to sessionStorage
-      { stateKey: 'feature2' }, // to localStorage because of 'default' which is set below.
+      { stateKey: 'feature2' } // to localStorage because of 'default' which is set below.
     ],
     storage: window.localStorage // default
   })(reducer);
@@ -193,9 +196,9 @@ const state: IRootState = {
     auth: {
       loading: false, // excluded
       loggedIn: false,
-      message: 'hello', // excluded
-    },
-  },
+      message: 'hello' // excluded
+    }
+  }
 };
 
 export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
@@ -214,12 +217,12 @@ Sync state to storage based on a condition.
 const state: IRootState = {
   checkMe: true, // <---
   feature1: {
-    rememberMe: false, // <--- 
+    rememberMe: false, // <---
     auth: {
       loading: false,
       message: 'hello'
-    },
-  },
+    }
+  }
 };
 
 export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
@@ -229,8 +232,8 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
         stateKey: 'feature1',
         shouldSync: (feature1: any, state: IRootState) => {
           return feature1.rememberMe || state.checkMe;
-        },
-      },
+        }
+      }
     ],
     storage: window.localStorage
   })(reducer);
@@ -247,8 +250,8 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
     features: [
       {
         stateKey: 'feature1',
-        serialize: (feature1: any) => JSON.stringify(feature1),
-      },
+        serialize: (feature1: any) => JSON.stringify(feature1)
+      }
     ],
     storage: window.localStorage
   })(reducer);
@@ -265,8 +268,8 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
     features: [
       {
         stateKey: 'feature1',
-        deserialize: (feature1: string) => JSON.parse(feature1),
-      },
+        deserialize: (feature1: string) => JSON.parse(feature1)
+      }
     ],
     storage: window.localStorage
   })(reducer);

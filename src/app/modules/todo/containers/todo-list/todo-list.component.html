@@ -1,6 +1,9 @@
 <div class="todo-list__container"
   [style.minWidth]="(isMobile$ | async) ? 'auto' : '500px'">
-  <h2>Add Todo</h2>
+  <h1>Todo List</h1>
+
+  <p>Add a todo item below or mark one as complete.</p>
+  <p>Try to do a page refresh after, you'll see the data will persist through localStorage.</p>
 
   <div class="input__container">
     <mat-form-field>
@@ -19,7 +22,8 @@
     <h2>Todo ({{ count }})</h2>
     <mat-selection-list id="selectTodos">
       <ng-container *ngFor="let todo of todos$ | async">
-        <mat-list-option color="primary" [title]="todo.id"
+        <mat-list-option color="primary"
+          [title]="todo.id"
           (click)="onTodoClicked(todo)">{{ todo.value }}</mat-list-option>
         <mat-divider></mat-divider>
       </ng-container>
