@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { INIT_ACTION } from '../lib/storage-sync/actions';
+import { IStorageSyncOptions } from '../lib/storage-sync/models/storage-sync-options';
 import { storageSync } from '../lib/storage-sync/storage-sync';
 import { MockStorage } from './mock/mock-storage';
 
@@ -8,6 +9,134 @@ describe('StorageSync', () => {
 
   beforeEach(() => {
     storage = new MockStorage();
+  });
+
+  it('should call storageError function on error when compatible version is checked from storage', () => {
+    jest.spyOn(storage, 'getItem').mockImplementation(() => {
+      throw new Error('ERROR');
+    });
+
+    const feature1 = { prop1: false };
+    const initialState = { feature1 };
+
+    const reducer = (state = initialState, action: Action) => state;
+
+    const config: IStorageSyncOptions<any> = {
+      version: 1,
+      features: [{ stateKey: 'feature1' }],
+      storage,
+      storageError: jest.fn()
+    };
+
+    const metaReducer = storageSync<any>(config);
+
+    const storageErrorSpy = jest.spyOn(config, 'storageError');
+
+    metaReducer(reducer)(initialState, { type: INIT_ACTION });
+
+    expect(storageErrorSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should re-throw error when compatible version is checked from storage if storageError function is not present', () => {
+    jest.spyOn(storage, 'getItem').mockImplementation(() => {
+      throw new Error('ERROR');
+    });
+
+    const feature1 = { prop1: false };
+    const initialState = { feature1 };
+
+    const reducer = (state = initialState, action: Action) => state;
+
+    const config: IStorageSyncOptions<any> = {
+      version: 1,
+      features: [{ stateKey: 'feature1' }],
+      storage
+    };
+
+    const metaReducer = storageSync<any>(config);
+
+    try {
+      metaReducer(reducer)(initialState, { type: INIT_ACTION });
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
+  });
+
+  it('should call storageError function on error when trying to update version in storage', () => {
+    jest.spyOn(storage, 'setItem').mockImplementation((key, value) => {
+      if (key === 'version' && value === '1') {
+        throw new Error('ERROR');
+      }
+    });
+
+    const feature1 = { prop1: false };
+    const initialState = { feature1 };
+
+    const reducer = (state = initialState, action: Action) => state;
+
+    const config: IStorageSyncOptions<any> = {
+      version: 1,
+      features: [{ stateKey: 'feature1' }],
+      storage,
+      storageError: jest.fn()
+    };
+
+    const metaReducer = storageSync<any>(config);
+
+    const storageErrorSpy = jest.spyOn(config, 'storageError');
+
+    metaReducer(reducer)(initialState, { type: 'ANY_ACTION' });
+
+    expect(storageErrorSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should re-throw error when trying to update version in storage if storageError function is not present', () => {
+    jest.spyOn(storage, 'setItem').mockImplementation((key, value) => {
+      if (key === 'version' && value === '1') {
+        throw new Error('ERROR');
+      }
+    });
+
+    const feature1 = { prop1: false };
+    const initialState = { feature1 };
+
+    const reducer = (state = initialState, action: Action) => state;
+
+    const config: IStorageSyncOptions<any> = {
+      version: 1,
+      features: [{ stateKey: 'feature1' }],
+      storage
+    };
+
+    const metaReducer = storageSync<any>(config);
+
+    try {
+      metaReducer(reducer)(initialState, { type: 'ANY_ACTION' });
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
+  });
+
+  it('should remove item from storage if version is present in storage but not in config', () => {
+    const feature1 = { prop1: false };
+
+    const initialState = { feature1 };
+
+    storage.setItem('version', String(1));
+    storage.setItem('feature1', JSON.stringify({ prop1: true }));
+
+    const metaReducer = storageSync<any>({
+      features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
+      storage
+    });
+
+    const reducer = (state = initialState, action: Action) => state;
+
+    expect(storage.getItem('version')).toEqual('1');
+
+    metaReducer(reducer)(initialState, { type: 'ANY_ACTION' });
+
+    expect(storage.getItem('version')).toBeNull();
   });
 
   it('should return the initial state if version from storage and version from config are present but not the same', () => {

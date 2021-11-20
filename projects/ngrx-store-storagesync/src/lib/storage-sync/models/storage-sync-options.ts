@@ -14,9 +14,11 @@ export interface IStorageSyncOptions<T> {
    *
    * @examples
    *  Storage.version = 1 and Config.version = 2 --> Skip hydration
+   *
    *  Storage.version = undefined and Config.version = 1 --> Skip hydration
    *
    *  Storage.version = 1 and Config.version = undefined --> Hydrate
+   *
    *  Storage.version = 1 and Config.version = 1 --> Hydrate
    */
   version?: number;

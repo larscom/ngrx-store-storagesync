@@ -52,9 +52,11 @@ export const storageSync =
  *
  * @examples
  *  Storage.version = 1 and Config.version = 2 --> incompatible
+ *
  *  Storage.version = undefined and Config.version = 1 --> incompatible
  *
  *  Storage.version = 1 and Config.version = undefined --> compatible
+ *
  *  Storage.version = 1 and Config.version = 1 --> compatible
  */
 const isCompatibleVersion = <T>({
