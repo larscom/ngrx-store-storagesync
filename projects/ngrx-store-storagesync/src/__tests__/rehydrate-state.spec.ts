@@ -9,7 +9,44 @@ describe('RehydrateState', () => {
     storage = new MockStorage();
   });
 
-  it('should return undefined from rehydration', () => {
+  it('should call storageError function on error', () => {
+    jest.spyOn(storage, 'getItem').mockImplementation(() => {
+      throw new Error('ERROR');
+    });
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      storageError: jest.fn(),
+      storageKeySerializer: (key: string) => key,
+      features: [{ stateKey: 'feature1' }]
+    };
+
+    const storageErrorSpy = jest.spyOn(config, 'storageError');
+
+    rehydrateState(config);
+
+    expect(storageErrorSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should re-throw error if storageError function is not present', () => {
+    jest.spyOn(storage, 'getItem').mockImplementation(() => {
+      throw new Error('ERROR');
+    });
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      storageKeySerializer: (key: string) => key,
+      features: [{ stateKey: 'feature1' }]
+    };
+
+    try {
+      rehydrateState(config);
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
+  });
+
+  it('should return undefined from rehydration because no features present', () => {
     const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
     const feature3 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
@@ -21,7 +58,7 @@ describe('RehydrateState', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       features: [],
-      storageKeySerializer: (key: string) => key,
+      storageKeySerializer: (key: string) => key
     };
 
     expect(storage.length).toEqual(3);
@@ -43,7 +80,7 @@ describe('RehydrateState', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
-      storageKeySerializer: (key: string) => key,
+      storageKeySerializer: (key: string) => key
     };
 
     expect(storage.length).toEqual(3);
@@ -62,7 +99,7 @@ describe('RehydrateState', () => {
       date: new Date(),
       prop1: false,
       prop2: 100,
-      prop3: { check: false, random: 1337 },
+      prop3: { check: false, random: 1337 }
     };
 
     storage.setItem(storageKeySerializerForFeature('feature1'), JSON.stringify(feature1));
@@ -72,7 +109,7 @@ describe('RehydrateState', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       features: [{ stateKey: 'feature1', storageKeySerializerForFeature }],
-      storageKeySerializer: (key: string) => key,
+      storageKeySerializer: (key: string) => key
     };
 
     const rehydratedState = rehydrateState(config);
@@ -102,9 +139,9 @@ describe('RehydrateState', () => {
         { stateKey: 'feature2' },
         { stateKey: 'feature3' },
         { stateKey: 'feature4' },
-        { stateKey: 'feature5' },
+        { stateKey: 'feature5' }
       ],
-      storageKeySerializer: (key: string) => key,
+      storageKeySerializer: (key: string) => key
     };
 
     const rehydratedState = rehydrateState(config);
@@ -113,7 +150,7 @@ describe('RehydrateState', () => {
       feature1,
       feature2,
       feature3,
-      feature5,
+      feature5
     });
   });
 });

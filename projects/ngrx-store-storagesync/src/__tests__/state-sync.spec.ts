@@ -1,5 +1,5 @@
 import { IStorageSyncOptions } from '../lib/storage-sync/models/storage-sync-options';
-import { excludeKeysFromState, stateSync } from '../lib/storage-sync/state-sync';
+import { stateSync } from '../lib/storage-sync/state-sync';
 import { MockStorage } from './mock/mock-storage';
 
 describe('StateSync', () => {
@@ -9,21 +9,49 @@ describe('StateSync', () => {
     storage = new MockStorage();
   });
 
-  it('should exclude keys from state', () => {
-    const state = {
-      prop1: false,
-      prop2: 100,
-      prop3: { check: false, random: 1337 },
-      prop4: { check: false, random: 1337, array: [1, 2, 3] },
+  it('should call storageError function on error', () => {
+    jest.spyOn(storage, 'setItem').mockImplementation(() => {
+      throw new Error('ERROR');
+    });
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      storageError: jest.fn(),
+      storageKeySerializer: (key: string) => key,
+      features: [{ stateKey: 'feature1' }]
     };
 
-    const expected = {
-      prop2: 100,
-      prop3: { check: false },
-      prop4: { check: false },
+    const storageErrorSpy = jest.spyOn(config, 'storageError');
+
+    const feature1 = 'myValue';
+    const state = { feature1 };
+
+    // sync to storage
+    stateSync(state, config);
+
+    expect(storageErrorSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should re-throw error if storageError function is not present', () => {
+    jest.spyOn(storage, 'setItem').mockImplementation(() => {
+      throw new Error('ERROR');
+    });
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      storageKeySerializer: (key: string) => key,
+      features: [{ stateKey: 'feature1' }]
     };
 
-    expect(excludeKeysFromState(state, ['prop1', 'random', 'prop4.array'])).toEqual(expected);
+    const feature1 = 'myValue';
+    const state = { feature1 };
+
+    try {
+      // sync to storage
+      stateSync(state, config);
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
   });
 
   it('should sync primitive/non-primitive types', () => {
@@ -43,30 +71,30 @@ describe('StateSync', () => {
       storageKeySerializer: (key: string) => key,
       features: [
         {
-          stateKey: 'feature1',
+          stateKey: 'feature1'
         },
         {
-          stateKey: 'feature2',
+          stateKey: 'feature2'
         },
         {
-          stateKey: 'feature3',
+          stateKey: 'feature3'
         },
         {
-          stateKey: 'feature4',
+          stateKey: 'feature4'
         },
         {
-          stateKey: 'feature5',
+          stateKey: 'feature5'
         },
         {
-          stateKey: 'feature6',
+          stateKey: 'feature6'
         },
         {
-          stateKey: 'feature7',
+          stateKey: 'feature7'
         },
         {
-          stateKey: 'feature8',
-        },
-      ],
+          stateKey: 'feature8'
+        }
+      ]
     };
 
     expect(storage.length).toEqual(0);
@@ -76,14 +104,14 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(7);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual(feature1);
-    expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
-    expect(JSON.parse(storage.getItem('feature3'))).toEqual(feature3);
-    expect(JSON.parse(storage.getItem('feature4'))).toEqual(feature4);
-    expect(JSON.parse(storage.getItem('feature5'))).toEqual(feature5);
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual(feature1);
+    expect(JSON.parse(storage.getItem('feature2')!)).toEqual(feature2);
+    expect(JSON.parse(storage.getItem('feature3')!)).toEqual(feature3);
+    expect(JSON.parse(storage.getItem('feature4')!)).toEqual(feature4);
+    expect(JSON.parse(storage.getItem('feature5')!)).toEqual(feature5);
     expect(storage.getItem('feature6')).toBeNull();
-    expect(JSON.parse(storage.getItem('feature7'))).toEqual(feature7);
-    expect(JSON.parse(storage.getItem('feature8'))).toEqual(feature8);
+    expect(JSON.parse(storage.getItem('feature7')!)).toEqual(feature7);
+    expect(JSON.parse(storage.getItem('feature8')!)).toEqual(feature8);
   });
 
   it('should not sync if feature state is not present in state', () => {
@@ -96,12 +124,12 @@ describe('StateSync', () => {
       storageKeySerializer: (key: string) => key,
       features: [
         {
-          stateKey: 'feature1',
+          stateKey: 'feature1'
         },
         {
-          stateKey: 'feature2',
-        },
-      ],
+          stateKey: 'feature2'
+        }
+      ]
     };
 
     expect(storage.length).toEqual(0);
@@ -111,7 +139,7 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(1);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual(feature1);
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual(feature1);
     expect(storage.getItem('feature2')).toBeNull();
   });
 
@@ -129,15 +157,15 @@ describe('StateSync', () => {
           stateKey: 'feature1',
           shouldSync: (featureState: any, nextState: any) => {
             return featureState.checkMe && nextState.feature1.checkMe;
-          },
+          }
         },
         {
           stateKey: 'feature2',
           shouldSync: (featureState: any, nextState: any) => {
             return featureState.checkMe && nextState.feature2.checkMe;
-          },
-        },
-      ],
+          }
+        }
+      ]
     };
 
     expect(storage.length).toEqual(0);
@@ -147,7 +175,7 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(1);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual(feature1);
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual(feature1);
     expect(storage.getItem('feature2')).toBeNull();
   });
 
@@ -159,9 +187,9 @@ describe('StateSync', () => {
       prop3: {
         check: false,
         random: 1337,
-        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } },
+        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } }
       },
-      prop4: { check: false, random: 1337 },
+      prop4: { check: false, random: 1337 }
     };
 
     const feature2 = {
@@ -171,9 +199,9 @@ describe('StateSync', () => {
       prop3: {
         check: false,
         random: 1337,
-        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } },
+        prop5: { check: true, value: 100, prop6: { check: false, value: 200, prop1: true } }
       },
-      prop4: { check: false, random: 1337 },
+      prop4: { check: false, random: 1337 }
     };
 
     const state = { feature1, feature2 };
@@ -183,8 +211,8 @@ describe('StateSync', () => {
       storageKeySerializer: (key: string) => key,
       features: [
         { stateKey: 'feature1', excludeKeys: ['prop5.check', 'prop6.check', 'prop1'] },
-        { stateKey: 'feature2', excludeKeys: ['prop5.check', 'prop6.check', 'prop1'] },
-      ],
+        { stateKey: 'feature2', excludeKeys: ['prop5.check', 'prop6.check', 'prop1'] }
+      ]
     };
 
     expect(storage.length).toEqual(0);
@@ -194,26 +222,26 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(2);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual({
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual({
       random: 1337,
       check: false,
       prop3: {
         check: false,
         random: 1337,
-        prop5: { value: 100, prop6: { value: 200 } },
+        prop5: { value: 100, prop6: { value: 200 } }
       },
-      prop4: { check: false, random: 1337 },
+      prop4: { check: false, random: 1337 }
     });
 
-    expect(JSON.parse(storage.getItem('feature2'))).toEqual({
+    expect(JSON.parse(storage.getItem('feature2')!)).toEqual({
       random: 1337,
       check: false,
       prop3: {
         check: false,
         random: 1337,
-        prop5: { value: 100, prop6: { value: 200 } },
+        prop5: { value: 100, prop6: { value: 200 } }
       },
-      prop4: { check: false, random: 1337 },
+      prop4: { check: false, random: 1337 }
     });
   });
 
@@ -227,8 +255,8 @@ describe('StateSync', () => {
       storageKeySerializer: (key: string) => key,
       features: [
         { stateKey: 'feature1', excludeKeys: ['prop1', 'check', 'array'] },
-        { stateKey: 'feature2', excludeKeys: ['check'] },
-      ],
+        { stateKey: 'feature2', excludeKeys: ['check'] }
+      ]
     };
 
     expect(storage.length).toEqual(0);
@@ -238,8 +266,8 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(1);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toBeNull();
-    expect(JSON.parse(storage.getItem('feature2'))).toEqual({ prop1: false, prop2: { array: [] } });
+    expect(JSON.parse(storage.getItem('feature1')!)).toBeNull();
+    expect(JSON.parse(storage.getItem('feature2')!)).toEqual({ prop1: false, prop2: { array: [] } });
   });
 
   it('should sync the complete state to the provided storage', () => {
@@ -251,7 +279,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }],
+      features: [{ stateKey: 'feature1' }, { stateKey: 'feature2' }]
     };
 
     expect(storage.length).toEqual(0);
@@ -261,8 +289,8 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(2);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual(feature1);
-    expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual(feature1);
+    expect(JSON.parse(storage.getItem('feature2')!)).toEqual(feature2);
   });
 
   it('should sync a single feature of the state to the provided storage', () => {
@@ -274,7 +302,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1' }],
+      features: [{ stateKey: 'feature1' }]
     };
 
     expect(storage.length).toEqual(0);
@@ -284,7 +312,7 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(1);
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual(feature1);
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual(feature1);
     expect(storage.getItem('feature2')).toBeNull();
   });
 
@@ -293,7 +321,7 @@ describe('StateSync', () => {
       prop1: false,
       array: ['check'],
       prop2: 100,
-      prop3: { check: false, random: 1337 },
+      prop3: { check: false, random: 1337 }
     };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
 
@@ -302,7 +330,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1', excludeKeys: ['prop1', 'check'] }],
+      features: [{ stateKey: 'feature1', excludeKeys: ['prop1', 'check'] }]
     };
 
     expect(storage.length).toEqual(0);
@@ -315,10 +343,10 @@ describe('StateSync', () => {
     const expected = {
       array: ['check'],
       prop2: 100,
-      prop3: { random: 1337 },
+      prop3: { random: 1337 }
     };
 
-    expect(JSON.parse(storage.getItem('feature1'))).toEqual(expected);
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual(expected);
     expect(storage.getItem('feature2')).toBeNull();
   });
 
@@ -335,7 +363,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1', storageKeySerializerForFeature }, { stateKey: 'feature2' }],
+      features: [{ stateKey: 'feature1', storageKeySerializerForFeature }, { stateKey: 'feature2' }]
     };
 
     expect(storage.length).toEqual(0);
@@ -345,8 +373,8 @@ describe('StateSync', () => {
 
     expect(storage.length).toEqual(2);
 
-    expect(JSON.parse(storage.getItem(storageKeySerializerForFeature('feature1')))).toEqual(feature1);
-    expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
+    expect(JSON.parse(storage.getItem(storageKeySerializerForFeature('feature1'))!)).toEqual(feature1);
+    expect(JSON.parse(storage.getItem('feature2')!)).toEqual(feature2);
   });
 
   it('should sync the complete state in 2 storage locations with a custom storageKeySerializerForFeature', () => {
@@ -364,7 +392,7 @@ describe('StateSync', () => {
     const config: IStorageSyncOptions<any> = {
       storage,
       storageKeySerializer: (key: string) => key,
-      features: [{ stateKey: 'feature1', storageKeySerializerForFeature, storageForFeature }, { stateKey: 'feature2' }],
+      features: [{ stateKey: 'feature1', storageKeySerializerForFeature, storageForFeature }, { stateKey: 'feature2' }]
     };
 
     expect(storage.length).toEqual(0);
@@ -377,6 +405,6 @@ describe('StateSync', () => {
     expect(storageForFeature.length).toEqual(1);
 
     expect(JSON.parse(storageForFeature.getItem(storageKeySerializerForFeature('feature1')))).toEqual(feature1);
-    expect(JSON.parse(storage.getItem('feature2'))).toEqual(feature2);
+    expect(JSON.parse(storage.getItem('feature2')!)).toEqual(feature2);
   });
 });

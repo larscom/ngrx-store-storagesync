@@ -10,9 +10,14 @@ export interface IStorageSyncOptions<T> {
    */
   storage: Storage;
   /**
-   * Give the state a version number. Version number will be checked on rehydration.
+   * Give the state a version. Version will be checked before rehydration.
    *
-   * Skips rehydration if version from storage < version
+   * @examples
+   *  Storage.version = 1 and Config.version = 2 --> Skip hydration
+   *  Storage.version = undefined and Config.version = 1 --> Skip hydration
+   *
+   *  Storage.version = 1 and Config.version = undefined --> Hydrate
+   *  Storage.version = 1 and Config.version = 1 --> Hydrate
    */
   version?: number;
   /**
