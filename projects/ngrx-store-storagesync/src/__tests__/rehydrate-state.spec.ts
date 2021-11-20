@@ -9,7 +9,7 @@ describe('RehydrateState', () => {
     storage = new MockStorage();
   });
 
-  it('should return null from rehydration', () => {
+  it('should return undefined from rehydration', () => {
     const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
     const feature3 = { prop1: false, prop2: 200, prop3: { check: false, random: 1337 } };
@@ -28,7 +28,7 @@ describe('RehydrateState', () => {
 
     const rehydratedState = rehydrateState(config);
 
-    expect(rehydratedState).toBeNull();
+    expect(rehydratedState).toBeUndefined();
   });
 
   it('should rehydrate selectively', () => {

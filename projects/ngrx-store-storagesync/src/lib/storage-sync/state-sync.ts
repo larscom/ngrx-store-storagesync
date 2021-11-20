@@ -12,7 +12,7 @@ export const excludeKeysFromState = (featureState: any, excludeKeys?: string[]):
 
   const keyPairs = excludeKeys.map((key) => ({
     leftKey: key.split('.')[0],
-    rightKey: key.split('.')[1],
+    rightKey: key.split('.')[1]
   }));
 
   for (const key in featureState) {
@@ -75,26 +75,16 @@ export const cleanState = (featureState: any): any => {
  */
 export const stateSync = <T>(
   state: T,
-  { features, storage, storageKeySerializer, storageError, version: currentVersion }: IStorageSyncOptions<T>
+  { features, storage, storageKeySerializer, storageError, version }: IStorageSyncOptions<T>
 ): T => {
-  if (currentVersion) {
-    try {
-      const key = storageKeySerializer('version');
-      storage.setItem(key, String(currentVersion));
-    } catch (e) {
-      if (storageError) {
-        storageError(e);
-      } else {
-        throw e;
-      }
-    }
-  }
+  updateVersionInStorage({ storage, storageKeySerializer, version });
 
   features
-    .filter(({ stateKey }) => state[stateKey] !== undefined)
-    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey], state) : true))
+
+    .filter(({ stateKey }) => Object(state)[stateKey] !== undefined)
+    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(Object(state)[stateKey], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
-      const featureState = cloneDeep(state[stateKey]);
+      const featureState = cloneDeep(Object(state)[stateKey]);
       const cleanedState = cleanState(excludeKeysFromState(featureState, excludeKeys));
 
       if (isPlainObject(cleanedState) && !Object.keys(cleanedState).length) {
@@ -103,7 +93,7 @@ export const stateSync = <T>(
 
       const key = storageKeySerializerForFeature
         ? storageKeySerializerForFeature(stateKey)
-        : storageKeySerializer(stateKey);
+        : storageKeySerializer!(stateKey);
 
       const value = serialize ? serialize(cleanedState) : JSON.stringify(cleanedState);
 
@@ -123,4 +113,24 @@ export const stateSync = <T>(
     });
 
   return state;
+};
+
+const updateVersionInStorage = <T>({
+  storage,
+  storageError,
+  storageKeySerializer,
+  version
+}: Partial<IStorageSyncOptions<T>>): void => {
+  if (!version) return;
+
+  try {
+    const key = storageKeySerializer!('version');
+    storage!.setItem(key, String(version));
+  } catch (e) {
+    if (storageError) {
+      storageError(e);
+    } else {
+      throw e;
+    }
+  }
 };

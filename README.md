@@ -41,15 +41,15 @@ import { routerReducer } from '@ngrx/router-store';
 import { FormSyncModule, FORM_SYNC_STORE_KEY, storageSync } from '@larscom/ngrx-store-storagesync';
 import * as fromFeature1 from './feature/reducer';
 
-export const reducers: ActionReducerMap<IState> = {
+export const reducers: ActionReducerMap<IRootState> = {
   router: routerReducer,
   feature1: fromFeature1.reducer,
 };
 
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
+export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionReducer<IRootState> {
   // provide all feature states within the features array
   // features which are not provided, do not get synced
-  const metaReducer = storageSync<IState>({
+  const metaReducer = storageSync<IRootState>({
     features: [
       // save only router state to sessionStorage
       { stateKey: 'router', storageForFeature: window.sessionStorage },
@@ -170,8 +170,8 @@ export interface IFeatureOptions<T> {
 You can sync to different storage locations per feature state.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [
       { stateKey: 'feature1', storageForFeature: window.sessionStorage }, // to sessionStorage
       { stateKey: 'feature2' }, // to localStorage because of 'default' which is set below.
@@ -186,7 +186,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Prevent specific properties from being synced to storage.
 
 ```ts
-const state: IState = {
+const state: IRootState = {
   feature1: {
     message: 'hello', // excluded
     loading: false,
@@ -198,8 +198,8 @@ const state: IState = {
   },
 };
 
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [{ stateKey: 'feature1', excludeKeys: ['auth.loading', 'message'] }],
     storage: window.localStorage
   })(reducer);
@@ -211,7 +211,7 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Sync state to storage based on a condition.
 
 ```ts
-const state: IState = {
+const state: IRootState = {
   checkMe: true, // <---
   feature1: {
     rememberMe: false, // <--- 
@@ -222,12 +222,12 @@ const state: IState = {
   },
 };
 
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [
       {
         stateKey: 'feature1',
-        shouldSync: (feature1: any, state: IState) => {
+        shouldSync: (feature1: any, state: IRootState) => {
           return feature1.rememberMe || state.checkMe;
         },
       },
@@ -242,8 +242,8 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Override the default serializer for the feature state.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [
       {
         stateKey: 'feature1',
@@ -260,8 +260,8 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Override the default deserializer for the feature state.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [
       {
         stateKey: 'feature1',
@@ -278,8 +278,8 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Override the default storage key serializer.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [{ stateKey: 'feature1' }],
     storageKeySerializer: (key: string) => `abc_${key}`,
     storage: window.localStorage
@@ -292,10 +292,10 @@ export function storageSyncReducer(reducer: ActionReducer<IState>) {
 Override the default rehydrated state merger.
 
 ```ts
-export function storageSyncReducer(reducer: ActionReducer<IState>) {
-  return storageSync<IState>({
+export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
+  return storageSync<IRootState>({
     features: [{ stateKey: 'feature1' }],
-    rehydrateStateMerger: (state: IState, rehydratedState: IState) => {
+    rehydrateStateMerger: (state: IRootState, rehydratedState: IRootState) => {
       return { ...state, ...rehydratedState };
     },
     storage: window.localStorage

@@ -11,7 +11,7 @@ export class HeaderComponent implements AfterViewInit {
   @Input() isPlatformBrowser: boolean;
 
   @Output()
-  menuButtonRendered = new EventEmitter<HTMLButtonElement>();
+  menuButtonRendered = new EventEmitter<HTMLButtonElement | null>();
   @Output()
   navigateHome = new EventEmitter<void>();
   @Output()

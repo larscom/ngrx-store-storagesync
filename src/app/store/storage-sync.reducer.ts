@@ -8,10 +8,10 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionRe
     features: [
       { stateKey: 'app', storageForFeature: window.sessionStorage },
       { stateKey: 'todo' },
-      { stateKey: 'settings' },
+      { stateKey: 'settings' }
     ],
     storageError: console.error,
-    storage: window.localStorage,
+    storage: window.localStorage
   });
 
   return metaReducer(reducer);
