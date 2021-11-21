@@ -6,8 +6,8 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
-    "strictPropertyInitialization": false,
     "noPropertyAccessFromIndexSignature": true,
+    "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -25,10 +25,9 @@
     }
   },
   "angularCompilerOptions": {
-    "enableIvy" : true,
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true,
+    "strictTemplates": true
   }
 }
