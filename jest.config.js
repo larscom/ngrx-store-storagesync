@@ -9,6 +9,6 @@ module.exports = {
   moduleNameMapper: {
     '^lodash-es$': 'lodash'
   },
-  setupFilesAfterEnv: ['<rootDir>/projects/ngrx-store-storagesync/test.ts'],
-  coveragePathIgnorePatterns: ['mock']
+  setupFilesAfterEnv: ['<rootDir>/projects/ngrx-store-storagesync/src/test.ts'],
+  coveragePathIgnorePatterns: ['test']
 };

@@ -1,6 +1,6 @@
-import { IStorageSyncOptions } from '../lib/storage-sync/models/storage-sync-options';
-import { rehydrateState } from '../lib/storage-sync/rehydrate-state';
-import { MockStorage } from './mock/mock-storage';
+import { IStorageSyncOptions } from './models/storage-sync-options';
+import { rehydrateState } from './rehydrate-state';
+import { MockStorage } from '../../test/mock-storage';
 
 describe('RehydrateState', () => {
   let storage: Storage;
