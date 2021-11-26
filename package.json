@@ -4,7 +4,7 @@
     "ng": "ng",
     "test": "jest --detectOpenHandles --coverage",
     "test:ci": "jest --forceExit --runInBand --detectOpenHandles --coverage",
-    "test:watch": "jest --detectOpenHandles --watch --coverage",
+    "test:watch": "jest --detectOpenHandles --watch",
     "test:coverage": "jest --detectOpenHandles --coverage",
     "e2e": "testcafe chrome ./e2e/src",
     "e2e:ci": "testcafe chrome:headless ./e2e/src",
