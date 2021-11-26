@@ -1,4 +1,4 @@
-import { MockStorage } from '../../test/mock-storage';
+import { MockStorage } from '../test/mock-storage';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 import { stateSync } from './state-sync';
 

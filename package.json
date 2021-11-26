@@ -3,7 +3,7 @@
   "scripts": {
     "ng": "ng",
     "test": "jest --detectOpenHandles --coverage",
-    "test:ci": "jest --runInBand --detectOpenHandles --coverage",
+    "test:ci": "jest --forceExit --runInBand --detectOpenHandles --coverage",
     "test:watch": "jest --detectOpenHandles --watch --coverage",
     "test:coverage": "jest --detectOpenHandles --coverage",
     "e2e": "ng e2e",

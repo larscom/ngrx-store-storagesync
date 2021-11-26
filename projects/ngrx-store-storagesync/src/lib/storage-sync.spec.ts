@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { MockStorage } from '../../test/mock-storage';
+import { MockStorage } from '../test/mock-storage';
 import { INIT_ACTION } from './actions';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 import { storageSync } from './storage-sync';

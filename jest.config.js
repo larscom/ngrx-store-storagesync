@@ -1,14 +1,17 @@
+require('jest-preset-angular/ngcc-jest-processor');
+
 module.exports = {
   reporters: ['default'],
   preset: 'jest-preset-angular',
   roots: ['<rootDir>/projects/ngrx-store-storagesync'],
   testMatch: ['**/+(*.)+(spec).+(ts)'],
   transform: {
-    '^.+\\.js$': 'babel-jest'
+    '^.+\\.(ts|js|mjs|html|svg)$': 'jest-preset-angular'
   },
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   moduleNameMapper: {
     '^lodash-es$': 'lodash'
   },
   setupFilesAfterEnv: ['<rootDir>/projects/ngrx-store-storagesync/src/test.ts'],
-  coveragePathIgnorePatterns: ['test']
+  coveragePathIgnorePatterns: ['models', 'public_api', 'test']
 };
