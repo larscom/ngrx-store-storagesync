@@ -65,8 +65,10 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionRe
   return metaReducer(reducer);
 }
 
+const metaReducers: MetaReducer<any>[] = [storageSyncReducer];
+
 @NgModule({
-  imports: [BrowserModule, StoreModule.forRoot(reducers, { metaReducers: [storageSyncReducer] })]
+  imports: [BrowserModule, StoreModule.forRoot(reducers, { metaReducers })]
 })
 export class AppModule {}
 ```
