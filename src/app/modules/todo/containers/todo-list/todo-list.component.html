@@ -21,8 +21,8 @@
   <ng-container *ngIf="count$ | async as count; else noTodo">
     <h2>Todo ({{ count }})</h2>
     <mat-selection-list id="selectTodos">
-      <ng-container *ngFor="let todo of todos$ | async">
-        <mat-list-option color="primary"
+      <ng-container *ngFor="let todo of todos$ | async; let i = index;">
+        <mat-list-option [id]="'todo-' + i" color="primary"
           [title]="todo.id"
           (click)="onTodoClicked(todo)">{{ todo.value }}</mat-list-option>
         <mat-divider></mat-divider>

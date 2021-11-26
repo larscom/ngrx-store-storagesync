@@ -77,18 +77,6 @@
             "browserTarget": "ngrx-store-storagesync-app:build"
           }
         },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ngrx-store-storagesync-app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ngrx-store-storagesync-app:serve:production"
-            }
-          }
-        },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
