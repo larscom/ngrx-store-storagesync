@@ -46,8 +46,7 @@ jobs:
         run: npm ci --ignore-scripts
       - name: start e2e test
         run: |
-          docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
-          npx webdriver-manager update --gecko=false --versions.chrome="$(google-chrome --product-version)"
+          docker run -p 127.0.0.1:4200:80 -d $(docker build -q .)
           npm run e2e:ci
 
   unit-test:
