@@ -16,7 +16,7 @@
 - &#10003; **Storage** location per feature state, for example:
   - feature1 to `sessionStorage`
   - feature2 to `localStorage`
-- &#10003; [Sync Reactive Forms](#sync-reactive-forms) (additional library)
+- &#10003; [Sync Reactive Forms](#Sync-Reactive-Forms) (additional library)
 
 ## Demo
 
@@ -67,6 +67,7 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>): ActionRe
   return metaReducer(reducer);
 }
 
+// add storageSyncReducer to metaReducers
 const metaReducers: MetaReducer<any>[] = [storageSyncReducer];
 
 @NgModule({
@@ -310,7 +311,7 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
 }
 ```
 
-## [Sync Reactive Forms](#sync-reactive-forms)
+## Sync Reactive Forms
 
 To sync `reactive forms` to the store, you can use [@larscom/ngrx-store-formsync](https://github.com/larscom/ngrx-store-formsync)
 
