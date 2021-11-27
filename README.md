@@ -8,9 +8,7 @@
 [![CodeQL](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/codeql-analysis.yml)
 [![codecov](https://codecov.io/gh/larscom/ngrx-store-storagesync/branch/master/graph/badge.svg?token=P8CK9EK73K)](https://codecov.io/gh/larscom/ngrx-store-storagesync)
 
-**Highly configurable** state syncing between the `@ngrx/store` and any implementation of the `Storage` interface.
-
-For example `localstorage` or `sessionstorage`.
+**Highly configurable** state syncing between the `@ngrx/store` and any implementation of the `Storage` interface, like `localstorage` or `sessionstorage`
 
 ## Supports
 
@@ -18,6 +16,7 @@ For example `localstorage` or `sessionstorage`.
 - &#10003; **Storage** location per feature state, for example:
   - feature1 to `sessionStorage`
   - feature2 to `localStorage`
+- &#10003; [Sync Reactive Forms](#sync-reactive-forms) (additional library)
 
 ## Demo
 
@@ -311,9 +310,10 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
 }
 ```
 
-## Deserializing
+## [Sync Reactive Forms](#sync-reactive-forms)
 
-By default the state gets deserialized and parsed by `JSON.parse` with an ISO date reviver.
-This means that your ISO date objects gets stored as `string`, and restored as `Date`
+To sync `reactive forms` to the store, you can use [@larscom/ngrx-store-formsync](https://github.com/larscom/ngrx-store-formsync)
 
-If you do not want this behaviour, you can implement your own `deserialize` function.
+It is really easy to setup and you can combine that library with this one to easily synchronize `reactive forms` to the store and persist state through `localStorage` or `sessionStorage`
+
+Head over to [@larscom/ngrx-store-formsync](https://github.com/larscom/ngrx-store-formsync) on how to configure that library.
