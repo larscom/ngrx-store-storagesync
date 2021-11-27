@@ -54,6 +54,7 @@
     "@types/lodash-es": "^4.17.5",
     "@types/node": "^16.11.9",
     "@types/uuid": "^8.3.3",
+    "codecov": "^3.8.3",
     "codelyzer": "^6.0.2",
     "jest": "^27.3.1",
     "jest-preset-angular": "^11.0.0",

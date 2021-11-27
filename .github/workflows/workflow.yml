@@ -61,7 +61,9 @@ jobs:
       - name: install
         run: npm ci --ignore-scripts
       - name: start unit test
-        run: npm run test:ci
+        run: |
+          npm run test:ci
+          $(npm bin)/codecov -f coverage/*.json
 
   npm:
     needs:

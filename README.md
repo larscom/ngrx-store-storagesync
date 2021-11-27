@@ -3,7 +3,10 @@
 [![npm-version](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg?label=npm)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
 ![npm](https://img.shields.io/npm/dw/@larscom/ngrx-store-storagesync)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
-[![@larscom/ngrx-store-storagesync](https://github.com/larscom/ngrx-store-storagesync/workflows/@larscom/ngrx-store-storagesync/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync)
+
+[![Master](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/workflow.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/workflow.yml)
+[![CodeQL](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/codeql-analysis.yml)
+[![codecov](https://codecov.io/gh/larscom/ngrx-store-storagesync/branch/master/graph/badge.svg?token=P8CK9EK73K)](https://codecov.io/gh/larscom/ngrx-store-storagesync)
 
 **Highly configurable** state syncing between the `@ngrx/store` and any implementation of the `Storage` interface.
 
