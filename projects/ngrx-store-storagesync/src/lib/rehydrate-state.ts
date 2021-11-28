@@ -1,11 +1,10 @@
 import { IStorageSyncOptions } from './models/storage-sync-options';
+import { isPlainObjectAndNotEmpty } from './util';
 
 const dateMatcher = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
 
 /**
  * @internal Restores the resolved state from a storage location
- * @param options the configurable options
- * @returns the restored state from the provided storage
  */
 export const rehydrateState = <T>({
   storage,
@@ -41,7 +40,7 @@ export const rehydrateState = <T>({
         throw e;
       }
     }
-  }, Object());
+  }, Object()) as T;
 
-  return Object.keys(rehydratedState || {}).length ? (rehydratedState as T) : undefined;
+  return isPlainObjectAndNotEmpty(rehydratedState) ? rehydratedState : undefined;
 };

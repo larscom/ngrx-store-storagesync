@@ -1,8 +1,8 @@
 import { MockStorage } from '../test/mock-storage';
 import { IStorageSyncOptions } from './models/storage-sync-options';
-import { stateSync } from './state-sync';
+import { syncWithStorage } from './sync-with-storage';
 
-describe('StateSync', () => {
+describe('SyncWithStorage', () => {
   let storage: Storage;
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('StateSync', () => {
     const state = { feature1 };
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storageErrorSpy).toHaveBeenCalledTimes(1);
   });
@@ -48,7 +48,7 @@ describe('StateSync', () => {
 
     try {
       // sync to storage
-      stateSync(state, config);
+      syncWithStorage(state, config);
     } catch (e) {
       expect(e).toBeInstanceOf(Error);
     }
@@ -100,7 +100,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(7);
 
@@ -135,7 +135,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -171,7 +171,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -218,7 +218,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(2);
 
@@ -245,7 +245,7 @@ describe('StateSync', () => {
     });
   });
 
-  it('should not sync empty objects the provided storage but keep empty arrays', () => {
+  it('should not sync empty objects to the provided storage but keep empty arrays', () => {
     const feature1 = { prop1: false, array: ['1'], prop2: { check: false } };
     const feature2 = { prop1: false, prop2: { check: false, array: [] } };
     const state = { feature1, feature2 };
@@ -262,7 +262,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -285,7 +285,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(2);
 
@@ -308,7 +308,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -336,7 +336,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -369,7 +369,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(2);
 
@@ -399,12 +399,40 @@ describe('StateSync', () => {
     expect(storageForFeature.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
     expect(storageForFeature.length).toEqual(1);
 
     expect(JSON.parse(storageForFeature.getItem(storageKeySerializerForFeature('feature1')))).toEqual(feature1);
     expect(JSON.parse(storage.getItem('feature2')!)).toEqual(feature2);
+  });
+
+  it('should sync with storage with custom serialize function', () => {
+    const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+
+    const state = { feature1 };
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      storageKeySerializer: (key: string) => key,
+      features: [
+        {
+          stateKey: 'feature1',
+          serialize: () => {
+            return JSON.stringify('customSerializer');
+          }
+        }
+      ]
+    };
+
+    expect(storage.length).toEqual(0);
+
+    // sync to storage
+    syncWithStorage(state, config);
+
+    expect(storage.length).toEqual(1);
+
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual('customSerializer');
   });
 });

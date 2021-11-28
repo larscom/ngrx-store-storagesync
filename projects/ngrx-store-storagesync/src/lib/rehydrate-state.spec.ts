@@ -153,4 +153,37 @@ describe('RehydrateState', () => {
       feature5
     });
   });
+
+  it('should rehydrate with custom deserialize function', () => {
+    const feature1 = { prop1: false, prop2: 100 };
+
+    storage.setItem('feature1', JSON.stringify(feature1));
+
+    expect(storage.length).toEqual(1);
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      features: [
+        {
+          stateKey: 'feature1',
+          deserialize: (featureState: string) => {
+            return {
+              ...JSON.parse(featureState),
+              extra: 1
+            };
+          }
+        }
+      ],
+      storageKeySerializer: (key: string) => key
+    };
+
+    const rehydratedState = rehydrateState(config);
+
+    expect(rehydratedState).toEqual({
+      feature1: {
+        ...feature1,
+        extra: 1
+      }
+    });
+  });
 });
