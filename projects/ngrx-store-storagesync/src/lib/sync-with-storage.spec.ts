@@ -1,8 +1,8 @@
 import { MockStorage } from '../test/mock-storage';
 import { IStorageSyncOptions } from './models/storage-sync-options';
-import { stateSync } from './state-sync';
+import { syncWithStorage } from './sync-with-storage';
 
-describe('StateSync', () => {
+describe('SyncWithStorage', () => {
   let storage: Storage;
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('StateSync', () => {
     const state = { feature1 };
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storageErrorSpy).toHaveBeenCalledTimes(1);
   });
@@ -48,7 +48,7 @@ describe('StateSync', () => {
 
     try {
       // sync to storage
-      stateSync(state, config);
+      syncWithStorage(state, config);
     } catch (e) {
       expect(e).toBeInstanceOf(Error);
     }
@@ -100,7 +100,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(7);
 
@@ -135,7 +135,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -171,7 +171,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -218,7 +218,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(2);
 
@@ -262,7 +262,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -285,7 +285,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(2);
 
@@ -308,7 +308,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -336,7 +336,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
 
@@ -369,7 +369,7 @@ describe('StateSync', () => {
     expect(storage.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(2);
 
@@ -399,7 +399,7 @@ describe('StateSync', () => {
     expect(storageForFeature.length).toEqual(0);
 
     // sync to storage
-    stateSync(state, config);
+    syncWithStorage(state, config);
 
     expect(storage.length).toEqual(1);
     expect(storageForFeature.length).toEqual(1);

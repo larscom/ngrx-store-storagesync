@@ -315,6 +315,6 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
 
 To sync `reactive forms` to the store, you can use [@larscom/ngrx-store-formsync](https://github.com/larscom/ngrx-store-formsync)
 
-It is really easy to setup and you can combine that library with this one to easily synchronize `reactive forms` to the store and persist state through `localStorage` or `sessionStorage`
+It is really easy to setup and you can combine that library with this one.
 
 Head over to [@larscom/ngrx-store-formsync](https://github.com/larscom/ngrx-store-formsync) on how to configure that library.

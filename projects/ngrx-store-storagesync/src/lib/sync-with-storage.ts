@@ -1,3 +1,4 @@
+import { isObjectLike } from 'lodash';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 import { isNotPlainObject, isPlainObjectAndEmpty, isPlainObjectAndNotEmpty } from './util';
 
@@ -25,8 +26,8 @@ const removeEmptyObjects = (object: any): any => {
 /**
  * @internal Exclude properties from featureState
  */
-export const excludeKeysFromState = <T>(featureState: Partial<T>, excludeKeys?: string[]): Partial<T> => {
-  if (!excludeKeys) {
+const excludePropsFromState = <T>(featureState: Partial<T>, excludeKeys?: string[]): Partial<T> => {
+  if (!excludeKeys || !excludeKeys.length) {
     return featureState;
   }
 
@@ -40,22 +41,16 @@ export const excludeKeysFromState = <T>(featureState: Partial<T>, excludeKeys?: 
     const leftKey = keyPair?.leftKey;
     const rightKey = keyPair?.rightKey;
 
-    switch (typeof featureState[key]) {
-      case 'object': {
-        if (leftKey && rightKey) {
-          excludeKeysFromState(featureState[key] as Partial<T>, [...excludeKeys, rightKey]);
-        } else if (leftKey) {
-          delete featureState[key];
-        } else {
-          excludeKeysFromState(featureState[key] as Partial<T>, excludeKeys);
-        }
-        break;
+    if (isObjectLike(featureState[key])) {
+      if (leftKey && rightKey) {
+        excludePropsFromState(featureState[key] as Partial<T>, [...excludeKeys, rightKey]);
+      } else if (leftKey) {
+        delete featureState[key];
+      } else {
+        excludePropsFromState(featureState[key] as Partial<T>, excludeKeys);
       }
-      default: {
-        if (leftKey) {
-          delete featureState[key];
-        }
-      }
+    } else if (leftKey) {
+      delete featureState[key];
     }
   }
 
@@ -65,7 +60,7 @@ export const excludeKeysFromState = <T>(featureState: Partial<T>, excludeKeys?: 
 /**
  * @internal Sync state with storage
  */
-export const stateSync = <T>(
+export const syncWithStorage = <T>(
   state: T,
   { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions<T>
 ): T => {
@@ -74,7 +69,7 @@ export const stateSync = <T>(
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey as keyof T], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
       const featureStateClone = JSON.parse(JSON.stringify(state[stateKey as keyof T])) as Partial<T>;
-      const featureState = excludeKeysFromState(featureStateClone, excludeKeys);
+      const featureState = excludePropsFromState(featureStateClone, excludeKeys);
 
       if (isPlainObjectAndEmpty(featureState)) {
         return;

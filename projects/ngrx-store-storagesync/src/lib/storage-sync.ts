@@ -3,7 +3,7 @@ import { merge } from 'lodash';
 import { INIT_ACTION, INIT_ACTION_EFFECTS, UPDATE_ACTION } from './actions';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
-import { stateSync } from './state-sync';
+import { syncWithStorage } from './sync-with-storage';
 
 /**
  * The StorageSync Meta Reducer for @ngrx/store.
@@ -41,7 +41,7 @@ export const storageSync =
         return mergedState;
       } else {
         updateNewVersion(config);
-        return stateSync(mergedState, config);
+        return syncWithStorage(mergedState, config);
       }
     };
   };
