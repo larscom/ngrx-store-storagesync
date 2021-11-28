@@ -407,4 +407,32 @@ describe('SyncWithStorage', () => {
     expect(JSON.parse(storageForFeature.getItem(storageKeySerializerForFeature('feature1')))).toEqual(feature1);
     expect(JSON.parse(storage.getItem('feature2')!)).toEqual(feature2);
   });
+
+  it('should sync with storage with custom serialize function', () => {
+    const feature1 = { prop1: false, prop2: 100, prop3: { check: false, random: 1337 } };
+
+    const state = { feature1 };
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      storageKeySerializer: (key: string) => key,
+      features: [
+        {
+          stateKey: 'feature1',
+          serialize: () => {
+            return JSON.stringify('customSerializer');
+          }
+        }
+      ]
+    };
+
+    expect(storage.length).toEqual(0);
+
+    // sync to storage
+    syncWithStorage(state, config);
+
+    expect(storage.length).toEqual(1);
+
+    expect(JSON.parse(storage.getItem('feature1')!)).toEqual('customSerializer');
+  });
 });
