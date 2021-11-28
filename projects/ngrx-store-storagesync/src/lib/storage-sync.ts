@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { merge } from 'lodash-es';
+import { merge } from 'lodash';
 import { INIT_ACTION, INIT_ACTION_EFFECTS, UPDATE_ACTION } from './actions';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
@@ -31,7 +31,7 @@ export const storageSync =
     const rehydratedState = shouldRehydrate ? rehydrateState(config) : undefined;
 
     return (state: T | undefined, action: Action): T => {
-      const nextState = action.type === INIT_ACTION ? reducer(state, action) : (Object({ ...state }) as T);
+      const nextState = action.type === INIT_ACTION ? reducer(state, action) : ({ ...state } as T);
 
       const shouldMerge = rehydratedState !== undefined && [INIT_ACTION, UPDATE_ACTION].includes(action.type);
 

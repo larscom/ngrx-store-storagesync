@@ -1,11 +1,31 @@
-import { cloneDeep, isPlainObject } from 'lodash-es';
 import { IStorageSyncOptions } from './models/storage-sync-options';
+import { isNotPlainObject, isPlainObjectAndEmpty, isPlainObjectAndNotEmpty } from './util';
 
 /**
- * @internal Blacklisting
- * @returns the filtered featureState
+ * @internal Remove empty objects
  */
-const excludeKeysFromState = <T>(featureState: Partial<T>, excludeKeys?: string[]): Partial<T> => {
+const removeEmptyObjects = (object: any): any => {
+  for (const key in object) {
+    if (isNotPlainObject(object[key])) {
+      continue;
+    }
+
+    if (isPlainObjectAndNotEmpty(object[key])) {
+      removeEmptyObjects(object[key]);
+    }
+
+    if (isPlainObjectAndEmpty(object[key])) {
+      delete object[key];
+    }
+  }
+
+  return object;
+};
+
+/**
+ * @internal Exclude properties from featureState
+ */
+export const excludeKeysFromState = <T>(featureState: Partial<T>, excludeKeys?: string[]): Partial<T> => {
   if (!excludeKeys) {
     return featureState;
   }
@@ -16,75 +36,47 @@ const excludeKeysFromState = <T>(featureState: Partial<T>, excludeKeys?: string[
   }));
 
   for (const key in featureState) {
-    if (featureState.hasOwnProperty(key)) {
-      const keyPair = keyPairs.find((pair) => pair.leftKey === key);
+    const keyPair = keyPairs.find((pair) => pair.leftKey === key);
+    const leftKey = keyPair?.leftKey;
+    const rightKey = keyPair?.rightKey;
 
-      const leftKey = keyPair?.leftKey;
-      const rightKey = keyPair?.rightKey;
-
-      switch (typeof featureState[key]) {
-        case 'object': {
-          if (leftKey && !featureState[key]) {
-            delete featureState[key];
-          } else if (leftKey && rightKey) {
-            excludeKeysFromState(Object(featureState)[key], [...excludeKeys, rightKey]);
-          } else if (leftKey) {
-            delete featureState[key];
-          } else {
-            excludeKeysFromState(Object(featureState)[key], excludeKeys);
-          }
-          break;
+    switch (typeof featureState[key]) {
+      case 'object': {
+        if (leftKey && rightKey) {
+          excludeKeysFromState(featureState[key] as Partial<T>, [...excludeKeys, rightKey]);
+        } else if (leftKey) {
+          delete featureState[key];
+        } else {
+          excludeKeysFromState(featureState[key] as Partial<T>, excludeKeys);
         }
-        default: {
-          if (leftKey) {
-            delete featureState[key];
-          }
+        break;
+      }
+      default: {
+        if (leftKey) {
+          delete featureState[key];
         }
       }
     }
   }
 
-  return featureState;
-};
-
-/**
- * @internal Remove empty objects from featureState
- * @returns the cleaned featureState
- */
-const cleanState = <T>(featureState: Partial<T>): Partial<T> => {
-  for (const key in featureState) {
-    if (!isPlainObject(featureState[key])) {
-      continue;
-    }
-
-    cleanState(Object(featureState)[key]);
-
-    if (!Object.keys(Object(featureState)[key]).length) {
-      delete featureState[key];
-    }
-  }
-
-  return featureState;
+  return removeEmptyObjects(featureState);
 };
 
 /**
  * @internal Sync state with storage
- * @param state the next state
- * @param options the configurable options
- * @returns the next state
  */
 export const stateSync = <T>(
   state: T,
   { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions<T>
 ): T => {
   features
-    .filter(({ stateKey }) => Object(state)[stateKey] !== undefined)
-    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(Object(state)[stateKey], state) : true))
+    .filter(({ stateKey }) => state[stateKey as keyof T] !== undefined)
+    .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey as keyof T], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
-      const featureState = cloneDeep(Object(state)[stateKey] as Partial<T>);
-      const cleanedState = cleanState(excludeKeysFromState(featureState, excludeKeys));
+      const featureStateClone = JSON.parse(JSON.stringify(state[stateKey as keyof T])) as Partial<T>;
+      const featureState = excludeKeysFromState(featureStateClone, excludeKeys);
 
-      if (isPlainObject(cleanedState) && !Object.keys(cleanedState).length) {
+      if (isPlainObjectAndEmpty(featureState)) {
         return;
       }
 
@@ -92,7 +84,7 @@ export const stateSync = <T>(
         ? storageKeySerializerForFeature(stateKey)
         : storageKeySerializer!(stateKey);
 
-      const value = serialize ? serialize(cleanedState) : JSON.stringify(cleanedState);
+      const value = serialize ? serialize(featureState) : JSON.stringify(featureState);
 
       try {
         if (storageForFeature) {

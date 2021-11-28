@@ -3,6 +3,5 @@
   "dest": "../../dist/ngrx-store-storagesync",
   "lib": {
     "entryFile": "src/public_api.ts"
-  },
-  "allowedNonPeerDependencies": ["tslib", "lodash-es"]
+  }
 }

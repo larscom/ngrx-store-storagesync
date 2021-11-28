@@ -245,7 +245,7 @@ describe('StateSync', () => {
     });
   });
 
-  it('should not sync empty objects the provided storage but keep empty arrays', () => {
+  it('should not sync empty objects to the provided storage but keep empty arrays', () => {
     const feature1 = { prop1: false, array: ['1'], prop2: { check: false } };
     const feature2 = { prop1: false, prop2: { check: false, array: [] } };
     const state = { feature1, feature2 };
