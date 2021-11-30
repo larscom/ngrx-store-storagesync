@@ -24,13 +24,20 @@ You can play arround at https://ngrx-store-storagesync.firebaseapp.com
 
 ## Dependencies
 
-`@larscom/ngrx-store-storagesync` depends on [@ngrx/store 8+](https://github.com/ngrx/store) and [Angular 7+](https://github.com/angular/angular).
+`@larscom/ngrx-store-storagesync` depends on [@ngrx/store](https://github.com/ngrx/store) and [Angular](https://github.com/angular/angular)
 
 ## Installation
 
 ```bash
 npm i --save @larscom/ngrx-store-storagesync
 ```
+
+Choose the version corresponding to your Angular version
+
+| @angular/core | @larscom/ngrx-store-storagesync |
+| ------------- | ------------------------------- |
+| >= 12         | >= 13.0.0                       |
+| < 12          | <= 6.3.0                        |
 
 ## Usage
 
