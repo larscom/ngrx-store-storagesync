@@ -94,7 +94,7 @@ const updateNewVersion = <T>({
   storageError,
   storageKeySerializer,
   version
-}: Partial<IStorageSyncOptions<T>>): void => {
+}: IStorageSyncOptions<T>): void => {
   try {
     const key = storageKeySerializer!('version');
 
