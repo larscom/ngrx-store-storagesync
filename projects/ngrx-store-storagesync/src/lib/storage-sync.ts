@@ -32,17 +32,15 @@ export const storageSync =
 
     return (state: T | undefined, action: Action): T => {
       const nextState = action.type === INIT_ACTION ? reducer(state, action) : ({ ...state } as T);
-
       const shouldMerge = rehydratedState !== undefined && [INIT_ACTION, UPDATE_ACTION].includes(action.type);
-
       const mergedState = reducer(shouldMerge ? rehydrateStateMerger!(nextState, rehydratedState) : nextState, action);
 
-      if ([INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type)) {
-        return mergedState;
-      } else {
+      if (![INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type)) {
         updateNewVersion(config);
-        return syncWithStorage(mergedState, config);
-      }
+        syncWithStorage(mergedState, config);
+      } 
+
+      return mergedState;      
     };
   };
 

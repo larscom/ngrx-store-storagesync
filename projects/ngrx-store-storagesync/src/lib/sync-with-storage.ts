@@ -63,7 +63,7 @@ const excludePropsFromState = <T>(featureState: Partial<T>, excludeKeys?: string
 export const syncWithStorage = <T>(
   state: T,
   { features, storage, storageKeySerializer, storageError }: IStorageSyncOptions<T>
-): T => {
+): void => {
   features
     .filter(({ stateKey }) => state[stateKey as keyof T] !== undefined)
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey as keyof T], state) : true))
@@ -95,6 +95,4 @@ export const syncWithStorage = <T>(
         }
       }
     });
-
-  return state;
 };
