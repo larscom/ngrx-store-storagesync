@@ -10,7 +10,7 @@ on:
       - '!v*.'
       - '!*.*.*'
 jobs:
-  build:
+  build-and-start-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: checkout source
@@ -34,19 +34,19 @@ jobs:
           context: .
           push: false
           tags: ngrx-store-storagesync:latest
-
-  e2e:
-    needs:
-     - build
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout source
-        uses: actions/checkout@v2
       - name: start frontend container
         uses: addnab/docker-run-action@v3
         with:
           image: ngrx-store-storagesync:latest
           options: -p 80:80
+
+  e2e:
+    needs:
+     - build-and-start-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
       - name: start e2e test container
         uses: addnab/docker-run-action@v3
         with:
