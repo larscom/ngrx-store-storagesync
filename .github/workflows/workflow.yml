@@ -11,10 +11,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 14 environment
+      - name: setup node environment
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: install
         run: npm ci --ignore-scripts
       - name: build lib & app
@@ -33,10 +33,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 14 environment
+      - name: setup node environment
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: download artifact
         uses: actions/download-artifact@v2
         with:
@@ -54,10 +54,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 14 environment
+      - name: setup node environment
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: install
         run: npm ci --ignore-scripts
       - name: start unit test
@@ -74,10 +74,10 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup node 14 environment
+      - name: setup node environment
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
           registry-url: https://registry.npmjs.org/
       - name: download artifact
         uses: actions/download-artifact@v2
