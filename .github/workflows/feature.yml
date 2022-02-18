@@ -33,11 +33,11 @@ jobs:
         with:
           context: .
           push: false
-          tags: ngrx-store-storagesync:latest
+          tags: larscom/ngrx-store-storagesync:latest
       - name: start frontend container
         uses: addnab/docker-run-action@v3
         with:
-          image: ngrx-store-storagesync:latest
+          image: larscom/ngrx-store-storagesync:latest
           options: -p 80:80
 
   e2e:
