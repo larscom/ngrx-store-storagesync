@@ -42,4 +42,4 @@ jobs:
       - name: start frontend container
         run: docker run -p 127.0.0.1:80:80 -d $(docker build -q .)
       - name: start e2e test
-        run: docker run -e BASE_RUL="http://127.0.0.1" -v e2e/reports:/opt/robotframework/reports:Z -v e2e/tests:/opt/robotframework/tests:Z ppodgorsek/robot-framework:3.8.0
+        run: docker run -e BASE_RUL="http://127.0.0.1" -v $(pwd)/e2e/reports:/opt/robotframework/reports:Z -v $(pwd)/e2e/tests:/opt/robotframework/tests:Z ppodgorsek/robot-framework:3.8.0
