@@ -65,6 +65,7 @@ jobs:
         with:
           image: ngrx-store-storagesync:latest
           options: -p 80:80
+          run: nginx -g daemon off;
       - name: start e2e test container
         uses: addnab/docker-run-action@v3
         with:
