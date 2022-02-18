@@ -6,8 +6,6 @@
     "test:ci": "jest --forceExit --runInBand --detectOpenHandles --coverage",
     "test:watch": "jest --detectOpenHandles --watch",
     "test:coverage": "jest --detectOpenHandles --coverage",
-    "e2e": "testcafe chrome ./e2e/src",
-    "e2e:ci": "testcafe chrome:headless ./e2e/src",
     "start": "npm run start:app",
     "start:app": "ng serve",
     "start:ssr": "ng run ngrx-store-storagesync-app:serve-ssr",
@@ -57,7 +55,6 @@
     "jest": "^27.3.1",
     "jest-preset-angular": "^11.0.0",
     "ng-packagr": "^13.0.6",
-    "testcafe": "^1.17.1",
     "ts-node": "~7.0.0",
     "typescript": "~4.4.4"
   }

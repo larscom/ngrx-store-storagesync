@@ -4,6 +4,9 @@
 /dist
 /tmp
 /out-tsc
+**/reports/*
+!**/reports/.gitkeep
+
 # Only exists if Bazel was run
 /bazel-out
 
