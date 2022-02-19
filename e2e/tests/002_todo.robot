@@ -1,7 +1,7 @@
 *** Settings ***
 Suite Setup       Suite Setup
 Suite Teardown    Suite Teardown
-Resource          resource.robot
+Resource          fixture.robot
 
 *** Test Cases ***
 Should remember completed todo items after page refresh
@@ -48,11 +48,11 @@ Add Todo Item
 
 
 Complete All Todo Items
-    Click Todo Item    0
-    Click Todo Item    1
-    Click Todo Item    2
-    Click Todo Item    3
-    Sleep              1
+    Click Todo Item       0
+    Click Todo Item       1
+    Click Todo Item       2
+    Click Todo Item       3
+    Wait For Animation
 
 
 Should Have Completed Todo Item Count Of

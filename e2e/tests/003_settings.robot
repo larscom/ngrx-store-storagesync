@@ -1,33 +1,47 @@
 *** Settings ***
 Suite Setup       Suite Setup
 Suite Teardown    Suite Teardown
-Resource          resource.robot
+Resource          fixture.robot
 
 *** Test Cases ***
-Should stay opened after a page refresh
+Should remember light theme after page refresh
     [Tags]    default    settings
 
     Navigate To Home
 
-    Menu Should Be Closed
-
     Open Menu
+    Click Settings Menu
 
-    Menu Should Be Opened
+    Should Be On Settings Page
+    Dark Theme Should Be Selected
+
+    Select Light Theme
+    Light Theme Should Be Selected
+
+    Wait For Animation
 
     Reload Page
 
-    Menu Should Be Opened
+    Light Theme Should Be Selected
+
 
 *** Keywords ***
+Click Settings Menu
+    Click Element    css:app-navigation-menu > mat-nav-list > a:nth-child(3)
 
-Menu Should Be Closed
-    Page Should Not Contain Element    ${menuOpened}
+Should Be On Settings Page
+    Wait Until Element Contains    css:app-settings-list > div > h1    Select theme    ${DEFAULT_TIMEOUT}
 
-Menu Should Be Opened
-    Wait Until Page Contains Element    ${menuOpened}    ${DEFAULT_TIMEOUT}
+Dark Theme Should Be Selected
+    Wait Until Page Contains Element    ${darkTheme}.mat-radio-checked    ${DEFAULT_TIMEOUT}
 
+Light Theme Should Be Selected
+    Wait Until Page Contains Element    ${lightTheme}.mat-radio-checked    ${DEFAULT_TIMEOUT}
+
+Select Light Theme
+    Sleep    0.5s
+    Click Element    ${lightTheme}
 
 *** Variables ***
-${menuOpened}    css:mat-drawer.mat-drawer-opened
-
+${lightTheme}    css:#theme-0
+${darkTheme}     css:#theme-1

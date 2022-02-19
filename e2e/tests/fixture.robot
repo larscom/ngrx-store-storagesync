@@ -6,7 +6,7 @@ Resource    ./css_selectors.robot
 *** Variables ***
 ${BROWSER}            Chrome
 ${BASE_RUL}           %{BASE_RUL=https://ngrx-store-storagesync.firebaseapp.com}
-${DEFAULT_TIMEOUT}    3
+${DEFAULT_TIMEOUT}    2
 
 *** Keywords ***
 Suite Setup
@@ -29,4 +29,12 @@ Navigate To Home
     Go To    ${BASE_RUL}
 
 Open Menu
-    Click Element    ${menuButton}
+    Click Element            ${menuButton}
+    Wait For Animation
+    Menu Should Be Opened
+
+Menu Should Be Opened
+    Wait Until Page Contains Element    ${menuOpened}    ${DEFAULT_TIMEOUT}
+
+Wait For Animation
+    Sleep    ${DEFAULT_TIMEOUT}
