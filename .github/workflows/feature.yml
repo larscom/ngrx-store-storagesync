@@ -66,6 +66,8 @@ jobs:
           image: ngrx-store-storagesync:latest
           options: -p 80:80 -d
           run: nginx -g "daemon off;"
+      - name: curl test
+        run: curl http://127.0.0.1
       - name: start e2e test container
         uses: addnab/docker-run-action@v3
         with:
@@ -76,6 +78,7 @@ jobs:
             run-tests-in-virtual-screen.sh
       - name: upload reports
         uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: reports
           path: ${{ github.workspace }}/e2e/reports
