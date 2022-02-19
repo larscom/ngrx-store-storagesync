@@ -137,10 +137,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ngrx-store-storagesync
-          path: /lib
+          path: /tmp/ngrx-store-storagesync
       - name: Publish lib
         run: |
-          cd /lib
+          cd /tmp/ngrx-store-storagesync
+          ls -ltra /tmp/ngrx-store-storagesync
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
