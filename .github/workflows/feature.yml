@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
-      - name: Download
+      - name: Download app
         uses: actions/download-artifact@v2
         with:
           name: ngrx-store-storagesync-app
@@ -76,7 +76,7 @@ jobs:
         run: |
           docker load --input /tmp/ngrx-store-storagesync-app.tar
           docker image ls -a
-      - name: Start frontend container
+      - name: Run app container
         uses: addnab/docker-run-action@v3
         with:
           image: ngrx-store-storagesync-app:latest
