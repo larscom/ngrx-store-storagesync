@@ -4,7 +4,7 @@
 ![npm](https://img.shields.io/npm/dw/@larscom/ngrx-store-storagesync)
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 
-[![Master](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/workflow.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/workflow.yml)
+[![master](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/master.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/master.yml)
 [![CodeQL](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/codeql-analysis.yml)
 [![codecov](https://codecov.io/gh/larscom/ngrx-store-storagesync/branch/master/graph/badge.svg?token=P8CK9EK73K)](https://codecov.io/gh/larscom/ngrx-store-storagesync)
 
