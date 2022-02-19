@@ -27,6 +27,22 @@ jobs:
         run: npm run test:ci
       - name: build app
         run: npm run build:app-prerender
+      - name: upload app
+        uses: actions/upload-artifact@v2
+        with:
+          name: ngrx-store-storagesync-app
+          path: /dist
+
+  build-app-docker:
+    needs:
+      - build-app
+    runs-on: ubuntu-latest
+    steps:
+      - name: download app
+        uses: actions/download-artifact@v2
+        with:
+          name: ngrx-store-storagesync-app
+          path: /dist
       - name: setup docker buildx
         uses: docker/setup-buildx-action@v1
       - name: build docker image
@@ -44,7 +60,7 @@ jobs:
 
   e2e:
     needs:
-      - build-app
+      - build-app-docker
     runs-on: ubuntu-latest
     steps:
       - name: checkout source
