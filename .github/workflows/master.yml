@@ -114,7 +114,8 @@ jobs:
           $(npm bin)/codecov -f coverage/*.json
       - name: Build lib
         run: npm run build:lib
-      - name: Upload lib
+      - if: startsWith(github.ref, 'refs/tags/v')
+        name: Upload lib
         uses: actions/upload-artifact@v2
         with:
           name: ngrx-store-storagesync
