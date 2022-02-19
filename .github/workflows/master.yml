@@ -1,15 +1,11 @@
-name: 'feature'
+name: 'master'
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
-      - '*'
-      - '!master'
-      - '!v*.'
-      - '!*.*.*'
+      - 'master'
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build-app:

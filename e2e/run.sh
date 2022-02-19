@@ -11,4 +11,6 @@ else
     export ROBOT_OPTIONS="-i ${1}"
 fi
 
-docker run -e ROBOT_OPTIONS="${ROBOT_OPTIONS}" -v $(pwd)/reports:/opt/robotframework/reports:Z -v $(pwd)/tests:/opt/robotframework/tests:Z ppodgorsek/robot-framework:3.8.0
+e2e_dir="$(dirname "$(which "$0")")"
+
+docker run -e ROBOT_OPTIONS="${ROBOT_OPTIONS}" -v $e2e_dir/reports:/opt/robotframework/reports:Z -v $e2e_dir/tests:/opt/robotframework/tests:Z ppodgorsek/robot-framework:3.8.0
