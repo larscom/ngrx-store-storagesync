@@ -12,7 +12,7 @@ on:
       - '!*.*.*'
 
 jobs:
-  build-app:
+  app:
     runs-on: ubuntu-latest
     steps:
       - name: checkout source
@@ -31,18 +31,18 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ngrx-store-storagesync-app
-          path: /dist
+          path: dist
 
-  build-app-docker:
+  app-docker:
     needs:
-      - build-app
+      - app
     runs-on: ubuntu-latest
     steps:
       - name: download app
         uses: actions/download-artifact@v2
         with:
           name: ngrx-store-storagesync-app
-          path: /dist
+          path: dist
       - name: setup docker buildx
         uses: docker/setup-buildx-action@v1
       - name: build docker image
@@ -60,7 +60,7 @@ jobs:
 
   e2e:
     needs:
-      - build-app-docker
+      - app-docker
     runs-on: ubuntu-latest
     steps:
       - name: checkout source
