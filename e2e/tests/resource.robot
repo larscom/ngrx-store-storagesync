@@ -4,8 +4,9 @@ Library     OperatingSystem
 Resource    ./css_selectors.robot
 
 *** Variables ***
-${BROWSER}     Chrome
-${BASE_RUL}    %{BASE_RUL=https://ngrx-store-storagesync.firebaseapp.com}
+${BROWSER}            Chrome
+${BASE_RUL}           %{BASE_RUL=https://ngrx-store-storagesync.firebaseapp.com}
+${DEFAULT_TIMEOUT}    3
 
 *** Keywords ***
 Suite Setup
@@ -28,4 +29,4 @@ Navigate To Home
     Go To    ${BASE_RUL}
 
 Open Menu
-    Click Element    ${menuButton}    
+    Click Element    ${menuButton}

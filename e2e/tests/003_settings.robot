@@ -5,7 +5,7 @@ Resource          resource.robot
 
 *** Test Cases ***
 Should stay opened after a page refresh
-    [Tags]    default    menu
+    [Tags]    default    settings
 
     Navigate To Home
 
@@ -26,6 +26,7 @@ Menu Should Be Closed
 
 Menu Should Be Opened
     Wait Until Page Contains Element    ${menuOpened}    ${DEFAULT_TIMEOUT}
+
 
 *** Variables ***
 ${menuOpened}    css:mat-drawer.mat-drawer-opened
