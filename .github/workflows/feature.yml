@@ -64,10 +64,10 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ngrx-store-storagesync:latest
-          options: -p 80:80 -d
+          options: -p 127.0.0.1:80:80 -d
           run: nginx -g "daemon off;"
-      - name: curl test
-        run: curl http://127.0.0.1
+      - name: smoke test
+        run: sleep 5 && curl http://127.0.0.1
       - name: start e2e test container
         uses: addnab/docker-run-action@v3
         with:
