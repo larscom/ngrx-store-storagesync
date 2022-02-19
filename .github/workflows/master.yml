@@ -1,15 +1,11 @@
-name: 'feature'
+name: 'master'
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
-      - '*'
-      - '!master'
-      - '!v*.'
-      - '!*.*.*'
+      - 'master'
+    tags:
+      - 'v*.*.*'
 
 jobs:
   app:
@@ -100,3 +96,72 @@ jobs:
         with:
           name: reports
           path: ${{ github.workspace }}/e2e/reports
+
+  lib:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Install packages
+        run: npm ci --ignore-scripts
+      - name: Unit test
+        run: |
+          npm run test:ci
+          $(npm bin)/codecov -f coverage/*.json
+      - name: Build lib
+        run: npm run build:lib
+      - name: Upload lib
+        uses: actions/upload-artifact@v2
+        with:
+          name: ngrx-store-storagesync
+          path: dist/ngrx-store-storagesync
+
+  npm:
+    needs:
+      - lib
+      - e2e
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Download lib
+        uses: actions/download-artifact@v2
+        with:
+          name: ngrx-store-storagesync
+          path: /lib
+      - name: Publish lib
+        run: |
+          cd /lib
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+  firebase:
+    needs:
+      - app
+      - e2e
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Download app
+        uses: actions/download-artifact@v2
+        with:
+          name: ngrx-store-storagesync-app
+          path: dist
+      - name: Firebase deploy
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

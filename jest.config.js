@@ -1,6 +1,5 @@
-require('jest-preset-angular/ngcc-jest-processor');
-
 module.exports = {
+  globalSetup: 'jest-preset-angular/global-setup',
   preset: 'jest-preset-angular',
   roots: ['<rootDir>/projects/ngrx-store-storagesync'],
   testMatch: ['**/+(*.)+(spec).+(ts)'],
