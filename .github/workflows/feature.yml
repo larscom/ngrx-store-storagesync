@@ -71,7 +71,9 @@ jobs:
         with:
           image: ppodgorsek/robot-framework:3.8.0
           options: -e BASE_RUL=http://127.0.0.1 -v ${{ github.workspace }}/e2e/tests:/opt/robotframework/tests:Z -v ${{ github.workspace }}/e2e/reports:/opt/robotframework/reports:Z
-          run: run-tests-in-virtual-screen.sh
+          run: |
+            ls -ltra /opt/robotframework/tests
+            run-tests-in-virtual-screen.sh
       - name: upload reports
         uses: actions/upload-artifact@v2
         with:
