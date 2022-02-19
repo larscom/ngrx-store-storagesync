@@ -64,14 +64,16 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ngrx-store-storagesync:latest
+          docker_network: ngrx-store-storagesync
           options: -p 0.0.0.0:80:80 -d
           run: nginx -g "daemon off;"
       - name: smoke test
-        run: sleep 5 && curl http://0.0.0.0
-      - name: start e2e test container
+        run: sleep 2 && curl http://0.0.0.0
+      - name: start e2e test
         uses: addnab/docker-run-action@v3
         with:
           image: ppodgorsek/robot-framework:3.8.0
+          docker_network: ngrx-store-storagesync
           options: --user=1001:121 -e ROBOT_UID=1001 -e ROBOT_GID=121 -e BASE_RUL=http://0.0.0.0 -v ${{ github.workspace }}/e2e/tests:/opt/robotframework/tests -v ${{ github.workspace }}/e2e/reports:/opt/robotframework/reports
           run: |
             ls -ltra /opt/robotframework/tests
