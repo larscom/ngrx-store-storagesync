@@ -61,7 +61,7 @@ jobs:
       - name: load docker image
         run: |
           docker load --input /tmp/ngrx-store-storagesync.tar
-          echo "dir: $(docker image ls -a)"
+          docker image ls -a
       - name: start frontend container
         uses: addnab/docker-run-action@v3
         with:
@@ -72,7 +72,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ppodgorsek/robot-framework:3.8.0
-          options: -e BASE_RUL=http://127.0.0.1 -v ${{ github.workspace }}/e2e/tests:/opt/robotframework/tests:Z -v ${{ github.workspace }}/e2e/reports:/opt/robotframework/reports:Z
+          options: -e BASE_RUL=http://127.0.0.1 -v ${{ github.workspace }}/e2e/tests:/opt/robotframework/tests -v ${{ github.workspace }}/e2e/reports:/opt/robotframework/reports
           run: |
             ls -ltra /opt/robotframework/tests
             run-tests-in-virtual-screen.sh
