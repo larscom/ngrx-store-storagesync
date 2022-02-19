@@ -15,19 +15,19 @@ jobs:
   app:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout source
+      - name: Checkout source
         uses: actions/checkout@v2
-      - name: setup node environment
+      - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: clean install
+      - name: Install packages
         run: npm ci --ignore-scripts
-      - name: unit test
+      - name: Unit test
         run: npm run test:ci
-      - name: build app
+      - name: Build app
         run: npm run build:app-prerender
-      - name: upload app
+      - name: Upload app
         uses: actions/upload-artifact@v2
         with:
           name: ngrx-store-storagesync-app
@@ -38,21 +38,23 @@ jobs:
       - app
     runs-on: ubuntu-latest
     steps:
-      - name: download app
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Download
         uses: actions/download-artifact@v2
         with:
           name: ngrx-store-storagesync-app
           path: dist
-      - name: setup docker buildx
+      - name: Setup docker buildx
         uses: docker/setup-buildx-action@v1
-      - name: build docker image
+      - name: Build docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: false
           tags: ngrx-store-storagesync-app:latest
           outputs: type=docker,dest=/tmp/ngrx-store-storagesync-app.tar
-      - name: upload docker image
+      - name: Upload docker image
         uses: actions/upload-artifact@v2
         with:
           name: ngrx-store-storagesync-app
@@ -63,27 +65,27 @@ jobs:
       - app-docker
     runs-on: ubuntu-latest
     steps:
-      - name: checkout source
+      - name: Checkout source
         uses: actions/checkout@v2
-      - name: download docker image
+      - name: Download docker image
         uses: actions/download-artifact@v2
         with:
           name: ngrx-store-storagesync-app
           path: /tmp
-      - name: load docker image
+      - name: Load docker image
         run: |
           docker load --input /tmp/ngrx-store-storagesync-app.tar
           docker image ls -a
-      - name: start frontend container
+      - name: Start frontend container
         uses: addnab/docker-run-action@v3
         with:
           image: ngrx-store-storagesync-app:latest
           docker_network: host
           options: -p 127.0.0.1:80:80 -d
           run: nginx -g "daemon off;"
-      - name: smoke test
+      - name: Smoke test
         run: sleep 2 && curl http://127.0.0.1
-      - name: e2e test
+      - name: Automated test
         uses: addnab/docker-run-action@v3
         with:
           image: ppodgorsek/robot-framework:3.8.0
@@ -92,7 +94,7 @@ jobs:
           run: |
             ls -ltra /opt/robotframework/tests
             run-tests-in-virtual-screen.sh
-      - name: upload reports
+      - name: Upload test reports
         uses: actions/upload-artifact@v2
         if: always()
         with:
