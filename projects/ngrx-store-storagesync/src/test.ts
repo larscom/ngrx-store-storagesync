@@ -1,3 +1,6 @@
+import 'zone.js/fesm2015/zone-testing-bundle.min.js';
+import { jest } from '@jest/globals';
+
 Object.defineProperty(window, 'CSS', { value: null });
 Object.defineProperty(window, 'getComputedStyle', {
   value: () => {
@@ -19,3 +22,5 @@ Object.defineProperty(document.body.style, 'transform', {
     };
   }
 });
+
+HTMLCanvasElement.prototype.getContext = <typeof HTMLCanvasElement.prototype.getContext>jest.fn();
