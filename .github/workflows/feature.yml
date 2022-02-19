@@ -49,6 +49,8 @@ jobs:
      - build-fe
     runs-on: ubuntu-latest
     steps:
+      - name: checkout source
+        uses: actions/checkout@v2
       - name: setup docker buildx
         uses: docker/setup-buildx-action@v1
       - name: download artifact
@@ -59,7 +61,7 @@ jobs:
       - name: load docker image
         run: |
           docker load --input /tmp/ngrx-store-storagesync.tar
-          docker image ls -a
+          echo "dir: $(docker image ls -a)"
       - name: start frontend container
         uses: addnab/docker-run-action@v3
         with:
