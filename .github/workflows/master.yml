@@ -141,7 +141,7 @@ jobs:
       - name: Publish lib
         run: |
           cd /tmp/ngrx-store-storagesync
-          ls -ltra /tmp/ngrx-store-storagesync
+          ls -ltra .
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
