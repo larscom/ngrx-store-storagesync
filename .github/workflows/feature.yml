@@ -60,6 +60,10 @@ jobs:
         run: |
           docker load --input /tmp/ngrx-store-storagesync.tar
           docker image ls -a
+      - name: create docker network
+        run: |
+          docker network create ngrx-store-storagesync
+          docker network ls
       - name: start frontend container
         uses: addnab/docker-run-action@v3
         with:
