@@ -5,7 +5,7 @@ Resource    ./css_selectors.robot
 
 *** Variables ***
 ${BROWSER}            Chrome
-${BASE_RUL}           %{BASE_RUL=https://ngrx-store-storagesync.firebaseapp.com}
+${BASE_URL}           %{BASE_URL=https://ngrx-store-storagesync.firebaseapp.com}
 ${DEFAULT_TIMEOUT}    2
 
 *** Keywords ***
@@ -26,7 +26,7 @@ ChromeDriver Setup
     Set Window Size        1920                 1080
 
 Navigate To Home
-    Go To    ${BASE_RUL}
+    Go To    ${BASE_URL}
 
 Open Menu
     Click Element            ${menuButton}
