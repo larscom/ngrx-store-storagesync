@@ -6,6 +6,7 @@
     "test:ci": "jest --forceExit --runInBand --detectOpenHandles --coverage",
     "test:watch": "jest --detectOpenHandles --watch",
     "test:coverage": "jest --detectOpenHandles --coverage",
+    "e2e": "bash e2e/run.sh",
     "start": "npm run start:app",
     "start:app": "ng serve",
     "start:ssr": "ng run ngrx-store-storagesync-app:serve-ssr",

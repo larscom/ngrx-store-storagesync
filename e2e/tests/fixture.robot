@@ -5,7 +5,7 @@ Resource    ./css_selectors.robot
 
 *** Variables ***
 ${BROWSER}            Chrome
-${BASE_URL}           %{BASE_URL=https://ngrx-store-storagesync.firebaseapp.com}
+${BASE_URL}           %{BASE_URL}
 ${DEFAULT_TIMEOUT}    2
 
 *** Keywords ***
