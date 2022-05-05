@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import { INIT_ACTION, INIT_ACTION_EFFECTS, UPDATE_ACTION } from './actions';
 import { IStorageSyncOptions } from './models/storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
@@ -38,9 +38,9 @@ export const storageSync =
       if (![INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type)) {
         updateNewVersion(config);
         syncWithStorage(mergedState, config);
-      } 
+      }
 
-      return mergedState;      
+      return mergedState;
     };
   };
 
