@@ -1,4 +1,4 @@
-import { isPlainObject } from 'lodash';
+import isPlainObject from 'lodash/isPlainObject';
 
 export const isNotPlainObject = (value: any) => !isPlainObject(value);
 
