@@ -5,20 +5,18 @@ export const routes: Routes = [
   {
     path: 'todo',
     pathMatch: 'full',
-    loadChildren: () => import('./modules/todo/todo.module').then((m) => m.TodoModule),
+    loadChildren: () => import('./modules/todo/todo.module').then((m) => m.TodoModule)
   },
   {
     path: 'settings',
     pathMatch: 'full',
-    loadChildren: () => import('./modules/settings/settings.module').then((m) => m.SettingsModule),
+    loadChildren: () => import('./modules/settings/settings.module').then((m) => m.SettingsModule)
   },
-  { path: '**', redirectTo: 'todo' },
+  { path: '**', redirectTo: 'todo' }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, { useHash: true, initialNavigation: 'enabled', relativeLinkResolution: 'legacy' }),
-  ],
-  exports: [RouterModule],
+  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy' })],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}
