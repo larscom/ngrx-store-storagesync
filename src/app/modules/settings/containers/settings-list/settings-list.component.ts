@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IRootState } from 'src/app/store/models/root-state';
@@ -14,7 +14,7 @@ import { getTheme } from '../../store/settings.selectors';
 })
 export class SettingsListComponent implements OnDestroy {
   readonly themes = Object.keys(Theme);
-  readonly themeControl = new FormControl();
+  readonly themeControl = new UntypedFormControl();
   readonly subscriptions = new Subscription();
 
   constructor(private readonly store$: Store<IRootState>) {
