@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 16
       - name: Install packages
-        run: npm ci --ignore-scripts
+        run: npm ci --legacy-peer-deps --ignore-scripts
       - name: Unit test
         run: npm run test:ci
       - name: Build app
