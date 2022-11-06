@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/ngrx-store-storagesync-app/browser",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",

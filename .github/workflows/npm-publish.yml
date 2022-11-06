@@ -20,7 +20,7 @@ jobs:
       - name: Test
         run: npm run test:ci
       - name: Build
-        run: npm run build:app && npm run build:lib
+        run: npm run build && npm run build:lib
       - name: Publish
         run: |
           cd dist/ngrx-store-storagesync
