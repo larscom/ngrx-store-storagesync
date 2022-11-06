@@ -12,13 +12,7 @@ import { StoreModule } from './store/store.module';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, DrawerComponent, NavigationMenuComponent, StorageDisplayComponent],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    MaterialModule,
-    StoreModule
-  ],
+  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, MaterialModule, StoreModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

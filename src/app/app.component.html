@@ -1,15 +1,11 @@
 <div class="container"
   [ngClass]="{ 'dark-theme' : isDarkTheme$ | async }">
   <app-header [isMobile]="(isHandsetPortrait$ | async)!"
-    [isPlatformBrowser]="isPlatformBrowser"
     (menuClicked)="onMenuClicked()"
-    (resetState)="onResetState()"
-    (menuButtonRendered)="onMenuButtonRendered($event)">
+    (resetState)="onResetState()">
   </app-header>
   <app-drawer>
-    <ng-container *ngIf="showStorageDisplay$ | async">
-      <app-storage-display></app-storage-display>
-    </ng-container>
+    <app-storage-display></app-storage-display>
     <router-outlet></router-outlet>
   </app-drawer>
 </div>
