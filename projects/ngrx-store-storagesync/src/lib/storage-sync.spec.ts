@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
-import { MockStorage } from '../test/mock-storage';
 import { INIT_ACTION } from './actions';
-import { IStorageSyncOptions } from './models/storage-sync-options';
+import { MockStorage } from './mock-storage';
 import { storageSync } from './storage-sync';
+import { IStorageSyncOptions } from './storage-sync-options';
 
 describe('StorageSync', () => {
   let storage: Storage;
@@ -12,25 +12,23 @@ describe('StorageSync', () => {
   });
 
   it('should call storageError function on error when compatible version is checked from storage', () => {
-    jest.spyOn(storage, 'getItem').mockImplementation(() => {
-      throw new Error('ERROR');
-    });
+    spyOn(storage, 'getItem').and.throwError(new Error('ERROR'));
 
     const feature1 = { prop1: false };
     const initialState = { feature1 };
 
     const reducer = (state = initialState, action: Action) => state;
 
+    const storageErrorSpy = jasmine.createSpy();
+
     const config: IStorageSyncOptions<any> = {
       version: 1,
       features: [{ stateKey: 'feature1' }],
       storage,
-      storageError: jest.fn()
+      storageError: storageErrorSpy
     };
 
     const metaReducer = storageSync<any>(config);
-
-    const storageErrorSpy = jest.spyOn(config, 'storageError');
 
     metaReducer(reducer)(initialState, { type: INIT_ACTION });
 
@@ -38,9 +36,7 @@ describe('StorageSync', () => {
   });
 
   it('should re-throw error when compatible version is checked from storage if storageError function is not present', () => {
-    jest.spyOn(storage, 'getItem').mockImplementation(() => {
-      throw new Error('ERROR');
-    });
+    spyOn(storage, 'getItem').and.throwError(new Error('ERROR'));
 
     const feature1 = { prop1: false };
     const initialState = { feature1 };
@@ -55,15 +51,11 @@ describe('StorageSync', () => {
 
     const metaReducer = storageSync<any>(config);
 
-    try {
-      metaReducer(reducer)(initialState, { type: INIT_ACTION });
-    } catch (e) {
-      expect(e).toBeInstanceOf(Error);
-    }
+    expect(() => metaReducer(reducer)(initialState, { type: INIT_ACTION })).toThrow(Error('ERROR'));
   });
 
   it('should call storageError function on error when trying to update version in storage', () => {
-    jest.spyOn(storage, 'setItem').mockImplementation((key, value) => {
+    spyOn(storage, 'setItem').and.callFake((key, value) => {
       if (key === 'version' && value === '1') {
         throw new Error('ERROR');
       }
@@ -74,16 +66,16 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
+    const storageErrorSpy = jasmine.createSpy();
+
     const config: IStorageSyncOptions<any> = {
       version: 1,
       features: [{ stateKey: 'feature1' }],
       storage,
-      storageError: jest.fn()
+      storageError: storageErrorSpy
     };
 
     const metaReducer = storageSync<any>(config);
-
-    const storageErrorSpy = jest.spyOn(config, 'storageError');
 
     metaReducer(reducer)(initialState, { type: 'ANY_ACTION' });
 
@@ -91,7 +83,7 @@ describe('StorageSync', () => {
   });
 
   it('should re-throw error when trying to update version in storage if storageError function is not present', () => {
-    jest.spyOn(storage, 'setItem').mockImplementation((key, value) => {
+    spyOn(storage, 'setItem').and.callFake((key, value) => {
       if (key === 'version' && value === '1') {
         throw new Error('ERROR');
       }
@@ -110,11 +102,7 @@ describe('StorageSync', () => {
 
     const metaReducer = storageSync<any>(config);
 
-    try {
-      metaReducer(reducer)(initialState, { type: 'ANY_ACTION' });
-    } catch (e) {
-      expect(e).toBeInstanceOf(Error);
-    }
+    expect(() => metaReducer(reducer)(initialState, { type: 'ANY_ACTION' })).toThrow(Error('ERROR'));
   });
 
   it('should remove item from storage if version is present in storage but not in config', () => {

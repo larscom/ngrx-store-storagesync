@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import isObjectLike from 'lodash/isObjectLike';
-import { IStorageSyncOptions } from './models/storage-sync-options';
+import { IStorageSyncOptions } from './storage-sync-options';
 import { isNotPlainObject, isPlainObjectAndEmpty } from './util';
 
 /**

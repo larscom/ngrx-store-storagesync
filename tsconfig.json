@@ -7,11 +7,13 @@
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-    "strictPropertyInitialization": false,
-    "allowSyntheticDefaultImports": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports" : true,
     "sourceMap": true,
+    "paths": {
+      "@larscom/ngrx-store-storagesync": ["projects/ngrx-store-storagesync/src/public-api"]
+    },
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
@@ -19,13 +21,9 @@
     "importHelpers": true,
     "target": "es2020",
     "module": "es2020",
-    "lib": ["es2020", "dom"],
-    "paths": {
-      "@larscom/ngrx-store-storagesync": ["projects/ngrx-store-storagesync/src/public_api"]
-    }
+    "lib": ["es2020", "dom"]
   },
   "angularCompilerOptions": {
-    "enableIvy": true,
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

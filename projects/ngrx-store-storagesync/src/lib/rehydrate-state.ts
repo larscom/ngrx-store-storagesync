@@ -1,4 +1,4 @@
-import { IStorageSyncOptions } from './models/storage-sync-options';
+import { IStorageSyncOptions } from './storage-sync-options';
 import { isPlainObjectAndEmpty } from './util';
 
 const dateMatcher = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;

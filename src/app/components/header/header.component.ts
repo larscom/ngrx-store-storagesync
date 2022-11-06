@@ -7,8 +7,8 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements AfterViewInit {
-  @Input() isMobile: boolean;
-  @Input() isPlatformBrowser: boolean;
+  @Input() isMobile!: boolean;
+  @Input() isPlatformBrowser!: boolean;
 
   @Output()
   menuButtonRendered = new EventEmitter<HTMLButtonElement | null>();

@@ -1,5 +1,5 @@
-import { MockStorage } from '../test/mock-storage';
-import { IStorageSyncOptions } from './models/storage-sync-options';
+import { MockStorage } from './mock-storage';
+import { IStorageSyncOptions } from './storage-sync-options';
 import { rehydrateState } from './rehydrate-state';
 
 describe('RehydrateState', () => {
@@ -10,18 +10,16 @@ describe('RehydrateState', () => {
   });
 
   it('should call storageError function on error', () => {
-    jest.spyOn(storage, 'getItem').mockImplementation(() => {
-      throw new Error('ERROR');
-    });
+    spyOn(storage, 'getItem').and.throwError(new Error('ERROR'));
+
+    const storageErrorSpy = jasmine.createSpy();
 
     const config: IStorageSyncOptions<any> = {
       storage,
-      storageError: jest.fn(),
+      storageError: storageErrorSpy,
       storageKeySerializer: (key: string) => key,
       features: [{ stateKey: 'feature1' }]
     };
-
-    const storageErrorSpy = jest.spyOn(config, 'storageError');
 
     rehydrateState(config);
 
@@ -29,9 +27,7 @@ describe('RehydrateState', () => {
   });
 
   it('should re-throw error if storageError function is not present', () => {
-    jest.spyOn(storage, 'getItem').mockImplementation(() => {
-      throw new Error('ERROR');
-    });
+    spyOn(storage, 'getItem').and.throwError(new Error('ERROR'));
 
     const config: IStorageSyncOptions<any> = {
       storage,
@@ -39,11 +35,7 @@ describe('RehydrateState', () => {
       features: [{ stateKey: 'feature1' }]
     };
 
-    try {
-      rehydrateState(config);
-    } catch (e) {
-      expect(e).toBeInstanceOf(Error);
-    }
+    expect(() => rehydrateState(config)).toThrow(Error('ERROR'));
   });
 
   it('should return undefined from rehydration because no features present', () => {
