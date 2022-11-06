@@ -9,15 +9,16 @@
 [![firebase-hosting](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/firebase-hosting-merge.yml)
 
 
-> **Highly configurable** state syncing between the `@ngrx/store` and any implementation of the `Storage` interface, like `localstorage` or `sessionstorage`
+> **Highly configurable** state sync library for `@ngrx/store` (Angular)
 
 ### ✨ [Live Demo](https://ngrx-store-storagesync.firebaseapp.com)
 
-## Supports
-- &#10003; Exclude **deeply** nested properties
-- &#10003; **Storage** location per feature state, for example:
+## Features
+- Sync to/from `localStorage` and `sessionStorage`
+- &#10003; **Storage** option per feature state, for example:
   - feature1 to `sessionStorage`
   - feature2 to `localStorage`
+- &#10003; Exclude **deeply** nested properties  
 - &#10003; [Sync Reactive Forms](#Sync-Reactive-Forms) (needs additional library)
 
 ## Dependencies

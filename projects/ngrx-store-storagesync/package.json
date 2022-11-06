@@ -1,7 +1,7 @@
 {
   "name": "@larscom/ngrx-store-storagesync",
   "version": "13.0.10",
-  "description": "Highly configurable state syncing between the @ngrx/store and localStorage/sessionStorage or any other implementation of the Storage interface",
+  "description": "Highly configurable state sync library for @ngrx/store (Angular)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/larscom/ngrx-store-storagesync.git"
@@ -18,7 +18,8 @@
     "storage",
     "rxjs",
     "localstorage",
-    "sessionstorage"
+    "sessionstorage",
+    "reactive"
   ],
   "author": "Lars Kniep",
   "license": "MIT",
