@@ -1,4 +1,4 @@
-export const getTag = (value: any): string =>
+const getTag = (value: any): string =>
   value == null
     ? value === undefined
       ? '[object Undefined]'
