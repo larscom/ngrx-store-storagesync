@@ -30,7 +30,6 @@
   "peerDependencies": {
     "@ngrx/store": ">=8.0.0",
     "@angular/common": ">=8.0.0",
-    "@angular/core": ">=8.0.0",
-    "lodash": ">=4.0.0"
+    "@angular/core": ">=8.0.0"
   }
 }

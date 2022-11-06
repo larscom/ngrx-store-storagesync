@@ -1,14 +1,12 @@
-import cloneDeep from 'lodash/cloneDeep';
-import isObjectLike from 'lodash/isObjectLike';
 import { IStorageSyncOptions } from './storage-sync-options';
-import { isNotPlainObject, isPlainObjectAndEmpty } from './util';
+import { isObjectLike, isPlainObject, isPlainObjectAndEmpty } from './util';
 
 /**
  * @internal Remove empty objects
  */
 const removeEmptyObjects = (object: any): any => {
   for (const key in object) {
-    if (isNotPlainObject(object[key])) {
+    if (!isPlainObject(object[key])) {
       continue;
     }
 
@@ -69,7 +67,7 @@ export const syncWithStorage = <T>(
     .filter(({ stateKey }) => state[stateKey as keyof T] !== undefined)
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey as keyof T], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
-      const featureStateClone = cloneDeep<Partial<T>>(state[stateKey as keyof T] as Partial<T>);
+      const featureStateClone = JSON.parse(JSON.stringify(state[stateKey as keyof T])) as Partial<T>;
       const featureState = excludePropsFromState(featureStateClone, excludeKeys);
 
       if (isPlainObjectAndEmpty(featureState)) {
