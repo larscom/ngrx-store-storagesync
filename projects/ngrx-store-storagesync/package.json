@@ -1,7 +1,7 @@
 {
   "name": "@larscom/ngrx-store-storagesync",
   "version": "14.0.0",
-  "description": "Highly configurable state sync library for @ngrx/store (Angular)",
+  "description": "Highly configurable state sync library between localStorage/sessionStorage and @ngrx/store (Angular)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/larscom/ngrx-store-storagesync.git"
