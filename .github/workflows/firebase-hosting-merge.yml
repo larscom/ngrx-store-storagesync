@@ -12,7 +12,7 @@ jobs:
           npm ci --ignore-scripts --legacy-peer-deps
           npm run test:ci
           npm run build
-          $(npm bin)/codecov -f coverage/coverage-final.json
+          $(npm bin)/codecov --disable=gcov -f coverage/coverage-final.json
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
