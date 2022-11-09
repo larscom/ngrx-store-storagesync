@@ -6,7 +6,6 @@ describe('Util', () => {
   it('should detect plain objects', () => {
     expect(isPlainObject({})).toBeTrue();
     expect(isPlainObject({ a: 1 })).toBeTrue();
-    expect(isPlainObject({ constructor: Foo })).toBeTrue();
 
     expect(isPlainObject(new Foo())).toBeFalse();
     expect(isPlainObject([1, 2, 3])).toBeFalse();
@@ -20,7 +19,6 @@ describe('Util', () => {
   it('should detect object like', () => {
     expect(isObjectLike({})).toBeTrue();
     expect(isObjectLike({ a: 1 })).toBeTrue();
-    expect(isObjectLike({ constructor: Foo })).toBeTrue();
     expect(isObjectLike(new Foo())).toBeTrue();
     expect(isObjectLike([1, 2, 3])).toBeTrue();
 

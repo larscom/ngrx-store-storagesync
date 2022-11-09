@@ -1,4 +1,5 @@
 import { IStorageSyncOptions } from './storage-sync-options';
+import { clone } from 'ramda';
 import { isObjectLike, isPlainObject, isPlainObjectAndEmpty } from './util';
 
 /**
@@ -67,7 +68,7 @@ export const syncWithStorage = <T>(
     .filter(({ stateKey }) => state[stateKey as keyof T] !== undefined)
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey as keyof T], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
-      const featureStateClone = JSON.parse(JSON.stringify(state[stateKey as keyof T])) as Partial<T>;
+      const featureStateClone = clone(state[stateKey as keyof T] as Partial<T>)
       const featureState = excludePropsFromState(featureStateClone, excludeKeys);
 
       if (isPlainObjectAndEmpty(featureState)) {
