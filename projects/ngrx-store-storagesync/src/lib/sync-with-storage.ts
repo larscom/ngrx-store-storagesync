@@ -26,7 +26,7 @@ const removeEmptyObjects = (object: any): any => {
 /**
  * @internal Exclude properties from featureState
  */
-const excludePropsFromState = <T>(featureState: Partial<T>, excludeKeys?: string[]): Partial<T> => {
+const excludePropsFromState = <T>(featureState: T[keyof T], excludeKeys?: string[]): T[keyof T] => {
   if (!excludeKeys || !excludeKeys.length) {
     return featureState;
   }
@@ -43,11 +43,11 @@ const excludePropsFromState = <T>(featureState: Partial<T>, excludeKeys?: string
 
     if (isObjectLike(featureState[key])) {
       if (leftKey && rightKey) {
-        excludePropsFromState(featureState[key] as Partial<T>, [...excludeKeys, rightKey]);
+        excludePropsFromState(featureState[key], [...excludeKeys, rightKey]);
       } else if (leftKey) {
         delete featureState[key];
       } else {
-        excludePropsFromState(featureState[key] as Partial<T>, excludeKeys);
+        excludePropsFromState(featureState[key], excludeKeys);
       }
     } else if (leftKey) {
       delete featureState[key];
@@ -68,7 +68,7 @@ export const syncWithStorage = <T>(
     .filter(({ stateKey }) => state[stateKey as keyof T] !== undefined)
     .filter(({ stateKey, shouldSync }) => (shouldSync ? shouldSync(state[stateKey as keyof T], state) : true))
     .forEach(({ stateKey, excludeKeys, storageKeySerializerForFeature, serialize, storageForFeature }) => {
-      const featureStateClone = clone(state[stateKey as keyof T] as Partial<T>)
+      const featureStateClone = clone(state[stateKey as keyof T]);
       const featureState = excludePropsFromState(featureStateClone, excludeKeys);
 
       if (isPlainObjectAndEmpty(featureState)) {

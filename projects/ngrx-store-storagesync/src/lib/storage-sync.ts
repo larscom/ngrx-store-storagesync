@@ -49,13 +49,13 @@ export const storageSync =
  * version from the config
  *
  * @examples
- *  Storage.version = 1 and Config.version = 2 --> incompatible
+ *  Storage.version = 1 and Config.version = 2 --> incompatible, skip hydration
  *
- *  Storage.version = undefined and Config.version = 1 --> incompatible
+ *  Storage.version = undefined and Config.version = 1 --> incompatible, skip hydration
  *
- *  Storage.version = 1 and Config.version = undefined --> compatible
+ *  Storage.version = 1 and Config.version = undefined --> unknown, incompatible, skip hydration
  *
- *  Storage.version = 1 and Config.version = 1 --> compatible
+ *  Storage.version = 1 and Config.version = 1 --> compatible, hydrate
  */
 const isCompatibleVersion = <T>({
   storage,
@@ -63,15 +63,14 @@ const isCompatibleVersion = <T>({
   storageKeySerializer,
   version
 }: IStorageSyncOptions<T>): boolean => {
-  if (!version) return true;
-
+  const key = storageKeySerializer!('version');
   try {
-    const key = storageKeySerializer!('version');
-    const versionFromStorage = Number(storage!.getItem(key));
-
-    if (versionFromStorage === version) {
+    const item = storage!.getItem(key);
+    if (item == null && version == null) {
       return true;
     }
+
+    return Number(item) === version;
   } catch (e) {
     if (storageError) {
       storageError(e);
@@ -93,9 +92,8 @@ const updateNewVersion = <T>({
   storageKeySerializer,
   version
 }: IStorageSyncOptions<T>): void => {
+  const key = storageKeySerializer!('version');
   try {
-    const key = storageKeySerializer!('version');
-
     if (version) {
       storage!.setItem(key, String(version));
     } else {

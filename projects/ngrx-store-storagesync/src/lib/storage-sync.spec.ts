@@ -21,7 +21,7 @@ describe('StorageSync', () => {
 
     const storageErrorSpy = jasmine.createSpy();
 
-    const config: IStorageSyncOptions<any> = {
+    const config: IStorageSyncOptions<typeof initialState> = {
       version: 1,
       features: [{ stateKey: 'feature1' }],
       storage,
@@ -43,7 +43,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const config: IStorageSyncOptions<any> = {
+    const config: IStorageSyncOptions<typeof initialState> = {
       version: 1,
       features: [{ stateKey: 'feature1' }],
       storage
@@ -68,7 +68,7 @@ describe('StorageSync', () => {
 
     const storageErrorSpy = jasmine.createSpy();
 
-    const config: IStorageSyncOptions<any> = {
+    const config: IStorageSyncOptions<typeof initialState> = {
       version: 1,
       features: [{ stateKey: 'feature1' }],
       storage,
@@ -94,7 +94,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state;
 
-    const config: IStorageSyncOptions<any> = {
+    const config: IStorageSyncOptions<typeof initialState> = {
       version: 1,
       features: [{ stateKey: 'feature1' }],
       storage
@@ -172,7 +172,7 @@ describe('StorageSync', () => {
     expect(finalState).toEqual(initialState);
   });
 
-  it('should merge with hydrated state if version from storage is present and version from config is undefined', () => {
+  it('should return the initial state if version from storage is present and version from config is undefined', () => {
     const feature1 = { prop1: false, prop2: 100, prop3: { check: false } };
     const feature2 = { prop1: false, prop2: 200, prop3: { check: false } };
 
@@ -190,13 +190,7 @@ describe('StorageSync', () => {
     });
 
     const finalState = metaReducer(reducer)(initialState, { type: INIT_ACTION });
-
-    const expected = {
-      feature1: { prop1: true, prop2: 100, prop3: { check: false } },
-      feature2: { prop1: true, prop2: 200, prop3: { check: true } }
-    };
-
-    expect(finalState).toEqual(expected);
+    expect(finalState).toEqual(initialState);
   });
 
   it('should merge with hydrated state if version from storage is the same as the version from config', () => {

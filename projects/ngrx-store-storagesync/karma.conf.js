@@ -8,9 +8,7 @@ module.exports = function (config) {
     coverageReporter: {
       dir: require('path').join(__dirname, '../../coverage'),
       subdir: '.',
-      reporters: [
-        { type: 'lcovonly' }, { type: 'json' }
-      ]
+      reporters: [{ type: 'json' }]
     }
   });
   config.set(conf);
