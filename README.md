@@ -248,7 +248,7 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
     features: [
       {
         stateKey: 'feature1',
-        shouldSync: (feature1: any, state: IRootState) => {
+        shouldSync: (feature1, state) => {
           return feature1.rememberMe || state.checkMe;
         }
       }
@@ -268,7 +268,7 @@ export function storageSyncReducer(reducer: ActionReducer<IRootState>) {
     features: [
       {
         stateKey: 'feature1',
-        serialize: (feature1: any) => JSON.stringify(feature1)
+        serialize: (feature1) => JSON.stringify(feature1)
       }
     ],
     storage: window.localStorage

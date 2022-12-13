@@ -153,7 +153,7 @@ describe('SyncWithStorage', () => {
         },
         {
           stateKey: 'feature2',
-          shouldSync: (featureState: any, nextState: any) => {
+          shouldSync: (featureState, nextState) => {
             return featureState.checkMe && nextState.feature2.checkMe;
           }
         }
