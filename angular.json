@@ -104,10 +104,11 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngrx-store-storagesync/src/test.ts",
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/ngrx-store-storagesync/tsconfig.spec.json",
             "karmaConfig": "projects/ngrx-store-storagesync/karma.conf.js",
-            "codeCoverageExclude": ["projects/ngrx-store-storagesync/src/lib/mock-storage.ts"]
+            "codeCoverageExclude": ["projects/ngrx-store-storagesync/src/lib/mock-storage.ts"],
+            "inlineStyleLanguage": "scss"
           }
         }
       }

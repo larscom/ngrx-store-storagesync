@@ -8,23 +8,17 @@ jobs:
   build_and_publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - name: Install
-        run: npm ci --legacy-peer-deps --ignore-scripts
-      - name: Test
-        run: npm run test:ci
-      - name: Build
-        run: npm run build && npm run build:lib
-      - name: Publish
-        run: |
-          cd dist/ngrx-store-storagesync
-          ls -ltra .
-          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      - run: npm ci --legacy-peer-deps --ignore-scripts
+      - run: npm run test:ci
+      - run: npm run build && npm run build:lib
+      - run: |
+           cd dist/ngrx-store-storagesync
+           ls -ltra .
+           npm publish

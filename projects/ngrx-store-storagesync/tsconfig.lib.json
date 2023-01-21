@@ -7,5 +7,5 @@
     "inlineSources": true,
     "types": []
   },
-  "exclude": ["src/test.ts", "**/*.spec.ts", "src/lib/mock-storage.ts"]
+  "exclude": ["**/*.spec.ts", "**/**/mock-storage.ts"]
 }
