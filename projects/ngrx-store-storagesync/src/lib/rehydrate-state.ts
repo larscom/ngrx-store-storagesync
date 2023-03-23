@@ -27,9 +27,9 @@ export const rehydrateState = <T>({
             ...{
               [stateKey]: deserialize
                 ? deserialize(featureState)
-                : JSON.parse(featureState, (_: string, value: string) =>
-                    dateMatcher.test(String(value)) ? new Date(value) : value
-                  )
+                : JSON.parse(featureState, (_: string, value: any) => {
+                    return dateMatcher.test(String(value)) && !isNaN(Date.parse(value)) ? new Date(value) : value;
+                  })
             }
           }
         : acc;

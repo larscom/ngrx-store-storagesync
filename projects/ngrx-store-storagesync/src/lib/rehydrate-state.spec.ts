@@ -88,7 +88,6 @@ describe('RehydrateState', () => {
     };
 
     const feature1 = {
-      date: new Date(),
       prop1: false,
       prop2: 100,
       prop3: { check: false, random: 1337 }
@@ -107,6 +106,35 @@ describe('RehydrateState', () => {
     const rehydratedState = rehydrateState(config);
 
     expect(rehydratedState).toEqual({ feature1 });
+  });
+
+  it('should correctly revive dates', () => {
+    const date = new Date()
+    const feature1 = {
+      date,
+      dateALike: '{"date": "2023-01-01T01:00:00"}',
+      dateString: '2023-01-01T01:00:00'
+    };
+
+    storage.setItem('feature1', JSON.stringify(feature1));
+
+    expect(storage.length).toEqual(1);
+
+    const config: IStorageSyncOptions<any> = {
+      storage,
+      features: [{ stateKey: 'feature1' }],
+      storageKeySerializer: (key: string) => key
+    };
+
+    const rehydratedState = rehydrateState(config);
+
+    expect(rehydratedState).toEqual({
+      feature1: {
+        date,
+        dateALike: '{"date": "2023-01-01T01:00:00"}',
+        dateString: new Date('2023-01-01T01:00:00')
+      }
+    });
   });
 
   it('should rehydrate the application state from primitive types', () => {
