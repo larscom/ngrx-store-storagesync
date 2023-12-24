@@ -5,10 +5,6 @@
 [![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/larscom/ngrx-store-storagesync/branch/master/graph/badge.svg?token=P8CK9EK73K)](https://codecov.io/gh/larscom/ngrx-store-storagesync)
 
-[![CodeQL](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/codeql-analysis.yml)
-[![firebase-hosting](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=master)](https://github.com/larscom/ngrx-store-storagesync/actions/workflows/firebase-hosting-merge.yml)
-
-
 > **Highly configurable** state sync library between `localStorage/sessionStorage` and `@ngrx/store` (Angular)
 
 ### ✨ [Live Demo](https://ngrx-store-storagesync.firebaseapp.com)
