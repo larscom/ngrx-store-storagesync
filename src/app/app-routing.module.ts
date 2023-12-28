@@ -7,11 +7,6 @@ export const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () => import('./modules/todo/todo.module').then((m) => m.TodoModule)
   },
-  {
-    path: 'settings',
-    pathMatch: 'full',
-    loadChildren: () => import('./modules/settings/settings.module').then((m) => m.SettingsModule)
-  },
   { path: '**', redirectTo: 'todo' }
 ];
 

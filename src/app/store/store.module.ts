@@ -1,7 +1,6 @@
 import { InjectionToken, NgModule } from '@angular/core';
 import { ActionReducerMap, StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import * as fromSettings from '../modules/settings/store/settings.reducer';
 import * as fromApp from './app.reducer';
 import { IRootState } from './models/root-state';
 import { storageSyncReducer } from './storage-sync.reducer';
@@ -26,6 +25,6 @@ const strictStore = true;
     StoreDevtoolsModule.instrument({ maxAge: 30 })
   ],
   exports: [NgRxStoreModule],
-  providers: [{ provide: ROOT_REDUCER, useValue: { app: fromApp.reducer, settings: fromSettings.reducer } }]
+  providers: [{ provide: ROOT_REDUCER, useValue: { app: fromApp.reducer } }]
 })
 export class StoreModule {}

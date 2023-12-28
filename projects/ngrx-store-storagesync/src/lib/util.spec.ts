@@ -1,41 +1,41 @@
-import { isObjectLike, isPlainObject, isPlainObjectAndEmpty } from './util';
+import { isObjectLike, isPlainObject, isPlainObjectAndEmpty } from './util'
 
 describe('Util', () => {
   class Foo {}
 
   it('should detect plain objects', () => {
-    expect(isPlainObject({})).toBeTrue();
-    expect(isPlainObject({ a: 1 })).toBeTrue();
+    expect(isPlainObject({})).toBeTruthy()
+    expect(isPlainObject({ a: 1 })).toBeTruthy()
 
-    expect(isPlainObject(new Foo())).toBeFalse();
-    expect(isPlainObject([1, 2, 3])).toBeFalse();
-    expect(isPlainObject(1)).toBeFalse();
-    expect(isPlainObject(true)).toBeFalse();
-    expect(isPlainObject('value')).toBeFalse();
-    expect(isPlainObject(null)).toBeFalse();
-    expect(isPlainObject(undefined)).toBeFalse();
-  });
+    expect(isPlainObject(new Foo())).toBeFalsy()
+    expect(isPlainObject([1, 2, 3])).toBeFalsy()
+    expect(isPlainObject(1)).toBeFalsy()
+    expect(isPlainObject(true)).toBeFalsy()
+    expect(isPlainObject('value')).toBeFalsy()
+    expect(isPlainObject(null)).toBeFalsy()
+    expect(isPlainObject(undefined)).toBeFalsy()
+  })
 
   it('should detect object like', () => {
-    expect(isObjectLike({})).toBeTrue();
-    expect(isObjectLike({ a: 1 })).toBeTrue();
-    expect(isObjectLike(new Foo())).toBeTrue();
-    expect(isObjectLike([1, 2, 3])).toBeTrue();
+    expect(isObjectLike({})).toBeTruthy()
+    expect(isObjectLike({ a: 1 })).toBeTruthy()
+    expect(isObjectLike(new Foo())).toBeTruthy()
+    expect(isObjectLike([1, 2, 3])).toBeTruthy()
 
-    expect(isObjectLike(1)).toBeFalse();
-    expect(isObjectLike(true)).toBeFalse();
-    expect(isObjectLike('value')).toBeFalse();
-    expect(isObjectLike(null)).toBeFalse();
-    expect(isObjectLike(undefined)).toBeFalse();
-  });
+    expect(isObjectLike(1)).toBeFalsy()
+    expect(isObjectLike(true)).toBeFalsy()
+    expect(isObjectLike('value')).toBeFalsy()
+    expect(isObjectLike(null)).toBeFalsy()
+    expect(isObjectLike(undefined)).toBeFalsy()
+  })
 
   it('should detect plain object and empty', () => {
-    expect(isPlainObjectAndEmpty({})).toBeTrue();
+    expect(isPlainObjectAndEmpty({})).toBeTruthy()
 
-    expect(isPlainObjectAndEmpty(new Foo())).toBeFalse();
-    expect(isPlainObjectAndEmpty({ a: 1 })).toBeFalse();
-    expect(isPlainObjectAndEmpty(null)).toBeFalse();
-    expect(isPlainObjectAndEmpty(undefined)).toBeFalse();
-    expect(isPlainObjectAndEmpty([])).toBeFalse();
-  });
-});
+    expect(isPlainObjectAndEmpty(new Foo())).toBeFalsy()
+    expect(isPlainObjectAndEmpty({ a: 1 })).toBeFalsy()
+    expect(isPlainObjectAndEmpty(null)).toBeFalsy()
+    expect(isPlainObjectAndEmpty(undefined)).toBeFalsy()
+    expect(isPlainObjectAndEmpty([])).toBeFalsy()
+  })
+})

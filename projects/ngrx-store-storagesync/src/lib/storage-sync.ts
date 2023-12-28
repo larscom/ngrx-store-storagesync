@@ -1,9 +1,9 @@
-import { Action } from '@ngrx/store';
-import { mergeDeepRight } from 'ramda';
-import { INIT_ACTION, INIT_ACTION_EFFECTS, UPDATE_ACTION } from './actions';
-import { rehydrateState } from './rehydrate-state';
-import { IStorageSyncOptions } from './storage-sync-options';
-import { syncWithStorage } from './sync-with-storage';
+import { Action } from '@ngrx/store'
+import { mergeDeepRight } from 'ramda'
+import { INIT_ACTION, INIT_ACTION_EFFECTS, UPDATE_ACTION } from './actions'
+import { rehydrateState } from './rehydrate-state'
+import { IStorageSyncOptions } from './storage-sync-options'
+import { syncWithStorage } from './sync-with-storage'
 
 /**
  * The StorageSync Meta Reducer for @ngrx/store.
@@ -23,26 +23,26 @@ export const storageSync =
       storageKeySerializer: (key: string) => key,
       rehydrateStateMerger: (nextState, rehydratedState) => mergeDeepRight<any, any>(nextState, rehydratedState),
       ...options
-    };
+    }
 
-    const { rehydrate, rehydrateStateMerger } = config;
+    const { rehydrate, rehydrateStateMerger } = config
 
-    const shouldRehydrate = rehydrate! && isCompatibleVersion(config);
-    const rehydratedState = shouldRehydrate ? rehydrateState(config) : undefined;
+    const shouldRehydrate = rehydrate! && isCompatibleVersion(config)
+    const rehydratedState = shouldRehydrate ? rehydrateState(config) : undefined
 
     return (state: T | undefined, action: Action): T => {
-      const nextState = action.type === INIT_ACTION ? reducer(state, action) : ({ ...state } as T);
-      const shouldMerge = rehydratedState !== undefined && [INIT_ACTION, UPDATE_ACTION].includes(action.type);
-      const mergedState = reducer(shouldMerge ? rehydrateStateMerger!(nextState, rehydratedState) : nextState, action);
+      const nextState = action.type === INIT_ACTION ? reducer(state, action) : ({ ...state } as T)
+      const shouldMerge = rehydratedState !== undefined && [INIT_ACTION, UPDATE_ACTION].includes(action.type)
+      const mergedState = reducer(shouldMerge ? rehydrateStateMerger!(nextState, rehydratedState) : nextState, action)
 
       if (![INIT_ACTION, INIT_ACTION_EFFECTS].includes(action.type)) {
-        updateNewVersion(config);
-        syncWithStorage(mergedState, config);
+        updateNewVersion(config)
+        syncWithStorage(mergedState, config)
       }
 
-      return mergedState;
-    };
-  };
+      return mergedState
+    }
+  }
 
 /**
  * @internal Load version from storage to see if it matches the
@@ -61,26 +61,27 @@ const isCompatibleVersion = <T>({
   storage,
   storageError,
   storageKeySerializer,
-  version
+  version,
+  versionKey = 'ngrx-store-storagesync.version'
 }: IStorageSyncOptions<T>): boolean => {
-  const key = storageKeySerializer!('version');
+  const key = storageKeySerializer!(versionKey)
   try {
-    const item = storage!.getItem(key);
+    const item = storage!.getItem(key)
     if (item == null && version == null) {
-      return true;
+      return true
     }
 
-    return Number(item) === version;
+    return Number(item) === version
   } catch (e) {
     if (storageError) {
-      storageError(e);
+      storageError(e)
     } else {
-      throw e;
+      throw e
     }
   }
 
-  return false;
-};
+  return false
+}
 
 /**
  * @internal Update Storage with new config version
@@ -90,20 +91,21 @@ const updateNewVersion = <T>({
   storage,
   storageError,
   storageKeySerializer,
-  version
+  version,
+  versionKey = 'ngrx-store-storagesync.version'
 }: IStorageSyncOptions<T>): void => {
-  const key = storageKeySerializer!('version');
+  const key = storageKeySerializer!(versionKey)
   try {
     if (version) {
-      storage!.setItem(key, String(version));
+      storage!.setItem(key, String(version))
     } else {
-      storage!.removeItem(key);
+      storage!.removeItem(key)
     }
   } catch (e) {
     if (storageError) {
-      storageError(e);
+      storageError(e)
     } else {
-      throw e;
+      throw e
     }
   }
-};
+}

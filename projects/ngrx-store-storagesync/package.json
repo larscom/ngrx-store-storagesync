@@ -1,6 +1,6 @@
 {
   "name": "@larscom/ngrx-store-storagesync",
-  "version": "14.0.4",
+  "version": "0.0.0",
   "description": "Highly configurable state sync library between localStorage/sessionStorage and @ngrx/store (Angular)",
   "repository": {
     "type": "git",
@@ -33,6 +33,6 @@
     "@angular/core": ">=8.0.0"
   },
   "dependencies": {
-    "ramda": "^0.28.0"
+    "ramda": "^0.29.1"
   }
 }

@@ -1,8 +1,5 @@
-<div class="container"
-  [ngClass]="{ 'dark-theme' : isDarkTheme$ | async }">
-  <app-header [isMobile]="(isHandsetPortrait$ | async)!"
-    (menuClicked)="onMenuClicked()"
-    (resetState)="onResetState()">
+<div class="container">
+  <app-header [isMobile]="(isHandsetPortrait$ | async)!" (menuClicked)="onMenuClicked()" (resetState)="onResetState()">
   </app-header>
   <app-drawer>
     <app-storage-display></app-storage-display>

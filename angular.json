@@ -15,16 +15,16 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/ngrx-store-storagesync-app",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "styles": ["@angular/material/prebuilt-themes/indigo-pink.css", "src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -41,21 +41,12 @@
                   "maximumError": "4kb"
                 }
               ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -64,10 +55,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngrx-store-storagesync-app:build:production"
+              "buildTarget": "ngrx-store-storagesync-app:build:production"
             },
             "development": {
-              "browserTarget": "ngrx-store-storagesync-app:build:development"
+              "buildTarget": "ngrx-store-storagesync-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +66,16 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngrx-store-storagesync-app:build"
+            "buildTarget": "ngrx-store-storagesync-app:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "include": ["src/**/*.spec.ts"],
+            "coverage": true
           }
         }
       }
@@ -102,13 +102,12 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
+            "tsConfig": "tsconfig.spec.json",
             "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "projects/ngrx-store-storagesync/tsconfig.spec.json",
-            "karmaConfig": "projects/ngrx-store-storagesync/karma.conf.js",
-            "codeCoverageExclude": ["projects/ngrx-store-storagesync/src/lib/mock-storage.ts"],
-            "inlineStyleLanguage": "scss"
+            "include": ["src/**/*.spec.ts"],
+            "coverage": true
           }
         }
       }

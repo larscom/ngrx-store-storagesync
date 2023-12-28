@@ -1,14 +1,14 @@
-import { IFeatureOptions } from './feature-options';
+import { IFeatureOptions } from './feature-options'
 
 export interface IStorageSyncOptions<T> {
   /**
    * By default, states are not synced, provide the feature states you want to sync.
    */
-  features: IFeatureOptions<T>[];
+  features: IFeatureOptions<T>[]
   /**
    * Provide the storage type to sync the state to, it can be any storage which implements the 'Storage' interface.
    */
-  storage: Storage;
+  storage: Storage
   /**
    * Give the state a version. Version will be checked before rehydration.
    *
@@ -21,25 +21,29 @@ export interface IStorageSyncOptions<T> {
    *
    *  Version from Storage = 1 and Config.version = 1 --> Hydrate
    */
-  version?: number;
+  version?: number
+  /**
+   * Under which key the version should be saved into storage
+   */
+  versionKey?: string
   /**
    * Function that gets executed on a storage error
    * @param error the error that occurred
    */
-  storageError?: (error: any) => void;
+  storageError?: (error: any) => void
   /**
    * Restore last known state from storage on startup
    */
-  rehydrate?: boolean;
+  rehydrate?: boolean
   /**
    * Serializer for storage keys
    * @param key the storage item key
    */
-  storageKeySerializer?: (key: string) => string;
+  storageKeySerializer?: (key: string) => string
   /**
    * Custom state merge function after rehydration (by default it does a deep merge)
    * @param state the next state
    * @param rehydratedState the state resolved from a storage location
    */
-  rehydrateStateMerger?: (state: T, rehydratedState: T) => T;
+  rehydrateStateMerger?: (state: T, rehydratedState: T) => T
 }

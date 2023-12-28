@@ -1,8 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
-import * as settingsSelectors from './modules/settings/store/settings.selectors';
 import * as appActions from './store/app.actions';
 import { IRootState } from './store/models/root-state';
 
@@ -15,8 +14,6 @@ export class AppComponent {
   readonly isHandsetPortrait$ = this.breakpoint
     .observe(Breakpoints.HandsetPortrait)
     .pipe(map(({ matches }) => matches));
-
-  readonly isDarkTheme$ = this.store$.pipe(select(settingsSelectors.isDarkTheme));
 
   constructor(private readonly breakpoint: BreakpointObserver, private readonly store$: Store<IRootState>) {}
 
