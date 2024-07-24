@@ -2,8 +2,7 @@
 
 [![npm-version](https://img.shields.io/npm/v/@larscom/ngrx-store-storagesync.svg?label=npm)](https://www.npmjs.com/package/@larscom/ngrx-store-storagesync)
 ![npm](https://img.shields.io/npm/dw/@larscom/ngrx-store-storagesync)
-[![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/master/LICENSE)
-[![codecov](https://codecov.io/gh/larscom/ngrx-store-storagesync/branch/master/graph/badge.svg?token=P8CK9EK73K)](https://codecov.io/gh/larscom/ngrx-store-storagesync)
+[![license](https://img.shields.io/npm/l/@larscom/ngrx-store-storagesync.svg)](https://github.com/larscom/ngrx-store-storagesync/blob/main/LICENSE)
 
 > **Highly configurable** state sync library between `localStorage/sessionStorage` and `@ngrx/store` (Angular)
 
