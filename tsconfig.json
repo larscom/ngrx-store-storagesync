@@ -5,11 +5,11 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "esModuleInterop": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "paths": {
       "@larscom/ngrx-store-storagesync": [
@@ -17,7 +17,6 @@
       ]
     },
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
