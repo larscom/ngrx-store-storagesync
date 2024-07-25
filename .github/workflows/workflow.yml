@@ -23,6 +23,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: |
           npm ci --ignore-scripts --legacy-peer-deps
+          npm run build
           npm run test
 
   publish:
