@@ -13,7 +13,6 @@
   - feature1 to `sessionStorage`
   - feature2 to `localStorage`
 - &#10003; Exclude **deeply** nested properties
-- &#10003; [Sync Reactive Forms](#Sync-Reactive-Forms) (needs additional library)
 
 ## Dependencies
 
