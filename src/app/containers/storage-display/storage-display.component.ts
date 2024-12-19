@@ -7,7 +7,8 @@ import { IRootState } from '../../store/models/root-state';
 @Component({
   selector: 'app-storage-display',
   templateUrl: './storage-display.component.html',
-  styleUrls: ['./storage-display.component.scss']
+  styleUrls: ['./storage-display.component.scss'],
+  standalone: false
 })
 export class StorageDisplayComponent {
   readonly sessionStorage$ = this.store$.pipe(

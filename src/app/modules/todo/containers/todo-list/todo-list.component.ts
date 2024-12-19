@@ -10,7 +10,8 @@ import * as todoSelectors from '../../store/todo.selectors';
 @Component({
   selector: 'app-todo-list',
   templateUrl: 'todo-list.component.html',
-  styleUrls: ['todo-list.component.scss']
+  styleUrls: ['todo-list.component.scss'],
+  standalone: false
 })
 export class TodoListComponent {
   readonly todos$ = this.store$.pipe(select(todoSelectors.getTodos));

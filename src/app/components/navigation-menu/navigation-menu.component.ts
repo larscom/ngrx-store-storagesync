@@ -4,7 +4,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
   selector: 'app-navigation-menu',
   templateUrl: 'navigation-menu.component.html',
   styleUrls: ['navigation-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class NavigationMenuComponent {
   @Output() navigate = new EventEmitter<string>();

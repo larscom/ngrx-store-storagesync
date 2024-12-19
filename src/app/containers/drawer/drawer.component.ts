@@ -7,7 +7,8 @@ import { IRootState } from '../../store/models/root-state';
 @Component({
   selector: 'app-drawer',
   templateUrl: 'drawer.component.html',
-  styleUrls: ['drawer.component.scss']
+  styleUrls: ['drawer.component.scss'],
+  standalone: false
 })
 export class DrawerComponent {
   readonly drawerOpened$ = this.store$.pipe(select(({ app }) => app.drawerOpen));
