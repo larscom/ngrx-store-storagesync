@@ -29,7 +29,7 @@
   "devDependencies": {
     "@angular-builders/jest": "19.0.1",
     "@angular/build": "^20.0.1",
-    "@angular/cli": "20.0.1",
+    "@angular/cli": "20.0.2",
     "@angular/compiler-cli": "20.0.3",
     "@types/jest": "29.5.14",
     "@types/ramda": "0.30.2",
