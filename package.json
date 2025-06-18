@@ -35,7 +35,7 @@
     "@types/ramda": "0.30.2",
     "jest": "30.0.0",
     "jest-preset-angular": "14.6.0",
-    "ng-packagr": "20.0.0",
+    "ng-packagr": "20.0.1",
     "typescript": "5.8.3"
   }
 }
