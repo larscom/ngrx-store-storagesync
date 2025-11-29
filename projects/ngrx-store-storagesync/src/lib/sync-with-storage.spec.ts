@@ -10,11 +10,11 @@ describe('SyncWithStorage', () => {
   })
 
   it('should call storageError function on error', () => {
-    jest.spyOn(storage, 'setItem').mockImplementation(() => {
+    vitest.spyOn(storage, 'setItem').mockImplementation(() => {
       throw new Error('ERROR')
     })
 
-    const storageErrorSpy = jest.fn()
+    const storageErrorSpy = vitest.fn()
 
     const config: IStorageSyncOptions<any> = {
       storage,
@@ -33,7 +33,7 @@ describe('SyncWithStorage', () => {
   })
 
   it('should re-throw error if storageError function is not present', () => {
-    jest.spyOn(storage, 'setItem').mockImplementation(() => {
+    vitest.spyOn(storage, 'setItem').mockImplementation(() => {
       throw new Error('ERROR')
     })
 

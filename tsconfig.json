@@ -1,32 +1,21 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "esModuleInterop": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
     "paths": {
-      "@larscom/ngrx-store-storagesync": [
-        "projects/ngrx-store-storagesync/src/public-api"
-      ]
+      "@larscom/ngrx-store-storagesync": ["./projects/ngrx-store-storagesync/src/public-api"]
     },
-    "declaration": false,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022",
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
-    "useDefineForClassFields": false
+    "module": "preserve"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -34,5 +23,20 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
     "disableTypeScriptVersionCheck": true
-  }
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/ngrx-store-storagesync/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngrx-store-storagesync/tsconfig.spec.json"
+    }
+  ]
 }

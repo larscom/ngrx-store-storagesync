@@ -12,7 +12,7 @@ describe('StorageSync', () => {
   })
 
   it('should call storageError function on error when compatible version is checked from storage', () => {
-    jest.spyOn(storage, 'getItem').mockImplementation(() => {
+    vitest.spyOn(storage, 'getItem').mockImplementation(() => {
       throw new Error('ERROR')
     })
 
@@ -21,7 +21,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state
 
-    const storageErrorSpy = jest.fn()
+    const storageErrorSpy = vitest.fn()
 
     const config: IStorageSyncOptions<typeof initialState> = {
       version: 1,
@@ -38,7 +38,7 @@ describe('StorageSync', () => {
   })
 
   it('should re-throw error when compatible version is checked from storage if storageError function is not present', () => {
-    jest.spyOn(storage, 'getItem').mockImplementation(() => {
+    vitest.spyOn(storage, 'getItem').mockImplementation(() => {
       throw new Error('ERROR')
     })
 
@@ -59,7 +59,7 @@ describe('StorageSync', () => {
   })
 
   it('should call storageError function on error when trying to update version in storage', () => {
-    jest.spyOn(storage, 'setItem').mockImplementation((key, value) => {
+    vitest.spyOn(storage, 'setItem').mockImplementation((key, value) => {
       if (key === 'version' && value === '1') {
         throw new Error('ERROR')
       }
@@ -70,7 +70,7 @@ describe('StorageSync', () => {
 
     const reducer = (state = initialState, action: Action) => state
 
-    const storageErrorSpy = jest.fn()
+    const storageErrorSpy = vitest.fn()
 
     const config: IStorageSyncOptions<typeof initialState> = {
       version: 1,
@@ -88,7 +88,7 @@ describe('StorageSync', () => {
   })
 
   it('should re-throw error when trying to update version in storage if storageError function is not present', () => {
-    jest.spyOn(storage, 'setItem').mockImplementation((key, value) => {
+    vitest.spyOn(storage, 'setItem').mockImplementation((key, value) => {
       if (key === 'ngrx-store-storagesync.version' && value === '1') {
         throw new Error('ERROR')
       }
